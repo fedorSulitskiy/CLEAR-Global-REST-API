@@ -16,10 +16,8 @@ module.exports = {
             ],
             (error, results, fields) => {
                 if (error) {
-                    winston.error(error.message, error);
                     return callBack(error);
                 }
-                winston.info(data);
                 return callBack(null, results);
             }
         );
@@ -39,9 +37,16 @@ module.exports = {
             
         )
     },
-    delete: (id, callBack) => {
+    deleteByID: (id, callBack) => {
         pool.query(
-            
-        )
+            `delete from languages where isoCode = ?`,
+            [id],
+            (error, results, fields) => {
+                if (error) {
+                    return callBack(error);
+                }
+                return callBack(null, results);
+            }
+        );
     },
 };

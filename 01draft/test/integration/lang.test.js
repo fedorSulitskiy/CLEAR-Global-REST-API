@@ -10,12 +10,13 @@ describe('Language API', () => {
 
     beforeEach(() => {
         server = require('../../index');
-        isoCode = "cum";
+        isoCode = "hah";
         name = "English";
         altName = "Anglish";
         noTranslators = 1000;
     });
-    afterEach(() => {
+    afterEach(async() => {
+        await request(server).delete("/api/languages/hah")
         server.close();
     });
 
