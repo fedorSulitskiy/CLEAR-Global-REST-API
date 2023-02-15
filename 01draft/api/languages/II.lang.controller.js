@@ -1,3 +1,4 @@
+/// Executes the SQL queries and catches any immediate connection errors
 const winston = require('winston');
 
 const { create } = require('./I.lang.service');

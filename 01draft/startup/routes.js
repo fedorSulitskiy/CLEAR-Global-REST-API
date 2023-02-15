@@ -1,3 +1,4 @@
+/// Stores all routers from APIs
 const express = require('express');
 
 const langRouter = require('../api/languages/III.lang.router');

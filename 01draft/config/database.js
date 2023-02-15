@@ -1,4 +1,4 @@
-/// serves to create object which will allow me send queries to the mysql database
+/// Serves to create object which will allow me send queries to the mysql database
 const { createPool } = require("mysql2");
 
 const pool = createPool({

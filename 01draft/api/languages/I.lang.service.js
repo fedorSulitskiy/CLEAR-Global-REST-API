@@ -1,3 +1,4 @@
+/// Functions that send queries to SQL database
 const winston = require('winston');
 
 const pool = require('../../config/database');
