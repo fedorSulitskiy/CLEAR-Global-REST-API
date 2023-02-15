@@ -1,6 +1,6 @@
 const express = require('express');
 
-const langRouter = require('../api/languages/lang.router');
+const langRouter = require('../api/languages/III.lang.router');
 
 const error = require('../middleware/error');
 

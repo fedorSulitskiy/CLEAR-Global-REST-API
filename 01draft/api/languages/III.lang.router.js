@@ -1,4 +1,4 @@
-const { createLang } = require('./lang.controller');
+const { createLang } = require('./II.lang.controller');
 
 const router = require('express').Router();
 

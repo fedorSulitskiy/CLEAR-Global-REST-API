@@ -1,6 +1,6 @@
 const winston = require('winston');
 
-const { create } = require('./lang.service');
+const { create } = require('./I.lang.service');
 
 module.exports = {
     createLang: (req, res) => {
