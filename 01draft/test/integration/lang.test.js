@@ -119,4 +119,17 @@ describe('Language API', () => {
         //     expect(res.status).toBe(400);
         // });
     });   
+
+    /// 500
+
+    describe('INTERNAL SERVER ERROR', () => {
+        it('Should return 500 if server fucking dies', async () => {
+            
+            const res = await request(server)
+                .post("/api/languages/")
+                .send({ isoCode: isoCode, name: name });
+
+            expect(res.status).toBe(500);              
+        });
+    });
 });

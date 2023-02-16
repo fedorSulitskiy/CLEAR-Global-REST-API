@@ -3,6 +3,11 @@ const winston = require('winston');
 
 const { create, update, showAll, showByID, deleteByID } = require('./I.lang.service');
 
+const status500 = function(res, err) {
+    winston.error(err);
+    return res.status(500).send('Database connection error');
+}
+
 module.exports = {
     createLang: (req, res) => {
         const body = req.body;
@@ -12,8 +17,7 @@ module.exports = {
                     winston.error(err)
                     return res.status(400).send(`Language with isoCode ${req.body.isoCode} already exists`);
                 }
-                winston.error(err)
-                return res.status(500).send('Database connection error');
+                status500(res, err);
             }
             winston.info('New language created')
             return res.status(200).send(results);
@@ -25,8 +29,7 @@ module.exports = {
             const noAffectedRows = results.affectedRows;
             const noChangedRows = results.changedRows;
             if (err) {
-                winston.error(err)
-                return res.status(500).send('Database connection error');
+                status500(res, err);
             }
             if (noAffectedRows === 0) {
                 winston.error(err);
@@ -43,8 +46,7 @@ module.exports = {
     showAll: (req, res) => {
         showAll((err, results) => {
             if (err) {
-                winston.error(err)
-                return res.status(500).send('Database connection error');
+                status500(res, err);
             }
             winston.info(results.length+' langauges found');
             return res.status(200).send(results);
@@ -53,8 +55,7 @@ module.exports = {
     showLang: (req, res) => {
         showByID(req.params.id, (err, results) => {
             if (err) {
-                winston.error(err)
-                return res.status(500).send('Database connection error');
+                status500(res, err);
             }
             if (results.length === 0) {
                 winston.error('Could not find language. ISO code: '+req.params.id);
@@ -68,8 +69,7 @@ module.exports = {
         deleteByID(req.params.id, (err, results) => {
             const noAffectedRows = results.affectedRows;
             if (err) {
-                winston.error(err)
-                return res.status(500).send('Database connection error');
+                status500(res, err);
             }
             if (noAffectedRows === 0) {
                 winston.error('Could not find language. ISO code: '+req.params.id);
