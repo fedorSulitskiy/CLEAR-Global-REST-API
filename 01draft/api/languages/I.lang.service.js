@@ -29,13 +29,27 @@ module.exports = {
     },
     showAll: callBack => {
         pool.query(
-            
-        )
+            `select * from languages`,
+            [],
+            (error, results, fields) => {
+                if (error) {
+                    return callBack(error);
+                }
+                return callBack(null, results);
+            }
+        );
     },
     showByID: (id, callBack) => {
         pool.query(
-            
-        )
+            `select * from languages where isoCode = ?`,
+            [id],
+            (error, results, fields) => {
+                if (error) {
+                    return callBack(error);
+                }
+                return callBack(null, results);
+            }
+        );
     },
     deleteByID: (id, callBack) => {
         pool.query(

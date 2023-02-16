@@ -8,7 +8,10 @@ module.exports = {
         const body = req.body;
         create(body, (err, results) => {
             if (err) {
-                console.log(err);
+                if (err.code==='ER_DUP_ENTRY') {
+                    winston.error(`Creating new language failed - language with isoCode ${req.body.isoCode} already exists`)
+                    return res.status(400).send(`Language with isoCode ${req.body.isoCode} already exists`);
+                }
                 winston.error('Creating new language failed.')
                 return res.status(500).send('Database connection error');
             }
@@ -16,13 +19,32 @@ module.exports = {
             return res.status(200).send(results);
         });
     },
+    showAll: (req, res) => {
+        showAll((err, results) => {
+            if (err) {
+                winston.error('Database connection error.')
+                return res.status(500).send('Database connection error');
+            }
+            winston.info(results.length+' langauges found');
+            return res.status(200).send(results);
+        })
+    },
+    showLang: (req, res) => {
+        showByID(req.params.id, (err, results) => {
+            if (err) {
+                winston.error('Database connection error.')
+                return res.status(500).send('Database connection error');
+            }
+            winston.info('Language found. ISO code: '+req.params.id);
+            return res.status(200).send(results);
+        })
+    },
 
     deleteLang: (req, res) => {
         deleteByID(req.params.id, (err, results) => {
             const noAffectedRows = results.affectedRows;
             if (err) {
-                console.log(err);
-                winston.error('Deleting language failed.')
+                winston.error('Deleting language failed-database connection error.')
                 return res.status(500).send('Database connection error');
             }
             if (noAffectedRows === 0) {

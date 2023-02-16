@@ -1,18 +1,25 @@
-{"level":"info","message":"Language deleted. ISO code: hah"}
-{"level":"info","message":"Could not find language. ISO code: hah"}
+{"level":"info","message":"Server up and running on port 3003"}
+{"level":"info","message":"Langauges found"}
 {"level":"info","message":"Server up and running on port 3003"}
 {"level":"info","message":"Server up and running on port 3003"}
 {"level":"info","message":"New language created"}
-{"level":"info","message":"Server up and running on port 3003"}
-{"level":"info","message":"Server up and running on port 3003"}
-{"level":"error","message":"Creating new language failed."}
 {"level":"info","message":"Language deleted. ISO code: hah"}
-{"level":"info","message":"Server up and running on port 3003"}
 {"level":"info","message":"New language created"}
 {"level":"info","message":"Language deleted. ISO code: hah"}
 {"level":"info","message":"Server up and running on port 3003"}
-{"level":"info","message":"New language created"}
-{"level":"info","message":"Language deleted. ISO code: hah"}
 {"level":"info","message":"Server up and running on port 3003"}
 {"level":"info","message":"New language created"}
+{"level":"info","message":"Language deleted. ISO code: hah"}
+{"level":"info","message":"2langauges found"}
+{"level":"info","message":"New language created"}
+{"level":"info","message":"Language found. ISO code: hah"}
+{"level":"info","message":"Language deleted. ISO code: hah"}
+{"level":"info","message":"2langauges found"}
+{"level":"info","message":"Server up and running on port 3003"}
+{"level":"info","message":"Server up and running on port 3003"}
+{"level":"info","message":"New language created"}
+{"level":"info","message":"Language deleted. ISO code: hah"}
+{"level":"info","message":"2 langauges found"}
+{"level":"info","message":"New language created"}
+{"level":"info","message":"Language found. ISO code: hah"}
 {"level":"info","message":"Language deleted. ISO code: hah"}
