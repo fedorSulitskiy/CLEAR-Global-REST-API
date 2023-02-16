@@ -22,9 +22,22 @@ module.exports = {
             }
         );
     },
-    update: (id, callBack) => {
+    update: (id, data, callBack) => {
         pool.query(
-            
+            `update languages set isoCode=?, name=?, altName=?, noTranslators=? where isoCode=?`,
+            [
+                data.isoCode,
+                data.name,
+                data.altName,
+                data.noTranslators,
+                id
+            ],
+            (error, results, fields) => {
+                if (error) {
+                    return callBack(error);
+                }
+                return callBack(null, results);
+            }
         )
     },
     showAll: callBack => {
