@@ -25,14 +25,14 @@ describe('Language API', () => {
             .post("/api/languages/")
             .send({ isoCode: isoCode, name: name, altName: altName, noTranslators: noTranslators });
     };
-    const execShowLang = () => {
-        return request(server)
-            .get("/api/languages/" + isoCode);
-    };
     const execUpdateLang = () => {
         return request(server)
             .patch("/api/languages/" + isoCode)
             .send({ isoCode: isoCode, name: name, altName: altName, noTranslators: noTranslators });
+    };
+    const execShowLang = () => {
+        return request(server)
+            .get("/api/languages/" + isoCode);
     };
     const execDeleteLang = () => {
         return request(server)
@@ -120,16 +120,40 @@ describe('Language API', () => {
         // });
     });   
 
-    /// 500
+    /// INTERNAL SERVER ERRORS
 
     describe('INTERNAL SERVER ERROR', () => {
-        it('Should return 500 if server fucking dies', async () => {
-            
+        it('Should return 500 if server dies on createLang', async () => {
+
             const res = await request(server)
                 .post("/api/languages/")
                 .send({ isoCode: isoCode, name: name });
 
             expect(res.status).toBe(500);              
         });
+        it('Should return 500 if server dies on updateLang', async () => {
+            await execCreateLang();
+
+            const res = await request(server)
+                .patch("/api/languages/" + isoCode)
+                .send({ isoCode: isoCode, name: name });
+
+            expect(res.status).toBe(500);              
+        });
+        // it('Should return 500 if server dies on showAll', async () => {
+            
+        //     const res = await request(server)
+        //         .get("/api/languages/" + isoCode);
+
+        //     expect(res.status).toBe(500);              
+        // });
+        // it('Should return 500 if server dies on delete', async () => {
+        //     isoCode = 'aaaa'
+            
+        //     const res = await request(server)
+        //         .delete("/api/languages/" + isoCode);
+
+        //     expect(res.status).toBe(500);              
+        // });
     });
 });

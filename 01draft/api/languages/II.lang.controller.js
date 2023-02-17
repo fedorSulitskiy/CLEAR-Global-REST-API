@@ -26,18 +26,20 @@ module.exports = {
     updateLang: (req, res) => {
         const body = req.body;
         update(req.params.id, body, (err, results) => {
-            const noAffectedRows = results.affectedRows;
-            const noChangedRows = results.changedRows;
             if (err) {
                 status500(res, err);
             }
-            if (noAffectedRows === 0) {
-                winston.error(err);
-                return res.status(404).send("Could not find language");
-            }
-            if (noChangedRows === 0) {
-                winston.info('No content has been changed. ISO code: '+req.params.id);
-                return res.status(200).send('No changes implemented');
+            if (results) {
+                const noAffectedRows = results.affectedRows;
+                const noChangedRows = results.changedRows;
+                if (noAffectedRows === 0) {
+                    winston.error(err);
+                    return res.status(404).send("Could not find language");
+                }
+                if (noChangedRows === 0) {
+                    winston.info('No content has been changed. ISO code: '+req.params.id);
+                    return res.status(200).send('No changes implemented');
+                }
             }
             winston.info('Language updated. ISO code: '+req.params.id);
             return res.status(200).send(results);
