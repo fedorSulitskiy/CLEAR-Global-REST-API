@@ -6,8 +6,12 @@ const express = require('express');
 const app = express();
 const winston = require('winston');
 
-require('./startup/logging');
+require('./startup/logging')();
 require('./startup/routes')(app);
+
+// throw new Error('Something failed during startup'); // to test uncaught exception
+const p = Promise.reject(new Error('Something failed miserably')); // rejected promise, like async operation dying
+p.then(() => console.log('Done')); // unhandled rejection
 
 const server = app.listen(process.env.APP_PORT, () => {
     // logs the start of the server in logfile.log
