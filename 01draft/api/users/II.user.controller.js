@@ -3,6 +3,7 @@ const winston = require('winston');
 const { genSaltSync, hashSync, compareSync } = require('bcrypt');
 
 const { create, update, showAll, showUserById, showUserByEmail, deleteByID } = require('./I.user.service');
+const pool = require('../../config/database');
 
 const status500 = function(res, err) {
     winston.error(err);
@@ -10,16 +11,23 @@ const status500 = function(res, err) {
 }
 
 module.exports = {
-    createUser: (req, res) => {
+    createUser: async (req, res) => {
         const body = req.body;
         const salt = genSaltSync(10);
         body.password = hashSync(body.password, salt);
+
+        const email = req.body.email;
+        const result = await pool.promise().query('SELECT * FROM users WHERE email = ?', [email]);
+        const count = result[0].length;
+
+        if (count > 0) {
+            repeatingEmailError = new Error('Email already in database');
+            winston.error(repeatingEmailError);
+            return res.status(400).send('User with this email is already registered: '+ email);
+        }
+
         create(body, (err, results) => {
             if (err) {
-                if (err.code==='ER_DUP_ENTRY') {
-                    winston.error(err)
-                    return res.status(400).send(`User ${id}: ${req.body.name} ${req.body.surname} already exists`);
-                }
                 status500(res, err);
             }
             winston.info('New user created')
