@@ -6,15 +6,16 @@ let surname;
 let email;
 let password;
 let type;
+let id;
 
 let trial_user_object;
 
 describe('User API', () => {
     beforeEach(() => {
         server = require('../../index');
-        name = 'John';
-        surname = 'Doe';
-        email = 'john@gmail.com';
+        name = 'Test';
+        surname = 'Test';
+        email = 'test@gmail.com';
         password = '1234';
         type = 0;
     });
@@ -23,6 +24,7 @@ describe('User API', () => {
             .get("/api/users/" + email);
         const id = trial_user_object.body.id;
         await request(server).delete("/api/users/"+id);
+        
         server.close();
     });
 
@@ -77,7 +79,10 @@ describe('User API', () => {
         });
         it('Should return 200 if update is successful', async () => {
             await execCreateUser();
-            name = 'Hehish';
+            name = 'TEST';
+            trial_user_object = await request(server)
+                .get("/api/users/" + email);
+            id = trial_user_object.body.id;
     
             const res = await execUpdateUser();
     
@@ -118,7 +123,7 @@ describe('User API', () => {
         });
         it('Should return 404 if user could not be found by updateUser', async () => {
             id = '10000000000';
-            name = 'Bruh';
+            name = 'Test';
 
             const res = await execUpdateUser();
 

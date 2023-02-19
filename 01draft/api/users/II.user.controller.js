@@ -38,18 +38,24 @@ module.exports = {
         const body = req.body;
         const salt = genSaltSync(10);
         body.password = hashSync(body.password, salt);
-        update(req.params.id, body, (err, results) => {
+        update(req.params.id, body, async (err, results) => {
             if (err) {
                 status500(res, err);
             }
             if (results) {
                 const noAffectedRows = results.affectedRows;
-                const noChangedRows = results.changedRows;
                 if (noAffectedRows === 0) {
                     winston.error(err);
                     return res.status(404).send("Could not find user");
                 }
-                if (noChangedRows === 0) {
+                // problem here is because I'm hashing the password the password string will always be the same meaingggggggggggggggggggggggggggggggggggggggggg
+                const result = await pool.promise().query('SELECT name, surname, email, type FROM users WHERE id = ?', [req.params.id]);
+
+                const resultBody = { ...result[0][0] };
+                const requestBody = { ...req.body };
+                delete requestBody['password'];
+
+                if (JSON.stringify(resultBody) === JSON.stringify(requestBody)) {
                     winston.info('No content has been changed. User id: '+req.params.id);
                     return res.status(200).send('No changes implemented');
                 }

@@ -1,0 +1,642 @@
+{"level":"info","message":"Server up and running on port 3003"}
+{"level":"error"}
+{"level":"info","message":"3 users found"}
+{"level":"error"}
+{"level":"info","message":"3 users found"}
+{"level":"error"}
+{"level":"error"}
+{"level":"error"}
+{"level":"error"}
+{"level":"error","message":"Could not find user. User id: 10000000000"}
+{"level":"error","message":"Could not find user. User id: 10000000000"}
+{"level":"error","message":null}
+{"level":"error"}
+{"level":"info","message":"User found. User email: john@gmail.com"}
+{"level":"info","message":"Server up and running on port 3003"}
+{"level":"info","message":"New language created"}
+{"level":"info","message":"Language deleted. ISO code: hah"}
+{"level":"info","message":"2 langauges found"}
+{"level":"info","message":"New language created"}
+{"level":"info","message":"Language found. ISO code: hah"}
+{"level":"info","message":"Language deleted. ISO code: hah"}
+{"level":"info","message":"New language created"}
+{"level":"info","message":"Language updated. ISO code: hah"}
+{"level":"info","message":"Language deleted. ISO code: hah"}
+{"level":"info","message":"New language created"}
+{"level":"info","message":"No content has been changed. ISO code: hah"}
+{"level":"info","message":"Language deleted. ISO code: hah"}
+{"level":"info","message":"New language created"}
+{"code":"ER_DUP_ENTRY","errno":1062,"level":"error","sql":"insert into languages(isoCode, name, altName, noTranslators)\n                values('hah','English','Anglish',1000)","sqlMessage":"Duplicate entry 'hah' for key 'languages.PRIMARY'","sqlState":"23000"}
+{"level":"info","message":"Language deleted. ISO code: hah"}
+{"level":"error","message":"Could not find language. ISO code: a"}
+{"level":"error","message":"Could not find language. ISO code: a"}
+{"level":"error","message":"Could not find language. ISO code: a"}
+{"level":"error","message":"Could not find language. ISO code: a"}
+{"level":"error","message":null}
+{"level":"error","message":"Could not find language. ISO code: a"}
+{"code":"ER_BAD_NULL_ERROR","errno":1048,"level":"error","sql":"insert into languages(isoCode, name, altName, noTranslators)\n                values('hah','English',NULL,NULL)","sqlMessage":"Column 'altName' cannot be null","sqlState":"23000"}
+{"level":"info","message":"New language created"}
+{"level":"error","message":"Could not find language. ISO code: hah"}
+{"level":"info","message":"New language created"}
+{"code":"ER_BAD_NULL_ERROR","errno":1048,"level":"error","sql":"update languages set isoCode='hah', name='English', altName=NULL, noTranslators=NULL where isoCode='hah'","sqlMessage":"Column 'altName' cannot be null","sqlState":"23000"}
+{"level":"info","message":"Language updated. ISO code: hah"}
+{"level":"info","message":"Language deleted. ISO code: hah"}
+{"level":"info","message":"Server up and running on port 3003"}
+{"level":"error"}
+{"level":"info","message":"User found. User email: john@gmail.com"}
+{"level":"info","message":"3 users found"}
+{"level":"info","message":"User found. User email: john@gmail.com"}
+{"level":"info","message":"User found. User email: john@gmail.com"}
+{"level":"info","message":"User found. User email: john@gmail.com"}
+{"level":"info","message":"User found. User email: john@gmail.com"}
+{"level":"info","message":"User found. User email: john@gmail.com"}
+{"level":"info","message":"User found. User email: john@gmail.com"}
+{"level":"info","message":"User found. User email: john@gmail.com"}
+{"level":"info","message":"User found. User email: john@gmail.com"}
+{"level":"info","message":"User found. User email: john@gmail.com"}
+{"level":"info","message":"User found. User email: john@gmail.com"}
+{"level":"info","message":"Server up and running on port 3003"}
+{"level":"info","message":"New language created"}
+{"level":"info","message":"Language deleted. ISO code: hah"}
+{"level":"info","message":"2 langauges found"}
+{"level":"info","message":"New language created"}
+{"level":"info","message":"Language found. ISO code: hah"}
+{"level":"info","message":"Language deleted. ISO code: hah"}
+{"level":"info","message":"New language created"}
+{"level":"info","message":"Language updated. ISO code: hah"}
+{"level":"info","message":"Language deleted. ISO code: hah"}
+{"level":"info","message":"New language created"}
+{"level":"info","message":"No content has been changed. ISO code: hah"}
+{"level":"info","message":"Language deleted. ISO code: hah"}
+{"level":"info","message":"New language created"}
+{"code":"ER_DUP_ENTRY","errno":1062,"level":"error","sql":"insert into languages(isoCode, name, altName, noTranslators)\n                values('hah','English','Anglish',1000)","sqlMessage":"Duplicate entry 'hah' for key 'languages.PRIMARY'","sqlState":"23000"}
+{"level":"info","message":"Language deleted. ISO code: hah"}
+{"level":"error","message":"Could not find language. ISO code: a"}
+{"level":"error","message":"Could not find language. ISO code: a"}
+{"level":"error","message":"Could not find language. ISO code: a"}
+{"level":"error","message":"Could not find language. ISO code: a"}
+{"level":"error","message":null}
+{"level":"error","message":"Could not find language. ISO code: a"}
+{"code":"ER_BAD_NULL_ERROR","errno":1048,"level":"error","sql":"insert into languages(isoCode, name, altName, noTranslators)\n                values('hah','English',NULL,NULL)","sqlMessage":"Column 'altName' cannot be null","sqlState":"23000"}
+{"level":"info","message":"New language created"}
+{"level":"error","message":"Could not find language. ISO code: hah"}
+{"level":"info","message":"New language created"}
+{"code":"ER_BAD_NULL_ERROR","errno":1048,"level":"error","sql":"update languages set isoCode='hah', name='English', altName=NULL, noTranslators=NULL where isoCode='hah'","sqlMessage":"Column 'altName' cannot be null","sqlState":"23000"}
+{"level":"info","message":"Language updated. ISO code: hah"}
+{"level":"info","message":"Language deleted. ISO code: hah"}
+{"level":"info","message":"Server up and running on port 3003"}
+{"level":"error"}
+{"level":"info","message":"User found. User email: john@gmail.com"}
+{"level":"info","message":"User found. User email: john@gmail.com"}
+{"level":"error"}
+{"level":"info","message":"3 users found"}
+{"level":"info","message":"User found. User email: john@gmail.com"}
+{"level":"info","message":"User found. User email: john@gmail.com"}
+{"level":"info","message":"User found. User email: john@gmail.com"}
+{"level":"info","message":"User found. User email: john@gmail.com"}
+{"level":"info","message":"User found. User email: john@gmail.com"}
+{"level":"error","message":"Could not find user. User id: 10000000000"}
+{"level":"info","message":"User found. User email: john@gmail.com"}
+{"level":"error","message":null}
+{"level":"info","message":"User found. User email: john@gmail.com"}
+{"level":"info","message":"User found. User email: john@gmail.com"}
+{"level":"error"}
+{"level":"info","message":"User found. User email: john@gmail.com"}
+{"level":"info","message":"Server up and running on port 3003"}
+{"level":"info","message":"New language created"}
+{"level":"info","message":"Language deleted. ISO code: hah"}
+{"level":"info","message":"2 langauges found"}
+{"level":"info","message":"New language created"}
+{"level":"info","message":"Language found. ISO code: hah"}
+{"level":"info","message":"Language deleted. ISO code: hah"}
+{"level":"info","message":"New language created"}
+{"level":"info","message":"Language updated. ISO code: hah"}
+{"level":"info","message":"Language deleted. ISO code: hah"}
+{"level":"info","message":"New language created"}
+{"level":"info","message":"No content has been changed. ISO code: hah"}
+{"level":"info","message":"Language deleted. ISO code: hah"}
+{"level":"info","message":"New language created"}
+{"code":"ER_DUP_ENTRY","errno":1062,"level":"error","sql":"insert into languages(isoCode, name, altName, noTranslators)\n                values('hah','English','Anglish',1000)","sqlMessage":"Duplicate entry 'hah' for key 'languages.PRIMARY'","sqlState":"23000"}
+{"level":"info","message":"Language deleted. ISO code: hah"}
+{"level":"error","message":"Could not find language. ISO code: a"}
+{"level":"error","message":"Could not find language. ISO code: a"}
+{"level":"error","message":"Could not find language. ISO code: a"}
+{"level":"error","message":"Could not find language. ISO code: a"}
+{"level":"error","message":null}
+{"level":"error","message":"Could not find language. ISO code: a"}
+{"code":"ER_BAD_NULL_ERROR","errno":1048,"level":"error","sql":"insert into languages(isoCode, name, altName, noTranslators)\n                values('hah','English',NULL,NULL)","sqlMessage":"Column 'altName' cannot be null","sqlState":"23000"}
+{"level":"info","message":"New language created"}
+{"level":"error","message":"Could not find language. ISO code: hah"}
+{"level":"info","message":"New language created"}
+{"code":"ER_BAD_NULL_ERROR","errno":1048,"level":"error","sql":"update languages set isoCode='hah', name='English', altName=NULL, noTranslators=NULL where isoCode='hah'","sqlMessage":"Column 'altName' cannot be null","sqlState":"23000"}
+{"level":"info","message":"Language updated. ISO code: hah"}
+{"level":"info","message":"Language deleted. ISO code: hah"}
+{"level":"info","message":"Server up and running on port 3003"}
+{"level":"info","message":"New user created"}
+{"level":"info","message":"User found. User email: john@gmail.com"}
+{"level":"info","message":"User found. User email: john@gmail.com"}
+{"level":"info","message":"User found. User email: john@gmail.com"}
+{"level":"info","message":"User found. User email: john@gmail.com"}
+{"level":"info","message":"User found. User email: john@gmail.com"}
+{"level":"error"}
+{"level":"error"}
+{"level":"info","message":"User found. User email: john@gmail.com"}
+{"level":"info","message":"User found. User email: john@gmail.com"}
+{"level":"info","message":"User found. User email: john@gmail.com"}
+{"level":"info","message":"User found. User email: john@gmail.com"}
+{"level":"info","message":"User found. User email: john@gmail.com"}
+{"level":"info","message":"User found. User email: john@gmail.com"}
+{"level":"info","message":"Server up and running on port 3003"}
+{"level":"error"}
+{"level":"info","message":"User found. User email: john@gmail.com"}
+{"level":"info","message":"3 users found"}
+{"level":"info","message":"User found. User email: john@gmail.com"}
+{"level":"info","message":"User found. User email: john@gmail.com"}
+{"level":"error"}
+{"level":"info","message":"User found. User email: john@gmail.com"}
+{"level":"info","message":"User found. User email: john@gmail.com"}
+{"level":"error"}
+{"level":"error"}
+{"level":"info","message":"User found. User email: john@gmail.com"}
+{"level":"info","message":"User found. User email: john@gmail.com"}
+{"level":"info","message":"User found. User email: john@gmail.com"}
+{"level":"info","message":"User found. User email: john@gmail.com"}
+{"level":"info","message":"User found. User email: john@gmail.com"}
+{"level":"info","message":"User found. User email: john@gmail.com"}
+{"level":"info","message":"Server up and running on port 3003"}
+{"level":"info","message":"New language created"}
+{"level":"info","message":"Language deleted. ISO code: hah"}
+{"level":"info","message":"2 langauges found"}
+{"level":"info","message":"New language created"}
+{"level":"info","message":"Language found. ISO code: hah"}
+{"level":"info","message":"Language deleted. ISO code: hah"}
+{"level":"info","message":"New language created"}
+{"level":"info","message":"Language updated. ISO code: hah"}
+{"level":"info","message":"Language deleted. ISO code: hah"}
+{"level":"info","message":"New language created"}
+{"level":"info","message":"No content has been changed. ISO code: hah"}
+{"level":"info","message":"Language deleted. ISO code: hah"}
+{"level":"info","message":"New language created"}
+{"code":"ER_DUP_ENTRY","errno":1062,"level":"error","sql":"insert into languages(isoCode, name, altName, noTranslators)\n                values('hah','English','Anglish',1000)","sqlMessage":"Duplicate entry 'hah' for key 'languages.PRIMARY'","sqlState":"23000"}
+{"level":"info","message":"Language deleted. ISO code: hah"}
+{"level":"error","message":"Could not find language. ISO code: a"}
+{"level":"error","message":"Could not find language. ISO code: a"}
+{"level":"error","message":"Could not find language. ISO code: a"}
+{"level":"error","message":"Could not find language. ISO code: a"}
+{"level":"error","message":null}
+{"level":"error","message":"Could not find language. ISO code: a"}
+{"code":"ER_BAD_NULL_ERROR","errno":1048,"level":"error","sql":"insert into languages(isoCode, name, altName, noTranslators)\n                values('hah','English',NULL,NULL)","sqlMessage":"Column 'altName' cannot be null","sqlState":"23000"}
+{"level":"info","message":"New language created"}
+{"level":"error","message":"Could not find language. ISO code: hah"}
+{"level":"info","message":"New language created"}
+{"code":"ER_BAD_NULL_ERROR","errno":1048,"level":"error","sql":"update languages set isoCode='hah', name='English', altName=NULL, noTranslators=NULL where isoCode='hah'","sqlMessage":"Column 'altName' cannot be null","sqlState":"23000"}
+{"level":"info","message":"Language updated. ISO code: hah"}
+{"level":"info","message":"Language deleted. ISO code: hah"}
+{"level":"info","message":"Server up and running on port 3003"}
+{"level":"error"}
+{"level":"info","message":"User found. User email: john@gmail.com"}
+{"level":"info","message":"User deleted. User id: 101"}
+{"level":"info","message":"2 users found"}
+{"level":"error","message":"Could not find user. User id: undefined"}
+{"level":"info","message":"New user created"}
+{"level":"info","message":"3 users found"}
+{"level":"info","message":"User found. User email: john@gmail.com"}
+{"level":"info","message":"User deleted. User id: 102"}
+{"level":"info","message":"New user created"}
+{"level":"info","message":"User found. User email: john@gmail.com"}
+{"level":"info","message":"User deleted. User id: 103"}
+{"level":"info","message":"New user created"}
+{"level":"info","message":"User found. User email: john@gmail.com"}
+{"level":"info","message":"User deleted. User id: 104"}
+{"level":"info","message":"New user created"}
+{"level":"error"}
+{"level":"info","message":"User found. User email: john@gmail.com"}
+{"level":"info","message":"User deleted. User id: 105"}
+{"level":"error","message":"Could not find user. User id: 10000000000"}
+{"level":"error","message":"Could not find user. User id: undefined"}
+{"level":"error","message":"Could not find user. User id: 10000000000"}
+{"level":"error","message":"Could not find user. User id: undefined"}
+{"level":"error","message":null}
+{"level":"error","message":"Could not find user. User id: undefined"}
+{"level":"error","message":"Could not find user. User id: undefined"}
+{"level":"info","message":"New user created"}
+{"level":"info","message":"User found. User email: john@gmail.com"}
+{"level":"info","message":"Server up and running on port 3003"}
+{"level":"info","message":"New language created"}
+{"level":"info","message":"Language deleted. ISO code: hah"}
+{"level":"info","message":"2 langauges found"}
+{"level":"info","message":"New language created"}
+{"level":"info","message":"Language found. ISO code: hah"}
+{"level":"info","message":"Language deleted. ISO code: hah"}
+{"level":"info","message":"New language created"}
+{"level":"info","message":"Language updated. ISO code: hah"}
+{"level":"info","message":"Language deleted. ISO code: hah"}
+{"level":"info","message":"New language created"}
+{"level":"info","message":"No content has been changed. ISO code: hah"}
+{"level":"info","message":"Language deleted. ISO code: hah"}
+{"level":"info","message":"New language created"}
+{"code":"ER_DUP_ENTRY","errno":1062,"level":"error","sql":"insert into languages(isoCode, name, altName, noTranslators)\n                values('hah','English','Anglish',1000)","sqlMessage":"Duplicate entry 'hah' for key 'languages.PRIMARY'","sqlState":"23000"}
+{"level":"info","message":"Language deleted. ISO code: hah"}
+{"level":"error","message":"Could not find language. ISO code: a"}
+{"level":"error","message":"Could not find language. ISO code: a"}
+{"level":"error","message":"Could not find language. ISO code: a"}
+{"level":"error","message":"Could not find language. ISO code: a"}
+{"level":"error","message":null}
+{"level":"error","message":"Could not find language. ISO code: a"}
+{"code":"ER_BAD_NULL_ERROR","errno":1048,"level":"error","sql":"insert into languages(isoCode, name, altName, noTranslators)\n                values('hah','English',NULL,NULL)","sqlMessage":"Column 'altName' cannot be null","sqlState":"23000"}
+{"level":"info","message":"New language created"}
+{"level":"error","message":"Could not find language. ISO code: hah"}
+{"level":"info","message":"New language created"}
+{"code":"ER_BAD_NULL_ERROR","errno":1048,"level":"error","sql":"update languages set isoCode='hah', name='English', altName=NULL, noTranslators=NULL where isoCode='hah'","sqlMessage":"Column 'altName' cannot be null","sqlState":"23000"}
+{"level":"info","message":"Language updated. ISO code: hah"}
+{"level":"info","message":"Language deleted. ISO code: hah"}
+{"level":"info","message":"Server up and running on port 3003"}
+{"level":"error"}
+{"level":"info","message":"User found. User email: john@gmail.com"}
+{"level":"info","message":"User deleted. User id: 106"}
+{"level":"info","message":"2 users found"}
+{"level":"error","message":"Could not find user. User id: undefined"}
+{"level":"info","message":"New user created"}
+{"level":"info","message":"3 users found"}
+{"level":"info","message":"User found. User email: john@gmail.com"}
+{"level":"info","message":"User deleted. User id: 107"}
+{"level":"info","message":"New user created"}
+{"level":"info","message":"User found. User email: john@gmail.com"}
+{"level":"info","message":"User updated. User id: 108"}
+{"level":"info","message":"User found. User email: john@gmail.com"}
+{"level":"info","message":"User deleted. User id: 108"}
+{"level":"info","message":"New user created"}
+{"level":"error","message":null}
+{"level":"info","message":"User found. User email: john@gmail.com"}
+{"level":"info","message":"User deleted. User id: 109"}
+{"level":"info","message":"New user created"}
+{"level":"error"}
+{"level":"info","message":"User found. User email: john@gmail.com"}
+{"level":"info","message":"User deleted. User id: 110"}
+{"level":"error","message":"Could not find user. User id: 10000000000"}
+{"level":"error","message":"Could not find user. User id: undefined"}
+{"level":"error","message":"Could not find user. User id: 10000000000"}
+{"level":"error","message":"Could not find user. User id: undefined"}
+{"level":"error","message":null}
+{"level":"error","message":"Could not find user. User id: undefined"}
+{"level":"error","message":"Could not find user. User id: undefined"}
+{"level":"info","message":"New user created"}
+{"level":"info","message":"User found. User email: john@gmail.com"}
+{"level":"info","message":"Server up and running on port 3003"}
+{"level":"info","message":"New language created"}
+{"level":"info","message":"Language deleted. ISO code: hah"}
+{"level":"info","message":"2 langauges found"}
+{"level":"info","message":"New language created"}
+{"level":"info","message":"Language found. ISO code: hah"}
+{"level":"info","message":"Language deleted. ISO code: hah"}
+{"level":"info","message":"New language created"}
+{"level":"info","message":"Language updated. ISO code: hah"}
+{"level":"info","message":"Language deleted. ISO code: hah"}
+{"level":"info","message":"New language created"}
+{"level":"info","message":"No content has been changed. ISO code: hah"}
+{"level":"info","message":"Language deleted. ISO code: hah"}
+{"level":"info","message":"New language created"}
+{"code":"ER_DUP_ENTRY","errno":1062,"level":"error","sql":"insert into languages(isoCode, name, altName, noTranslators)\n                values('hah','English','Anglish',1000)","sqlMessage":"Duplicate entry 'hah' for key 'languages.PRIMARY'","sqlState":"23000"}
+{"level":"info","message":"Language deleted. ISO code: hah"}
+{"level":"error","message":"Could not find language. ISO code: a"}
+{"level":"error","message":"Could not find language. ISO code: a"}
+{"level":"error","message":"Could not find language. ISO code: a"}
+{"level":"error","message":"Could not find language. ISO code: a"}
+{"level":"error","message":null}
+{"level":"error","message":"Could not find language. ISO code: a"}
+{"code":"ER_BAD_NULL_ERROR","errno":1048,"level":"error","sql":"insert into languages(isoCode, name, altName, noTranslators)\n                values('hah','English',NULL,NULL)","sqlMessage":"Column 'altName' cannot be null","sqlState":"23000"}
+{"level":"info","message":"New language created"}
+{"level":"error","message":"Could not find language. ISO code: hah"}
+{"level":"info","message":"New language created"}
+{"code":"ER_BAD_NULL_ERROR","errno":1048,"level":"error","sql":"update languages set isoCode='hah', name='English', altName=NULL, noTranslators=NULL where isoCode='hah'","sqlMessage":"Column 'altName' cannot be null","sqlState":"23000"}
+{"level":"info","message":"Language updated. ISO code: hah"}
+{"level":"info","message":"Language deleted. ISO code: hah"}
+{"level":"info","message":"Server up and running on port 3003"}
+{"level":"info","message":"New user created"}
+{"level":"info","message":"3 users found"}
+{"level":"error"}
+{"level":"info","message":"3 users found"}
+{"level":"error"}
+{"level":"info","message":"User found. User email: test@gmail.com"}
+{"level":"info","message":"User updated. User id: 112"}
+{"level":"error"}
+{"level":"info","message":"User updated. User id: 112"}
+{"level":"error"}
+{"level":"error"}
+{"level":"error","message":"Could not find user. User id: 10000000000"}
+{"level":"error","message":"Could not find user. User id: 10000000000"}
+{"level":"error","message":null}
+{"level":"error"}
+{"level":"info","message":"User found. User email: test@gmail.com"}
+{"level":"info","message":"Server up and running on port 3003"}
+{"level":"info","message":"New language created"}
+{"level":"info","message":"Language deleted. ISO code: hah"}
+{"level":"info","message":"2 langauges found"}
+{"level":"info","message":"New language created"}
+{"level":"info","message":"Language found. ISO code: hah"}
+{"level":"info","message":"Language deleted. ISO code: hah"}
+{"level":"info","message":"New language created"}
+{"level":"info","message":"Language updated. ISO code: hah"}
+{"level":"info","message":"Language deleted. ISO code: hah"}
+{"level":"info","message":"New language created"}
+{"level":"info","message":"No content has been changed. ISO code: hah"}
+{"level":"info","message":"Language deleted. ISO code: hah"}
+{"level":"info","message":"New language created"}
+{"code":"ER_DUP_ENTRY","errno":1062,"level":"error","sql":"insert into languages(isoCode, name, altName, noTranslators)\n                values('hah','English','Anglish',1000)","sqlMessage":"Duplicate entry 'hah' for key 'languages.PRIMARY'","sqlState":"23000"}
+{"level":"info","message":"Language deleted. ISO code: hah"}
+{"level":"error","message":"Could not find language. ISO code: a"}
+{"level":"error","message":"Could not find language. ISO code: a"}
+{"level":"error","message":"Could not find language. ISO code: a"}
+{"level":"error","message":"Could not find language. ISO code: a"}
+{"level":"error","message":null}
+{"level":"error","message":"Could not find language. ISO code: a"}
+{"code":"ER_BAD_NULL_ERROR","errno":1048,"level":"error","sql":"insert into languages(isoCode, name, altName, noTranslators)\n                values('hah','English',NULL,NULL)","sqlMessage":"Column 'altName' cannot be null","sqlState":"23000"}
+{"level":"info","message":"New language created"}
+{"level":"error","message":"Could not find language. ISO code: hah"}
+{"level":"info","message":"New language created"}
+{"code":"ER_BAD_NULL_ERROR","errno":1048,"level":"error","sql":"update languages set isoCode='hah', name='English', altName=NULL, noTranslators=NULL where isoCode='hah'","sqlMessage":"Column 'altName' cannot be null","sqlState":"23000"}
+{"level":"info","message":"Language updated. ISO code: hah"}
+{"level":"info","message":"Language deleted. ISO code: hah"}
+{"level":"info","message":"Server up and running on port 3003"}
+{"code":"ER_ACCESS_DENIED_ERROR","errno":1045,"level":"error","sqlMessage":"Access denied for user ''@'localhost' (using password: YES)","sqlState":"28000"}
+{"code":"ER_ACCESS_DENIED_ERROR","errno":1045,"level":"error","sqlMessage":"Access denied for user ''@'localhost' (using password: YES)","sqlState":"28000"}
+{"level":"error","message":"Could not find user. User id: 10000000000"}
+{"code":"ER_ACCESS_DENIED_ERROR","errno":1045,"level":"error","sqlMessage":"Access denied for user ''@'localhost' (using password: YES)","sqlState":"28000"}
+{"level":"info","message":"User updated. User id: 10000000000"}
+{"level":"info","message":"Server up and running on port 3003"}
+{"level":"info","message":"New language created"}
+{"level":"info","message":"Language deleted. ISO code: hah"}
+{"level":"info","message":"2 langauges found"}
+{"level":"info","message":"New language created"}
+{"level":"info","message":"Language found. ISO code: hah"}
+{"level":"info","message":"Language deleted. ISO code: hah"}
+{"level":"info","message":"New language created"}
+{"level":"info","message":"Language updated. ISO code: hah"}
+{"level":"info","message":"Language deleted. ISO code: hah"}
+{"level":"info","message":"New language created"}
+{"level":"info","message":"No content has been changed. ISO code: hah"}
+{"level":"info","message":"Language deleted. ISO code: hah"}
+{"level":"info","message":"New language created"}
+{"code":"ER_DUP_ENTRY","errno":1062,"level":"error","sql":"insert into languages(isoCode, name, altName, noTranslators)\n                values('hah','English','Anglish',1000)","sqlMessage":"Duplicate entry 'hah' for key 'languages.PRIMARY'","sqlState":"23000"}
+{"level":"info","message":"Language deleted. ISO code: hah"}
+{"level":"error","message":"Could not find language. ISO code: a"}
+{"level":"error","message":"Could not find language. ISO code: a"}
+{"level":"error","message":"Could not find language. ISO code: a"}
+{"level":"error","message":"Could not find language. ISO code: a"}
+{"level":"error","message":null}
+{"level":"error","message":"Could not find language. ISO code: a"}
+{"code":"ER_BAD_NULL_ERROR","errno":1048,"level":"error","sql":"insert into languages(isoCode, name, altName, noTranslators)\n                values('hah','English',NULL,NULL)","sqlMessage":"Column 'altName' cannot be null","sqlState":"23000"}
+{"level":"info","message":"New language created"}
+{"level":"error","message":"Could not find language. ISO code: hah"}
+{"level":"info","message":"New language created"}
+{"code":"ER_BAD_NULL_ERROR","errno":1048,"level":"error","sql":"update languages set isoCode='hah', name='English', altName=NULL, noTranslators=NULL where isoCode='hah'","sqlMessage":"Column 'altName' cannot be null","sqlState":"23000"}
+{"level":"info","message":"Language updated. ISO code: hah"}
+{"level":"info","message":"Language deleted. ISO code: hah"}
+{"level":"info","message":"Server up and running on port 3003"}
+{"code":"ER_ACCESS_DENIED_ERROR","errno":1045,"level":"error","sqlMessage":"Access denied for user ''@'localhost' (using password: YES)","sqlState":"28000"}
+{"code":"ER_ACCESS_DENIED_ERROR","errno":1045,"level":"error","sqlMessage":"Access denied for user ''@'localhost' (using password: YES)","sqlState":"28000"}
+{"level":"error","message":"Could not find user. User id: 10000000000"}
+{"code":"ER_ACCESS_DENIED_ERROR","errno":1045,"level":"error","sqlMessage":"Access denied for user ''@'localhost' (using password: YES)","sqlState":"28000"}
+{"level":"info","message":"User updated. User id: 10000000000"}
+{"level":"info","message":"Server up and running on port 3003"}
+{"level":"info","message":"New language created"}
+{"level":"info","message":"Language deleted. ISO code: hah"}
+{"level":"info","message":"2 langauges found"}
+{"level":"info","message":"New language created"}
+{"level":"info","message":"Language found. ISO code: hah"}
+{"level":"info","message":"Language deleted. ISO code: hah"}
+{"level":"info","message":"New language created"}
+{"level":"info","message":"Language updated. ISO code: hah"}
+{"level":"info","message":"Language deleted. ISO code: hah"}
+{"level":"info","message":"New language created"}
+{"level":"info","message":"No content has been changed. ISO code: hah"}
+{"level":"info","message":"Language deleted. ISO code: hah"}
+{"level":"info","message":"New language created"}
+{"code":"ER_DUP_ENTRY","errno":1062,"level":"error","sql":"insert into languages(isoCode, name, altName, noTranslators)\n                values('hah','English','Anglish',1000)","sqlMessage":"Duplicate entry 'hah' for key 'languages.PRIMARY'","sqlState":"23000"}
+{"level":"info","message":"Language deleted. ISO code: hah"}
+{"level":"error","message":"Could not find language. ISO code: a"}
+{"level":"error","message":"Could not find language. ISO code: a"}
+{"level":"error","message":"Could not find language. ISO code: a"}
+{"level":"error","message":"Could not find language. ISO code: a"}
+{"level":"error","message":null}
+{"level":"error","message":"Could not find language. ISO code: a"}
+{"code":"ER_BAD_NULL_ERROR","errno":1048,"level":"error","sql":"insert into languages(isoCode, name, altName, noTranslators)\n                values('hah','English',NULL,NULL)","sqlMessage":"Column 'altName' cannot be null","sqlState":"23000"}
+{"level":"info","message":"New language created"}
+{"level":"error","message":"Could not find language. ISO code: hah"}
+{"level":"info","message":"New language created"}
+{"code":"ER_BAD_NULL_ERROR","errno":1048,"level":"error","sql":"update languages set isoCode='hah', name='English', altName=NULL, noTranslators=NULL where isoCode='hah'","sqlMessage":"Column 'altName' cannot be null","sqlState":"23000"}
+{"level":"info","message":"Language updated. ISO code: hah"}
+{"level":"info","message":"Language deleted. ISO code: hah"}
+{"level":"info","message":"Server up and running on port 3003"}
+{"code":"ER_ACCESS_DENIED_ERROR","errno":1045,"level":"error","sqlMessage":"Access denied for user ''@'localhost' (using password: YES)","sqlState":"28000"}
+{"code":"ER_ACCESS_DENIED_ERROR","errno":1045,"level":"error","sqlMessage":"Access denied for user ''@'localhost' (using password: YES)","sqlState":"28000"}
+{"level":"error","message":"Could not find user. User id: 10000000000"}
+{"code":"ER_ACCESS_DENIED_ERROR","errno":1045,"level":"error","sqlMessage":"Access denied for user ''@'localhost' (using password: YES)","sqlState":"28000"}
+{"level":"info","message":"User updated. User id: 10000000000"}
+{"level":"info","message":"Server up and running on port 3003"}
+{"level":"info","message":"New language created"}
+{"level":"info","message":"Language deleted. ISO code: hah"}
+{"level":"info","message":"2 langauges found"}
+{"level":"info","message":"New language created"}
+{"level":"info","message":"Language found. ISO code: hah"}
+{"level":"info","message":"Language deleted. ISO code: hah"}
+{"level":"info","message":"New language created"}
+{"level":"info","message":"Language updated. ISO code: hah"}
+{"level":"info","message":"Language deleted. ISO code: hah"}
+{"level":"info","message":"New language created"}
+{"level":"info","message":"No content has been changed. ISO code: hah"}
+{"level":"info","message":"Language deleted. ISO code: hah"}
+{"level":"info","message":"New language created"}
+{"code":"ER_DUP_ENTRY","errno":1062,"level":"error","sql":"insert into languages(isoCode, name, altName, noTranslators)\n                values('hah','English','Anglish',1000)","sqlMessage":"Duplicate entry 'hah' for key 'languages.PRIMARY'","sqlState":"23000"}
+{"level":"info","message":"Language deleted. ISO code: hah"}
+{"level":"error","message":"Could not find language. ISO code: a"}
+{"level":"error","message":"Could not find language. ISO code: a"}
+{"level":"error","message":"Could not find language. ISO code: a"}
+{"level":"error","message":"Could not find language. ISO code: a"}
+{"level":"error","message":null}
+{"level":"error","message":"Could not find language. ISO code: a"}
+{"code":"ER_BAD_NULL_ERROR","errno":1048,"level":"error","sql":"insert into languages(isoCode, name, altName, noTranslators)\n                values('hah','English',NULL,NULL)","sqlMessage":"Column 'altName' cannot be null","sqlState":"23000"}
+{"level":"info","message":"New language created"}
+{"level":"error","message":"Could not find language. ISO code: hah"}
+{"level":"info","message":"New language created"}
+{"code":"ER_BAD_NULL_ERROR","errno":1048,"level":"error","sql":"update languages set isoCode='hah', name='English', altName=NULL, noTranslators=NULL where isoCode='hah'","sqlMessage":"Column 'altName' cannot be null","sqlState":"23000"}
+{"level":"info","message":"Language updated. ISO code: hah"}
+{"level":"info","message":"Language deleted. ISO code: hah"}
+{"level":"info","message":"Server up and running on port 3003"}
+{"level":"error"}
+{"level":"info","message":"User found. User email: test@gmail.com"}
+{"level":"info","message":"User deleted. User id: 112"}
+{"level":"info","message":"2 users found"}
+{"level":"error","message":"Could not find user. User id: undefined"}
+{"level":"info","message":"New user created"}
+{"level":"info","message":"3 users found"}
+{"level":"info","message":"User found. User email: test@gmail.com"}
+{"level":"info","message":"User deleted. User id: 113"}
+{"level":"info","message":"New user created"}
+{"level":"info","message":"User found. User email: test@gmail.com"}
+{"level":"info","message":"User updated. User id: 114"}
+{"level":"info","message":"User found. User email: test@gmail.com"}
+{"level":"info","message":"User deleted. User id: 114"}
+{"level":"info","message":"New user created"}
+{"level":"error","message":null}
+{"level":"info","message":"User found. User email: test@gmail.com"}
+{"level":"info","message":"User deleted. User id: 115"}
+{"level":"info","message":"New user created"}
+{"level":"error"}
+{"level":"info","message":"User found. User email: test@gmail.com"}
+{"level":"info","message":"User deleted. User id: 116"}
+{"level":"error","message":"Could not find user. User id: 10000000000"}
+{"level":"error","message":"Could not find user. User id: undefined"}
+{"level":"error","message":"Could not find user. User id: 10000000000"}
+{"level":"error","message":"Could not find user. User id: undefined"}
+{"level":"error","message":null}
+{"level":"error","message":"Could not find user. User id: undefined"}
+{"level":"error","message":"Could not find user. User id: undefined"}
+{"level":"info","message":"New user created"}
+{"level":"info","message":"User found. User email: test@gmail.com"}
+{"level":"info","message":"Server up and running on port 3003"}
+{"level":"info","message":"New language created"}
+{"level":"info","message":"Language deleted. ISO code: hah"}
+{"level":"info","message":"2 langauges found"}
+{"level":"info","message":"New language created"}
+{"level":"info","message":"Language found. ISO code: hah"}
+{"level":"info","message":"Language deleted. ISO code: hah"}
+{"level":"info","message":"New language created"}
+{"level":"info","message":"Language updated. ISO code: hah"}
+{"level":"info","message":"Language deleted. ISO code: hah"}
+{"level":"info","message":"New language created"}
+{"level":"info","message":"No content has been changed. ISO code: hah"}
+{"level":"info","message":"Language deleted. ISO code: hah"}
+{"level":"info","message":"New language created"}
+{"code":"ER_DUP_ENTRY","errno":1062,"level":"error","sql":"insert into languages(isoCode, name, altName, noTranslators)\n                values('hah','English','Anglish',1000)","sqlMessage":"Duplicate entry 'hah' for key 'languages.PRIMARY'","sqlState":"23000"}
+{"level":"info","message":"Language deleted. ISO code: hah"}
+{"level":"error","message":"Could not find language. ISO code: a"}
+{"level":"error","message":"Could not find language. ISO code: a"}
+{"level":"error","message":"Could not find language. ISO code: a"}
+{"level":"error","message":"Could not find language. ISO code: a"}
+{"level":"error","message":null}
+{"level":"error","message":"Could not find language. ISO code: a"}
+{"code":"ER_BAD_NULL_ERROR","errno":1048,"level":"error","sql":"insert into languages(isoCode, name, altName, noTranslators)\n                values('hah','English',NULL,NULL)","sqlMessage":"Column 'altName' cannot be null","sqlState":"23000"}
+{"level":"info","message":"New language created"}
+{"level":"error","message":"Could not find language. ISO code: hah"}
+{"level":"info","message":"New language created"}
+{"code":"ER_BAD_NULL_ERROR","errno":1048,"level":"error","sql":"update languages set isoCode='hah', name='English', altName=NULL, noTranslators=NULL where isoCode='hah'","sqlMessage":"Column 'altName' cannot be null","sqlState":"23000"}
+{"level":"info","message":"Language updated. ISO code: hah"}
+{"level":"info","message":"Language deleted. ISO code: hah"}
+{"level":"info","message":"Server up and running on port 3003"}
+{"level":"info","message":"New user created"}
+{"level":"info","message":"User found. User email: test@gmail.com"}
+{"level":"info","message":"User deleted. User id: 118"}
+{"level":"info","message":"2 users found"}
+{"level":"error","message":"Could not find user. User id: undefined"}
+{"level":"info","message":"New user created"}
+{"level":"info","message":"3 users found"}
+{"level":"info","message":"User found. User email: test@gmail.com"}
+{"level":"info","message":"User deleted. User id: 119"}
+{"level":"info","message":"New user created"}
+{"level":"info","message":"User found. User email: test@gmail.com"}
+{"level":"info","message":"User updated. User id: 120"}
+{"level":"info","message":"User found. User email: test@gmail.com"}
+{"level":"info","message":"User deleted. User id: 120"}
+{"level":"info","message":"New user created"}
+{"level":"error","message":null}
+{"level":"info","message":"User found. User email: test@gmail.com"}
+{"level":"info","message":"User deleted. User id: 121"}
+{"level":"error","message":"Could not find user. User id: 10000000000"}
+{"level":"error","message":"Could not find user. User id: undefined"}
+{"level":"error","message":"Could not find user. User id: 10000000000"}
+{"level":"error","message":"Could not find user. User id: undefined"}
+{"level":"error","message":null}
+{"level":"error","message":"Could not find user. User id: undefined"}
+{"level":"error","message":"Could not find user. User id: undefined"}
+{"level":"info","message":"New user created"}
+{"level":"info","message":"User found. User email: test@gmail.com"}
+{"level":"info","message":"Server up and running on port 3003"}
+{"level":"info","message":"New language created"}
+{"level":"info","message":"Language deleted. ISO code: hah"}
+{"level":"info","message":"2 langauges found"}
+{"level":"info","message":"New language created"}
+{"level":"info","message":"Language found. ISO code: hah"}
+{"level":"info","message":"Language deleted. ISO code: hah"}
+{"level":"info","message":"New language created"}
+{"level":"info","message":"Language updated. ISO code: hah"}
+{"level":"info","message":"Language deleted. ISO code: hah"}
+{"level":"info","message":"New language created"}
+{"level":"info","message":"No content has been changed. ISO code: hah"}
+{"level":"info","message":"Language deleted. ISO code: hah"}
+{"level":"info","message":"New language created"}
+{"code":"ER_DUP_ENTRY","errno":1062,"level":"error","sql":"insert into languages(isoCode, name, altName, noTranslators)\n                values('hah','English','Anglish',1000)","sqlMessage":"Duplicate entry 'hah' for key 'languages.PRIMARY'","sqlState":"23000"}
+{"level":"info","message":"Language deleted. ISO code: hah"}
+{"level":"error","message":"Could not find language. ISO code: a"}
+{"level":"error","message":"Could not find language. ISO code: a"}
+{"level":"error","message":"Could not find language. ISO code: a"}
+{"level":"error","message":"Could not find language. ISO code: a"}
+{"level":"error","message":null}
+{"level":"error","message":"Could not find language. ISO code: a"}
+{"code":"ER_BAD_NULL_ERROR","errno":1048,"level":"error","sql":"insert into languages(isoCode, name, altName, noTranslators)\n                values('hah','English',NULL,NULL)","sqlMessage":"Column 'altName' cannot be null","sqlState":"23000"}
+{"level":"info","message":"New language created"}
+{"level":"error","message":"Could not find language. ISO code: hah"}
+{"level":"info","message":"New language created"}
+{"code":"ER_BAD_NULL_ERROR","errno":1048,"level":"error","sql":"update languages set isoCode='hah', name='English', altName=NULL, noTranslators=NULL where isoCode='hah'","sqlMessage":"Column 'altName' cannot be null","sqlState":"23000"}
+{"level":"info","message":"Language updated. ISO code: hah"}
+{"level":"info","message":"Language deleted. ISO code: hah"}
+{"level":"info","message":"Server up and running on port 3003"}
+{"level":"error"}
+{"level":"info","message":"User found. User email: test@gmail.com"}
+{"level":"info","message":"User deleted. User id: 122"}
+{"level":"info","message":"2 users found"}
+{"level":"error","message":"Could not find user. User id: undefined"}
+{"level":"info","message":"New user created"}
+{"level":"info","message":"3 users found"}
+{"level":"info","message":"User found. User email: test@gmail.com"}
+{"level":"info","message":"User deleted. User id: 123"}
+{"level":"info","message":"New user created"}
+{"level":"info","message":"User found. User email: test@gmail.com"}
+{"level":"info","message":"User updated. User id: 124"}
+{"level":"info","message":"User found. User email: test@gmail.com"}
+{"level":"info","message":"User deleted. User id: 124"}
+{"level":"info","message":"New user created"}
+{"level":"error","message":null}
+{"level":"info","message":"User found. User email: test@gmail.com"}
+{"level":"info","message":"User deleted. User id: 125"}
+{"level":"info","message":"New user created"}
+{"level":"error"}
+{"level":"info","message":"User found. User email: test@gmail.com"}
+{"level":"info","message":"User deleted. User id: 126"}
+{"level":"error","message":"Could not find user. User id: 10000000000"}
+{"level":"error","message":"Could not find user. User id: undefined"}
+{"level":"error","message":"Could not find user. User id: 10000000000"}
+{"level":"error","message":"Could not find user. User id: undefined"}
+{"level":"error","message":null}
+{"level":"error","message":"Could not find user. User id: undefined"}
+{"level":"error","message":"Could not find user. User id: undefined"}
+{"level":"info","message":"New user created"}
+{"level":"info","message":"User found. User email: test@gmail.com"}
+{"level":"info","message":"Server up and running on port 3003"}
+{"level":"info","message":"User updated. User id: 4"}
+{"level":"info","message":"User updated. User id: 4"}
+{"level":"info","message":"User updated. User id: 4"}
+{"level":"error","message":null}
+{"level":"info","message":"Server up and running on port 3003"}
+{"level":"error","message":null}
+{"level":"error","message":null}
+{"level":"error","message":"id is not defined id is not defined","stack":"ReferenceError: id is not defined\n    at C:\\Users\\Fedor\\Desktop\\Python\\09CLEAR-API\\01draft\\api\\users\\II.user.controller.js:52:96\n    at Query.onResult (C:\\Users\\Fedor\\Desktop\\Python\\09CLEAR-API\\01draft\\api\\users\\I.user.service.js:40:24)\n    at C:\\Users\\Fedor\\Desktop\\Python\\09CLEAR-API\\01draft\\node_modules\\mysql2\\lib\\commands\\query.js:90:16\n    at process.processTicksAndRejections (node:internal/process/task_queues:77:11)"}
+{"level":"info","message":"Server up and running on port 3003"}
+{"level":"info","message":"User updated. User id: 4"}
+{"level":"info","message":"User updated. User id: 4"}
+{"level":"info","message":"Server up and running on port 3003"}
+{"level":"info","message":"User updated. User id: 4"}
+{"level":"info","message":"Server up and running on port 3003"}
+{"level":"info","message":"User updated. User id: 4"}
+{"level":"info","message":"Server up and running on port 3003"}
+{"level":"info","message":"User updated. User id: 4"}
+{"level":"info","message":"Server up and running on port 3003"}
+{"level":"info","message":"User updated. User id: 4"}
+{"level":"info","message":"Server up and running on port 3003"}
+{"level":"info","message":"User updated. User id: 4"}
+{"level":"info","message":"Server up and running on port 3003"}
+{"level":"info","message":"User updated. User id: 4"}
+{"level":"info","message":"Server up and running on port 3003"}
+{"level":"info","message":"User updated. User id: 4"}
+{"level":"info","message":"Server up and running on port 3003"}
+{"level":"info","message":"No content has been changed. User id: 4"}
