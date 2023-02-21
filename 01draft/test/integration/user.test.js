@@ -22,7 +22,7 @@ describe('User API', () => {
     afterEach(async() => {
         trial_user_object = await request(server)
             .get("/api/users/" + email);
-        const id = trial_user_object.body.id;
+        id = trial_user_object.body.id;
         await request(server).delete("/api/users/"+id);
         
         server.close();
@@ -72,6 +72,10 @@ describe('User API', () => {
         });
         it('Should return 200 if valid showUser request', async () => {
             await execCreateUser();
+
+            trial_user_object = await request(server)
+                .get("/api/users/" + email);
+            id = trial_user_object.body.id;
     
             const res = await execShowUserByID();
             
@@ -90,6 +94,10 @@ describe('User API', () => {
         });
         it('Should return 200 if no content changed', async () => {
             await execCreateUser();
+
+            trial_user_object = await request(server)
+                .get("/api/users/" + email);
+            id = trial_user_object.body.id;
 
             const res = await execUpdateUser();
 
@@ -146,7 +154,7 @@ describe('User API', () => {
 
             const res = await request(server)
                 .post("/api/users/")
-                .send({ name: name });
+                .send({ email: email, password: password });
 
             expect(res.status).toBe(500);              
         });
@@ -155,28 +163,28 @@ describe('User API', () => {
 
             trial_user_object = await request(server)
                 .get("/api/users/" + email);
-            const id = trial_user_object.body.id;
+            id = trial_user_object.body.id;
 
-            const res = await request(server)
-                .patch("/api/users/" + id)
-                .send({ name: name });
+            type = ""
+
+            const res = await execUpdateUser();
 
             expect(res.status).toBe(500);              
         });
-        // it('Should return 500 if server dies on showAll', async () => {
+    //     // it('Should return 500 if server dies on showAll', async () => {
             
-        //     const res = await request(server)
-        //         .get("/api/users/" + isoCode);
+    //     //     const res = await request(server)
+    //     //         .get("/api/users/" + isoCode);
 
-        //     expect(res.status).toBe(500);              
-        // });
-        // it('Should return 500 if server dies on delete', async () => {
-        //     isoCode = 'aaaa'
+    //     //     expect(res.status).toBe(500);              
+    //     // });
+    //     // it('Should return 500 if server dies on delete', async () => {
+    //     //     isoCode = 'aaaa'
             
-        //     const res = await request(server)
-        //         .delete("/api/users/" + isoCode);
+    //     //     const res = await request(server)
+    //     //         .delete("/api/users/" + isoCode);
 
-        //     expect(res.status).toBe(500);              
-        // });
+    //     //     expect(res.status).toBe(500);              
+    //     // });
     });
 });

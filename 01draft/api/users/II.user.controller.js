@@ -48,14 +48,17 @@ module.exports = {
                     winston.error(err);
                     return res.status(404).send("Could not find user");
                 }
-                // problem here is because I'm hashing the password the password string will always be the same meaingggggggggggggggggggggggggggggggggggggggggg
-                const result = await pool.promise().query('SELECT name, surname, email, type FROM users WHERE id = ?', [req.params.id]);
-
+                // problem here is because I'm hashing the password the password string will always change so even if no actual changes are introduced the 
+                // the password string will change due to new salts being generated meaning it's not possible to directly detect NO changes and this hashing
+                // must be factored in.
+                const result = await pool.promise().query('SELECT name, surname, email, password, type FROM users WHERE id = ?', [req.params.id]);
                 const resultBody = { ...result[0][0] };
-                const requestBody = { ...req.body };
-                delete requestBody['password'];
 
-                if (JSON.stringify(resultBody) === JSON.stringify(requestBody)) {
+                const salt = genSaltSync(10);
+                resultBody.password = hashSync(resultBody.password, salt);
+                body.password = hashSync(body.password, salt);
+
+                if (JSON.stringify(resultBody) === JSON.stringify(body)) {
                     winston.info('No content has been changed. User id: '+req.params.id);
                     return res.status(200).send('No changes implemented');
                 }
