@@ -1,4 +1,6 @@
 const request = require('supertest');
+const generateWebToken = require('../../auth/generateToken');
+const tud = require('./_testUserDetails');
 
 let server;
 let name;
@@ -7,6 +9,7 @@ let email;
 let password;
 let type;
 let id;
+let token;
 
 let trial_user_object;
 
@@ -14,18 +17,20 @@ describe('User API', () => {
 
     beforeEach(() => {
         server = require('../../index');
-        name = 'Test';
-        surname = 'Test';
-        email = 'test@gmail.com';
-        password = '1234';
-        type = 0;
+        name = tud.name;
+        surname = tud.surname;
+        email = tud.email;
+        password = tud.password;
+        type = tud.type;
+
+        token = generateWebToken({ name: name, surname: surname, email: email, password: password, type: type });
     });
     afterEach(async() => {
         trial_user_object = await request(server)
             .get("/api/users/" + email);
         id = trial_user_object.body.id;
 
-        await request(server).delete("/api/users/"+id);
+        await request(server).delete("/api/users/"+id).set("Authorization", "Bearer "+token);
         
         server.close();
     });
@@ -33,11 +38,13 @@ describe('User API', () => {
     const execCreateUser = () => {
         return request(server)
             .post("/api/users/")
+            .set("Authorization", "Bearer "+token)
             .send({ name: name, surname: surname, email: email, password: password, type: type });
     };
     const execUpdateUser = () => {
         return request(server)
             .patch("/api/users/" + id)
+            .set("Authorization", "Bearer "+token)
             .send({ name: name, surname: surname, email: email, password: password, type: type });
     };
     const execShowUserByID = () => {
@@ -50,7 +57,8 @@ describe('User API', () => {
     };
     const execDeleteUser = () => {
         return request(server)
-            .delete("/api/users/" + id);
+            .delete("/api/users/" + id)
+            .set("Authorization", "Bearer "+token);
     };
 
     /// VALID REQUESTS
@@ -166,6 +174,7 @@ describe('User API', () => {
 
             const res = await request(server)
                 .post("/api/users/")
+                .set("Authorization", "Bearer "+token)
                 .send({ email: email, password: password });
 
             expect(res.status).toBe(500);              

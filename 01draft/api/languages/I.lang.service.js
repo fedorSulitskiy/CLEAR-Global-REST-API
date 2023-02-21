@@ -38,7 +38,7 @@ module.exports = {
                 }
                 return callBack(null, results);
             }
-        )
+        );
     },
     showAll: callBack => {
         pool.query(

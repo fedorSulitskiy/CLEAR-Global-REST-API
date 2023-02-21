@@ -1,19 +1,30 @@
 const request = require('supertest');
+const generateWebToken = require('../../auth/generateToken');
+const tud = require('./_testUserDetails');
 
 let server;
 let isoCode;
 let name;
 let altName;
 let noTranslators;
+let token;
+
+const userName = tud.name;
+const surname = tud.surname;
+const email = tud.email;
+const password = tud.password;
+const type = tud.type;
 
 describe('Language API', () => {
 
     beforeEach(() => {
         server = require('../../index');
-        isoCode = "hah";
-        name = "English";
-        altName = "Anglish";
+        isoCode = "tst";
+        name = "Test";
+        altName = "Testing";
         noTranslators = 1000;
+
+        token = generateWebToken({ name: userName, surname: surname, email: email, password: password, type: type });
     });
     afterEach(async() => {
         await execDeleteLang();
@@ -23,11 +34,13 @@ describe('Language API', () => {
     const execCreateLang = () => {
         return request(server)
             .post("/api/languages/")
+            .set("Authorization", "Bearer "+token)
             .send({ isoCode: isoCode, name: name, altName: altName, noTranslators: noTranslators });
     };
     const execUpdateLang = () => {
         return request(server)
             .patch("/api/languages/" + isoCode)
+            .set("Authorization", "Bearer "+token)
             .send({ isoCode: isoCode, name: name, altName: altName, noTranslators: noTranslators });
     };
     const execShowLang = () => {
@@ -36,7 +49,8 @@ describe('Language API', () => {
     };
     const execDeleteLang = () => {
         return request(server)
-            .delete("/api/languages/"+isoCode);
+            .delete("/api/languages/"+isoCode)
+            .set("Authorization", "Bearer "+token);
     };
 
     /// VALID REQUESTS
@@ -63,7 +77,7 @@ describe('Language API', () => {
         });
         it('Should return 200 if update is successful', async () => {
             await execCreateLang();
-            name = 'Hehish';
+            name = 'TEST2';
     
             const res = await execUpdateLang();
     
@@ -89,22 +103,22 @@ describe('Language API', () => {
             expect(res.status).toBe(400);
         });
         it('Should return 404 if language not found by showLang', async () => {
-            isoCode = 'a';
+            isoCode = 't';
 
             const res = await execShowLang();
     
             expect(res.status).toBe(404);
         });  
         it('Should return 404 if language not found by deleteLang', async () => {
-            isoCode = 'a';
+            isoCode = 't';
 
             const res = await execDeleteLang();
     
             expect(res.status).toBe(404);
         });
         it('Should return 404 if language could not be found by updateLang', async () => {
-            isoCode = 'a';
-            name = 'Hehish';
+            isoCode = 't';
+            name = 'TEST2';
 
             const res = await execUpdateLang();
 
@@ -123,31 +137,33 @@ describe('Language API', () => {
     /// INTERNAL SERVER ERRORS
 
     describe('INTERNAL SERVER ERROR', () => {
-        it('Should return 500 if server dies on createLang', async () => {
+        it('Should return 500 if there is a server error on createLang', async () => {
 
             const res = await request(server)
                 .post("/api/languages/")
+                .set("Authorization", "Bearer "+token)
                 .send({ isoCode: isoCode, name: name });
 
             expect(res.status).toBe(500);              
         });
-        it('Should return 500 if server dies on updateLang', async () => {
+        it('Should return 500 if there is a server error on updateLang', async () => {
             await execCreateLang();
 
             const res = await request(server)
                 .patch("/api/languages/" + isoCode)
+                .set("Authorization", "Bearer "+token)
                 .send({ isoCode: isoCode, name: name });
 
             expect(res.status).toBe(500);              
         });
-        // it('Should return 500 if server dies on showAll', async () => {
+        // it('Should return 500 if there is a server error on showAll', async () => {
             
         //     const res = await request(server)
         //         .get("/api/languages/" + isoCode);
 
         //     expect(res.status).toBe(500);              
         // });
-        // it('Should return 500 if server dies on delete', async () => {
+        // it('Should return 500 if there is a server error on delete', async () => {
         //     isoCode = 'aaaa'
             
         //     const res = await request(server)

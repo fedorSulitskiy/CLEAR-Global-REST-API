@@ -1,6 +1,7 @@
 /// Executes the SQL queries and catches any immediate connection errors
 const winston = require('winston');
 const { genSaltSync, hashSync, compareSync } = require('bcrypt');
+const generateWebToken = require('../../auth/generateToken');
 
 const { create, update, showAll, showUserById, showUserByEmail, deleteByID } = require('./I.user.service');
 const pool = require('../../config/database');
@@ -120,34 +121,26 @@ module.exports = {
     },
     login: (req, res) => {
         const body = req.body;
-        getUserByEmail(body.email, (err, results) => {
+        showUserByEmail(body.email, (err, results) => {
             if (err) {
-                console.log(err);
-                return;
+                status500(res, err);
             }
             if (!results) {
-                return res.json({
-                    success: 0,
-                    data: "Invalid email or password"
-                });
+                winston.error('Invalid email or password');
+                return res.status(404).send("Invalid email or password");
             }
+
             const result = compareSync(body.password, results.password);
             if (result) {
                 results.password = undefined;
-                const jsontoken = sign({ result: results }, process.env.JWT_TOKEN, {
-                    expiresIn: "1h",
-                });
-                return res.json({
-                    success: 1,
-                    message: "login successful",
-                    token: jsontoken
-                });
+                const jsontoken = generateWebToken({ result: results });
+                winston.info('Login successful');
+                results['token'] = jsontoken;
+                return res.status(200).send(results);
             }
             else {
-                return res.json({
-                    success: 0,
-                    message: "Invalid email or password",
-                });
+                winston.error('Invalid email or password');
+                return res.status(404).send("Invalid email or password");
             }
         });
     },

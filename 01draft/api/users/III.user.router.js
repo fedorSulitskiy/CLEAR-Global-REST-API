@@ -1,13 +1,16 @@
 /// Connects the SQL query executor functions with html requests
-const { createUser, updateUser, showAllUsers, showUserByID, showUserByEmail, deleteUser } = require('./II.user.controller');
+const { createUser, updateUser, showAllUsers, showUserByID, showUserByEmail, deleteUser, login } = require('./II.user.controller');
 
 const router = require('express').Router();
+const { checkToken } = require('../../auth/auth');
+// unregistered users can only see informationbut not change or add it
 
-router.post("/", createUser);
-router.patch("/:id", updateUser);
+router.post("/", checkToken, createUser);
+router.patch("/:id", checkToken, updateUser);
 router.get("/", showAllUsers);
 router.get("/:id(\\d+)", showUserByID);
 router.get("/:email", showUserByEmail);
-router.delete("/:id(\\d+)", deleteUser);
+router.delete("/:id(\\d+)", checkToken, deleteUser);
+router.post("/login", login);
 
 module.exports = router;

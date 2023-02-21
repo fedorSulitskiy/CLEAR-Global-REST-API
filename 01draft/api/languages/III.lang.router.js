@@ -2,11 +2,13 @@
 const { createLang, updateLang, showAll, showLang, deleteLang } = require('./II.lang.controller');
 
 const router = require('express').Router();
+const { checkToken } = require('../../auth/auth');
+// unregistered users can only see informationbut not change or add it
 
-router.post("/", createLang);
-router.patch("/:id", updateLang);
+router.post("/", checkToken, createLang);
+router.patch("/:id", checkToken, updateLang);
 router.get("/", showAll);
 router.get("/:id", showLang);
-router.delete("/:id", deleteLang);
+router.delete("/:id", checkToken, deleteLang);
 
 module.exports = router;
