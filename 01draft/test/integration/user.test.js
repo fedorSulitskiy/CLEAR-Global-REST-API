@@ -11,6 +11,7 @@ let id;
 let trial_user_object;
 
 describe('User API', () => {
+
     beforeEach(() => {
         server = require('../../index');
         name = 'Test';
@@ -23,6 +24,7 @@ describe('User API', () => {
         trial_user_object = await request(server)
             .get("/api/users/" + email);
         id = trial_user_object.body.id;
+
         await request(server).delete("/api/users/"+id);
         
         server.close();
@@ -51,10 +53,6 @@ describe('User API', () => {
             .delete("/api/users/" + id);
     };
 
-    // it('It should return the fucking id', async() => {
-    //     expect(trial_user_object.body.id).toBe(1);
-    // });
-
     /// VALID REQUESTS
 
     describe('VALID REQUESTS', () => {
@@ -78,6 +76,13 @@ describe('User API', () => {
             id = trial_user_object.body.id;
     
             const res = await execShowUserByID();
+            
+            expect(res.status).toBe(200);
+        });
+        it('Should return 200 if valid showUserByEmail request', async () => {
+            await execCreateUser();
+    
+            const res = await execShowUserByEmail();
             
             expect(res.status).toBe(200);
         });
@@ -122,6 +127,13 @@ describe('User API', () => {
     
             expect(res.status).toBe(404);
         });  
+        it('Should return 404 if user not found by showUserByEmail', async () => {
+            email = 'THIS_EMAIL@dont.exist';
+
+            const res = await execShowUserByEmail();
+    
+            expect(res.status).toBe(404);
+        }); 
         it('Should return 404 if user not found by deleteUser', async () => {
             id = '10000000000';
 

@@ -86,10 +86,6 @@ module.exports = {
                 winston.error('Could not find user. User id: '+req.params.id);
                 return res.status(404).send("Could not find user");
             }
-            if (results.length === 0) {
-                winston.error('Could not find user. User id: '+req.params.id);
-                return res.status(404).send("Could not find user");
-            }
             winston.info('User found. User id: '+req.params.id);
             return res.status(200).send(results);
         });
@@ -101,11 +97,7 @@ module.exports = {
                 status500(res, err);
             }
             if (!results) {
-                winston.error('Could not find user. User id: '+req.params.id);
-                return res.status(404).send("Could not find user");
-            }
-            if (results.length === 0) {
-                winston.error('Could not find user. User email: '+email);
+                winston.error('Could not find user. User id: '+email);
                 return res.status(404).send("Could not find user");
             }
             winston.info('User found. User email: '+email);
