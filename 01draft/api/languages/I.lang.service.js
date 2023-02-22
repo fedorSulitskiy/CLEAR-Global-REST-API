@@ -6,8 +6,8 @@ const pool = require('../../config/database');
 module.exports = {
     create: (data, callBack) => {
         pool.query(
-            `insert into languages(isoCode, name, altName, noTranslators)
-                values(?,?,?,?)`,
+            `insert into languages(iso_id, lang_name, altName, noTranslators) 
+                values(?,?,?,?)`, // PROBLEM: they dont have an altName or noTranslators field in their db
             [
                 data.isoCode,
                 data.name,
@@ -24,8 +24,8 @@ module.exports = {
     },
     update: (id, data, callBack) => {
         pool.query(
-            `update languages set isoCode=?, name=?, altName=?, noTranslators=? where isoCode=?`,
-            [
+            `update languages set iso_id=?, lang_name=?, altName=?, noTranslators=? where isoCode=?`,
+            [                        // PROBLEM: they dont have an altName or noTranslators field in their db
                 data.isoCode,
                 data.name,
                 data.altName,
@@ -54,7 +54,7 @@ module.exports = {
     },
     showByID: (id, callBack) => {
         pool.query(
-            `select * from languages where isoCode = ?`,
+            `select * from languages where iso_id = ?`,
             [id],
             (error, results, fields) => {
                 if (error) {
@@ -66,7 +66,7 @@ module.exports = {
     },
     deleteByID: (id, callBack) => {
         pool.query(
-            `delete from languages where isoCode = ?`,
+            `delete from languages where iso_id = ?`,
             [id],
             (error, results, fields) => {
                 if (error) {
