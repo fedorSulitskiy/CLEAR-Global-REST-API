@@ -11,11 +11,19 @@ const status500 = function(res, err) {
     return res.status(500).send('Database connection error');
 }
 
+const hashPassword = function(res, password, salt) {
+    try {
+        return hashSync(password, salt);
+    } catch(ex) {
+        status500(res, ex);
+    } 
+}
+
 module.exports = {
     createUser: async (req, res) => {
         const body = req.body;
         const salt = genSaltSync(10);
-        body.password = hashSync(body.password, salt);
+        body.password = hashPassword(res, body.password, salt);
 
         const email = req.body.email;
         const result = await pool.promise().query('SELECT * FROM users WHERE email = ?', [email]);
@@ -38,7 +46,7 @@ module.exports = {
     updateUser: (req, res) => {
         const body = req.body;
         const salt = genSaltSync(10);
-        body.password = hashSync(body.password, salt);
+        body.password = hashPassword(res, body.password, salt);
         update(req.params.id, body, async (err, results) => {
             if (err) {
                 status500(res, err);
@@ -57,7 +65,7 @@ module.exports = {
 
                 const salt = genSaltSync(10);
                 resultBody.password = hashSync(resultBody.password, salt);
-                body.password = hashSync(body.password, salt);
+                body.password = hashPassword(res, body.password, salt);
 
                 if (JSON.stringify(resultBody) === JSON.stringify(body)) {
                     winston.info('No content has been changed. User id: '+req.params.id);
