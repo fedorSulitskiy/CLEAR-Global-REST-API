@@ -5,7 +5,7 @@ const pool = require('../../config/database');
 module.exports = {
     create: (data, callBack) => {
         pool.query(
-            `insert into users(name, surname, email, password, type)
+            `insert into users(first_name, last_name, email, password, user_type_id)
                 values(?,?,?,?,?)`,
             [
                 data.name,
@@ -24,7 +24,7 @@ module.exports = {
     },
     update: (id, data, callBack) => {
         pool.query(
-            `update users set name=?, surname=?, email=?, password=?, type=? where id = ?`,
+            `update users set first_name=?, last_name=?, email=?, password=?, user_type_id=? where user_id = ?`,
             [
                 data.name,
                 data.surname,
@@ -55,7 +55,7 @@ module.exports = {
     },
     showUserById: (id, callBack) => {
         pool.query(
-            `select * from users where id = ?`,
+            `select * from users where user_id = ?`,
             [id],
             (error, results, fields) => {
                 if (error) {
@@ -79,7 +79,7 @@ module.exports = {
     },
     deleteByID: (id, callBack) => {
         pool.query(
-            `delete from users where id = ?`,
+            `delete from users where user_id = ?`,
             [id],
             (error, results, fields) => {
                 if (error) {
@@ -91,7 +91,7 @@ module.exports = {
     },
     showUserByName: (name, surname, callBack) => {
         pool.query(
-            `select * from users where name = ?, surname = ?`,
+            `select * from users where first_name = ?, last_name = ?`,
             [name, surname],
             (error, results, fields) => {
                 if (error) {
