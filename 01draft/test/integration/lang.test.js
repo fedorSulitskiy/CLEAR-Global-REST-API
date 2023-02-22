@@ -56,7 +56,7 @@ describe('Language API', () => {
     /// VALID REQUESTS
 
     describe('VALID REQUESTS', () => {
-        it('Should return 200 if valid create request', async () => {
+        it('Should return 200 if valid createLang request', async () => {
             const res = await execCreateLang();
             
             expect(res.status).toBe(200);
@@ -75,7 +75,7 @@ describe('Language API', () => {
             
             expect(res.status).toBe(200);
         });
-        it('Should return 200 if update is successful', async () => {
+        it('Should return 200 if updateLang is successful', async () => {
             await execCreateLang();
             name = 'TEST2';
     
@@ -102,6 +102,57 @@ describe('Language API', () => {
             
             expect(res.status).toBe(400);
         });
+        it('should return 400 if user is not logged in on createLang', async () => {
+            token = '';
+
+            const res = await execCreateLang();
+    
+            expect(res.status).toBe(400);
+        });
+        it('should return 400 if token is invalid in on updateLang', async () => {
+            await execCreateLang();
+            name = 'TEST2';
+            token = '';
+
+            const res = await execUpdateLang();
+    
+            expect(res.status).toBe(400);
+        });
+        it('should return 400 if token is invalid in on deleteLang', async () => {
+            await execCreateLang();
+            
+            token = ''
+
+            const res = await execDeleteLang();
+    
+            expect(res.status).toBe(400);
+        });
+        it('should return 401 if token is invalid in on createLang', async () => {
+
+            const res = await request(server)
+                .post("/api/languages/")
+                .send({ isoCode: isoCode, name: name, altName: altName, noTranslators: noTranslators });
+    
+            expect(res.status).toBe(401);
+        });
+        it('should return 401 if user is not logged in on updateLang', async () => {
+            await execCreateLang();
+            name = 'TEST2';
+
+            const res = await request(server)
+                .patch("/api/languages/" + isoCode)
+                .send({ isoCode: isoCode, name: name, altName: altName, noTranslators: noTranslators });
+    
+            expect(res.status).toBe(401);
+        });
+        it('should return 401 if user is not logged in on deleteLang', async () => {
+            await execCreateLang();
+    
+            const res = await request(server)
+                .delete("/api/languages/" + isoCode);
+    
+            expect(res.status).toBe(401);
+        });
         it('Should return 404 if language not found by showLang', async () => {
             isoCode = 't';
 
@@ -124,14 +175,6 @@ describe('Language API', () => {
 
             expect(res.status).toBe(404);
         })
-        /// Returns 404 and I just can't catch it anywhere :/// Need help
-        // it('Should return 400 if isoCode for delete not provided', async () => {
-        //     isoCode = ''
-
-        //     const res = await execDeleteLang();
-    
-        //     expect(res.status).toBe(400);
-        // });
     });   
 
     /// INTERNAL SERVER ERRORS

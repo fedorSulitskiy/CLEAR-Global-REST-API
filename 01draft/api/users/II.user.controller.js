@@ -126,7 +126,7 @@ module.exports = {
                 status500(res, err);
             }
             if (!results) {
-                winston.error('Invalid email or password');
+                winston.error('Invalid email / No details provided - no results returned');
                 return res.status(404).send("Invalid email or password");
             }
 
@@ -139,7 +139,7 @@ module.exports = {
                 return res.status(200).send(results);
             }
             else {
-                winston.error('Invalid email or password');
+                winston.error('Invalid password - results returned');
                 return res.status(404).send("Invalid email or password");
             }
         });
