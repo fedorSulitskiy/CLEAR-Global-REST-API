@@ -89,4 +89,16 @@ module.exports = {
             }
         );
     },
+    showUserByName: (name, surname, callBack) => {
+        pool.query(
+            `select * from users where name = ?, surname = ?`,
+            [name, surname],
+            (error, results, fields) => {
+                if (error) {
+                    return callBack(error);
+                }
+                return callBack(null, results[0]);
+            }
+        );
+    },
 }
