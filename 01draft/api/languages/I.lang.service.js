@@ -6,28 +6,42 @@ const pool = require('../../config/database');
 module.exports = {
     createLang: (data, callBack) => { // create a basic language entry
         pool.query(
-            `insert into languages(iso_id, lang_name, lang_id, lang_status) 
+            `insert into languages(iso_id, lang_name, lang_status) 
                 values(?,?,?,?)`, // langs_info and languages have separate queries.
+
+            `insert into langs_info(lang_id, alternative_names, official, national, official_H2H, unofficial_H2H, total_speakers_nr,
+                first_lang_speakers_nr, second_lang_speakers_nr, internet_users_percent, TWB_machine_translation_development,
+                TWB_recommended_Pivot_langs, community_feasibility, reqruitment_feasibility, reqruitment_category,
+                total_score_15, level, latitude, longitude, aes_status, source_comment, alternative_names,
+                links, family_name) 
+                values((select lang_id from languages order by lang_id desc limit 1), ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,
+                ?, ?, ?, ?, ?, ?)`
             [
                 data.isoCode,
                 data.name,
-                data.id,
-                data.status
-            ],
-            (error, results, fields) => {
-                if (error) {
-                    return callBack(error);
-                }
-                return callBack(null, results);
-            }
-        );
-    },
-    createLangInfo: (data, callBack) => {  // create a basic lang info entry, borrow lang_id. want to do this and above together
-        pool.query(
-            `insert into langs_info(lang_id, alternative_names) 
-                values((select lang_id from languages order by lang_id desc limit 1), ?)`, // lang_id is fk
-            [
-                data.altName,
+                data.status,
+                data.alt_names,
+                data.official,
+                data.national,
+                data.official_h2h,
+                data.unoffical_h2h,
+                data.total_speakers,
+                data.first_lang_speakers,
+                data.second_lang_speakers,
+                data.internet_users_per,
+                data.twb_trans,
+                data.twb_rec_pivot,
+                data.community_feas,
+                data.recruitment_feas,
+                data.recruitment_cat,
+                data.total_score,
+                data.level,
+                data.latitude,
+                data.longitude,
+                data.aes_stat,
+                data.source_comment,
+                data.links,
+                data.family_name,
             ],
             (error, results, fields) => {
                 if (error) {
