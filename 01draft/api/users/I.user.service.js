@@ -89,29 +89,4 @@ module.exports = {
             }
         );
     },
-    deleteByName: (id, callBack) => {
-        pool.query(
-            `delete from users where first_name = ? and last_name = ?`,
-            [data.name,
-            data.surname],
-            (error, results, fields) => {
-                if (error) {
-                    return callBack(error);
-                }
-                return callBack(null, results);
-            }
-        );
-    },
-    showUserByName: (name, surname, callBack) => {
-        pool.query(
-            `select * from users where first_name = ?, last_name = ?`,
-            [name, surname],
-            (error, results, fields) => {
-                if (error) {
-                    return callBack(error);
-                }
-                return callBack(null, results[0]);
-            }
-        );
-    },
 }

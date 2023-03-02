@@ -95,7 +95,7 @@ module.exports = {
     showByID: (data, callBack) => {
         pool.query(
             `select * from languages where lang_id = ?`,
-            [data.id,]
+            [data.id,],
             (error, results, fields) => {
                 if (error) {
                     return callBack(error);
@@ -107,7 +107,7 @@ module.exports = {
     showRequestsByID: (data, callBack) => {
         pool.query(
             `select * from languages_requests where lang_request_id = ?`,
-            [data.requestsID,]
+            [data.requestsID,],
             (error, results, fields) => {
                 if (error) {
                     return callBack(error);
@@ -119,7 +119,7 @@ module.exports = {
     showAllRequests: (data, callBack) => {
         pool.query(
             `select * from languages_requests`,
-            []
+            [],
             (error, results, fields) => {
                 if (error) {
                     return callBack(error);
@@ -131,7 +131,7 @@ module.exports = {
     showAllInfo: (data, callBack) => {
         pool.query(
             `select * from langs_info`,
-            []
+            [],
             (error, results, fields) => {
                 if (error) {
                     return callBack(error);
@@ -143,7 +143,7 @@ module.exports = {
     showAllInfoByID: (data, callBack) => {
         pool.query(
             `select * from langs_info where lang_id = ?`,
-            [id]
+            [id],
             (error, results, fields) => {
                 if (error) {
                     return callBack(error);
