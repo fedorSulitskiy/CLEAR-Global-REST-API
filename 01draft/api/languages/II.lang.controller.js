@@ -23,7 +23,7 @@ module.exports = {
             return res.status(200).send(results);
         });
     },
-    updateLang: (req, res) => {
+    updateLang: (req, res) => { // should specify if by id or by iso (like delete by, see below)
         const body = req.body;
         update(req.params.id, body, (err, results) => {
             if (err) {
@@ -55,12 +55,12 @@ module.exports = {
         })
     },
     showLang: (req, res) => {
-        showByID(req.params.id, (err, results) => {
+        showByID(req.params.id, (err, results) => { // add show by iso
             if (err) {
                 status500(res, err);
             }
             if (results.length === 0) {
-                winston.error('Could not find language. ISO code: '+req.params.id);
+                winston.error('Could not find language. Language ID: '+req.params.id);
                 return res.status(404).send("Could not find language");
             }
             winston.info('Language found. ISO code: '+req.params.id);

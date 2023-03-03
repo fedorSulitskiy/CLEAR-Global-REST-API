@@ -55,8 +55,8 @@ module.exports = {
     createLangRequests: (data, callBack) => {  // create a lang request entry, borrow lang_id
         pool.query(
             `insert into language_requests(lang_id, lang_request_id, created_user_id, assigned_user_id, lr_end_date, lr_type, lr_content, lr_status) 
-            values((select lang_id from languages order by lang_id desc limit 1),?, ?, ?, ?, ?, ?, ?)`, // lang_id is 
-                //fk, how do we connect a request to the language? increment doesnt work as asynchronous 
+            values((select lang_id from languages order by lang_id desc limit 1),?, ?, ?, ?, ?, ?, ?)`, 
+                // lang_id is fk, how do we connect a request to the language? increment doesnt work as asynchronous 
                 //(ppl put requests in out of sync w language creation)
             [
                 data.langReqId,
@@ -75,7 +75,7 @@ module.exports = {
             }
         );
     },
-    updateByISO: (id, data, callBack) => { // do we actually need this? how often do iso codes change?
+    updateByISO: (isoCode, data, callBack) => { // do we actually need this? how often do iso codes change?
         pool.query(
             `update languages set iso_id=?, lang_name=?, lang_status =?, reference_id=?, kato_id=?, source_id=?, glotto_ref=?,
             alternative_names=?, official=?, national=?, official_H2H=?, unofficial_H2H=?, total_speakers_nr=?,
@@ -114,7 +114,7 @@ module.exports = {
                 data.source_comment,
                 data.links,
                 data.family_name,
-                data.isoCode
+                isoCode
             ],
             (error, results, fields) => {
                 if (error) {
@@ -151,7 +151,7 @@ module.exports = {
     showByID: (data, callBack) => {
         pool.query(
             `select * from languages where lang_id = ?`,
-            [data.id,],
+            [data.id],
             (error, results, fields) => {
                 if (error) {
                     return callBack(error);
@@ -223,7 +223,7 @@ module.exports = {
                 data.source_comment,
                 data.links,
                 data.family_name,
-                data.id
+                id
             ],
             (error, results, fields) => {
                 if (error) {
@@ -246,7 +246,7 @@ module.exports = {
                 data.lr_type,
                 data.lr_content,
                 data.lr_status,
-                data.lang_req_id
+                id
             ],
             (error, results, fields) => {
                 if (error) {
