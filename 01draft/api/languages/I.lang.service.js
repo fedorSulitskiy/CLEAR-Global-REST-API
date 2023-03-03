@@ -4,7 +4,7 @@ const winston = require('winston');
 const pool = require('../../config/database');
 
 module.exports = {
-    createLang: (data, callBack) => { // create a basic language entry
+    createLang: (data, callBack) => { // create a language entry
         pool.query(
             `insert into languages(iso_id, lang_name, lang_status) 
                 values(?,?,?,?)`, // langs_info and languages have separate queries.
