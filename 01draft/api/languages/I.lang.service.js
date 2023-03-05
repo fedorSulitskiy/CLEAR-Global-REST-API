@@ -166,6 +166,24 @@ module.exports = {
             }
         );
     },
+    showCountriesByLanguage: (id, callBack) => {
+        pool.query( // still have to join the countries and countries_names AND make isocode the id
+            `SELECT countries.country_name_id, countries.iso_code, regions.region_name, subregions.subregion_name, intermediate_regions.int_region_name
+            FROM langs_countries 
+            INNER JOIN countries ON countries.country_id = langs_countries.country_id 
+            INNER JOIN regions ON countries.region_id = regions.region_id 
+            INNER JOIN subregions ON countries.subregion_id = subregions.subregion_id
+            INNER JOIN intermediate_regions ON countries.int_region_id = intermediate_regions.int_region_id
+            WHERE langs_countries.lang_id = ?`,
+            [id],
+            (error, results, fields) => {
+                if (error) {
+                    return callBack(error);
+                }
+                return callBack(null, results);
+            }
+        );
+    },
     updateByID: (id, data, callBack) => {
         pool.query(
             `update languages set iso_id=?, lang_name=?, lang_status=?, where lang_id=?`,
@@ -271,5 +289,6 @@ module.exports = {
             }
         );
     },
+    
     
 };
