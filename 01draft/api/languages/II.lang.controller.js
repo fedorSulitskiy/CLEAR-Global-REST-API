@@ -1,7 +1,7 @@
 /// Executes the SQL queries and catches any immediate connection errors
 const winston = require('winston');
 
-const { create, update, showAll, showByID, deleteByID } = require('./I.lang.service');
+const { create, update, showAll, showByID, showByISO, deleteByID, deleteByISO } = require('./I.lang.service');
 
 const status500 = function(res, err) {
     winston.error(err);
@@ -23,9 +23,23 @@ module.exports = {
             return res.status(200).send(results);
         });
     },
-    updateLang: (req, res) => { // should specify if by id or by iso (like delete by, see below)
+    createLangRequests: (req, res) => {
         const body = req.body;
-        update(req.params.id, body, (err, results) => {
+        create(body, (err, results) => {
+            if (err) {
+                if (err.code==='ER_DUP_ENTRY') {
+                    winston.error(err)
+                    return res.status(400).send(`Language request with code ${req.body.langReqId} already exists`);
+                }
+                status500(res, err);
+            }
+            winston.info('New language request created')
+            return res.status(200).send(results);
+        });
+    },
+    updateLang: (req, res) => {
+        const body = req.body;
+        updateByID(req.params.id, body, (err, results) => {
             if (err) {
                 status500(res, err);
             }
@@ -37,15 +51,56 @@ module.exports = {
                     return res.status(404).send("Could not find language");
                 }
                 if (noChangedRows === 0) {
-                    winston.info('No content has been changed. ISO code: '+req.params.id);
+                    winston.info('No content has been changed. Language ID code: '+req.params.id);
                     return res.status(200).send('No changes implemented');
                 }
             }
-            winston.info('Language updated. ISO code: '+req.params.id);
+            winston.info('Language updated. Language ID: '+req.params.id);
+            return res.status(200).send(results);
+        });
+        updateByISO(req.params.isoCode, body, (err, results) => {
+            if (err) {
+                status500(res, err);
+            }
+            if (results) {
+                const noAffectedRows = results.affectedRows;
+                const noChangedRows = results.changedRows;
+                if (noAffectedRows === 0) {
+                    winston.error(err);
+                    return res.status(404).send("Could not find language");
+                }
+                if (noChangedRows === 0) {
+                    winston.info('No content has been changed. Language ISO code: '+req.params.isoCode);
+                    return res.status(200).send('No changes implemented');
+                }
+            }
+            winston.info('Language updated. ISO code: '+req.params.isoCode);
             return res.status(200).send(results);
         });
     },
-    showAll: (req, res) => {
+    updateRequestsByID: (req, res) => { // should the above lang updates also use the keyword update?
+        const body = req.body;
+        update(req.params.id, body, (err, results) => {
+            if (err) {
+                status500(res, err);
+            }
+            if (results) {
+                const noAffectedRows = results.affectedRows;
+                const noChangedRows = results.changedRows;
+                if (noAffectedRows === 0) {
+                    winston.error(err);
+                    return res.status(404).send("Could not find request");
+                }
+                if (noChangedRows === 0) {
+                    winston.info('No content has been changed. Request ID code: '+req.params.id);
+                    return res.status(200).send('No changes implemented');
+                }
+            }
+            winston.info('Language updated. Language ID: '+req.params.id);
+            return res.status(200).send(results);
+        });
+    },
+    showAll: (req, res) => { // should this be changed? why two?
         showAll((err, results) => {
             if (err) {
                 status500(res, err);
@@ -55,12 +110,23 @@ module.exports = {
         })
     },
     showLang: (req, res) => {
-        showByID(req.params.id, (err, results) => { // add show by iso
+        showByID(req.params.id, (err, results) => { 
             if (err) {
                 status500(res, err);
             }
             if (results.length === 0) {
                 winston.error('Could not find language. Language ID: '+req.params.id);
+                return res.status(404).send("Could not find language");
+            }
+            winston.info('Language found. Language ID: '+req.params.id);
+            return res.status(200).send(results);
+        })
+        showByISO(req.params.isoCode, (err, results) => { 
+            if (err) {
+                status500(res, err);
+            }
+            if (results.length === 0) {
+                winston.error('Could not find language. Language ISO code: '+req.params.isoCode);
                 return res.status(404).send("Could not find language");
             }
             winston.info('Language found. ISO code: '+req.params.id);
@@ -74,11 +140,23 @@ module.exports = {
                 status500(res, err);
             }
             if (noAffectedRows === 0) {
-                winston.error('Could not find language. ISO code: '+req.params.id);
+                winston.error('Could not find language. ID code: '+req.params.id);
+                return res.status(404).send("Could not find language");
+            }
+            winston.info('Language deleted. ID code: '+req.params.id);
+            return res.status(200).send(results);
+        });
+        deleteByISO(req.params.isoCode, (err, results) => {
+            const noAffectedRows = results.affectedRows;
+            if (err) {
+                status500(res, err);
+            }
+            if (noAffectedRows === 0) {
+                winston.error('Could not find language. ISO code: '+req.params.isoCode);
                 return res.status(404).send("Could not find language");
             }
             winston.info('Language deleted. ISO code: '+req.params.id);
             return res.status(200).send(results);
         });
     }
-};
+}
