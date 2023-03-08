@@ -78,15 +78,15 @@ module.exports = {
         });
     },
     showCountriesByLanguage: (req, res) => {
-        showCountriesByLanguage(req.params.id, (err, results) => {
+        showCountriesByLanguage(req.params.lang, (err, results) => {
             if (err) {
                 status500(res, err);
             }
             if (results.length === 0) {
-                winston.error('Could not find language. ISO code: '+req.params.id);
-                return res.status(404).send("Could not find language");
+                winston.error('Could not find countries for language: ' + req.params.lang);
+                return res.status(404).send("Could not find countries");
             }
-            winston.info('Language found. ISO code: '+req.params.id);
+            winston.info(results.length + ' ountries found for language: ' + req.params.lang);
             return res.status(200).send(results);
         });
     },

@@ -191,16 +191,16 @@ module.exports = {
             }
         );
     },
-    showCountriesByLanguage: (id, callBack) => {
-        pool.query( // still have to join the countries and countries_names AND make isocode the id
-            `SELECT countries.country_name_id, countries.iso_code, regions.region_name, subregions.subregion_name, intermediate_regions.int_region_name
+    showCountriesByLanguage: (lang, callBack) => {
+        pool.query(
+            `SELECT countries.iso_code, countries.english_name, countries.french_name, countries.german_name, regions.region_name, subregions.subregion_name, intermediate_regions.int_region_name
             FROM langs_countries 
             INNER JOIN countries ON countries.country_id = langs_countries.country_id 
             INNER JOIN regions ON countries.region_id = regions.region_id 
             INNER JOIN subregions ON countries.subregion_id = subregions.subregion_id
             INNER JOIN intermediate_regions ON countries.int_region_id = intermediate_regions.int_region_id
-            WHERE langs_countries.lang_id = ?`,
-            [id],
+            WHERE langs_countries.lang_id = (SELECT lang_id FROM languages WHERE lang_name = ?)`,
+            [lang],
             (error, results, fields) => {
                 if (error) {
                     return callBack(error);

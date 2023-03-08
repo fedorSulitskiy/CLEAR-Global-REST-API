@@ -9,8 +9,8 @@ router.post("/", checkToken, createLang);
 router.post("/requests/", checkToken, createLangRequests);
 router.patch("/:id", checkToken, updateLang);
 router.get("/", showAll);
+router.get("/countries/:lang", showCountriesByLanguage);
 router.get("/:id", showLang);
-router.get("/:id(/^[A-Za-z]+$/)", showCountriesByLanguage);
 router.delete("/:id", checkToken, deleteLang);
 
 module.exports = router;
