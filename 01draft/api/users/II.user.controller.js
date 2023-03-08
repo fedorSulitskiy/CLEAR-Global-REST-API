@@ -3,7 +3,7 @@ const winston = require('winston');
 const { genSaltSync, hashSync, compareSync } = require('bcrypt');
 const generateWebToken = require('../../auth/generateToken');
 
-const { create, update, showAll, showUserById, showUserByEmail, deleteByID } = require('./I.user.service');
+const { create, update, showAll, showUserById, showUserByEmail, deleteByID, logHistory } = require('./I.user.service');
 const pool = require('../../config/database');
 
 const status500 = function(res, err) {
@@ -142,9 +142,15 @@ module.exports = {
             if (result) {
                 results.password = undefined;
                 const jsontoken = generateWebToken({ result: results });
-                winston.info('Login successful');
-                results['token'] = jsontoken;
-                return res.status(200).send(results);
+
+                logHistory(results.user_id, 'logged in', (err, results) => {
+                    if (err) {
+                        status500(res, err);
+                    }
+                    winston.info('Login successful: user ' + results.user_id);
+                    results['token'] = jsontoken;
+                    return res.status(200).send(results);
+                });
             }
             else {
                 winston.error('Invalid password - results returned');
@@ -152,4 +158,13 @@ module.exports = {
             }
         });
     },
+    logout: (req, res) => {
+        logHistory(req.params.user_id, 'logged out', (err, results) => {
+            if (err) {
+                status500(res, err);
+            }
+            winston.info('Logout successful: user ' + req.params.user_id);
+            return res.status(200).send('logout successful!');
+        });
+    }
 }

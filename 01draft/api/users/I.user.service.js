@@ -129,4 +129,26 @@ module.exports = {
             }
         );
     },
+    logHistory: (user_id, log_status, callBack) => {
+        const currentDate = new Date();
+        const timestamp = Math.floor(currentDate.getTime() / 1000);
+        pool.query(
+            `insert into history(
+                user_id,
+                log_details,
+                log_time
+            ) values(?,?,?)`,
+            [
+                user_id, 
+                log_status, 
+                timestamp
+            ],
+            (error, results, fields) => {
+                if (error) {
+                    return callBack(error);
+                }
+                return callBack(null, results);
+            }
+        );
+    }
 }
