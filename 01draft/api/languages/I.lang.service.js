@@ -193,7 +193,14 @@ module.exports = {
     },
     showCountriesByLanguage: (lang, callBack) => {
         pool.query(
-            `SELECT countries.iso_code, countries.english_name, countries.french_name, countries.german_name, regions.region_name, subregions.subregion_name, intermediate_regions.int_region_name
+            `SELECT 
+                countries.iso_code, 
+                countries.english_name, 
+                countries.french_name, 
+                countries.german_name, 
+                regions.region_name, 
+                subregions.subregion_name, 
+                intermediate_regions.int_region_name
             FROM langs_countries 
             INNER JOIN countries ON countries.country_id = langs_countries.country_id 
             INNER JOIN regions ON countries.region_id = regions.region_id 
@@ -201,6 +208,48 @@ module.exports = {
             INNER JOIN intermediate_regions ON countries.int_region_id = intermediate_regions.int_region_id
             WHERE langs_countries.lang_id = (SELECT lang_id FROM languages WHERE lang_name = ?)`,
             [lang],
+            (error, results, fields) => {
+                if (error) {
+                    return callBack(error);
+                }
+                return callBack(null, results);
+            }
+        );
+    },
+    showLanguagesByCountry: (country, callBack) => {
+        pool.query(
+            `SELECT 
+                languages.lang_name, 
+                languages.iso_code, 
+                languages.no_of_trans, 
+                languages.lang_status, 
+                languages.glotto_ref, 
+                languages.official, 
+                languages.national, 
+                languages.official_H2H, 
+                languages.unofficial_H2H, 
+                languages.total_speakers_nr, 
+                languages.first_lang_speakers_nr, 
+                languages.second_lang_speakers_nr, 
+                languages.internet_users_percent, 
+                languages.TWB_machine_translation_development, 
+                languages.TWB_recommended_Pivot_langs, 
+                languages.community_feasibility, 
+                languages.reqruitment_feasibility, 
+                languages.reqruitment_category, 
+                languages.total_score_15, 
+                languages.level, 
+                languages.latitude,
+                languages.longitude, 
+                languages.aes_status, 
+                languages.source_comment, 
+                languages.alternative_names, 
+                languages.links, 
+                languages.family_name
+            FROM langs_countries
+            INNER JOIN languages ON languages.lang_id = langs_countries.lang_id
+            WHERE langs_countries.country_id = (SELECT country_id FROM countries WHERE country_name = ?)`,
+            [country],
             (error, results, fields) => {
                 if (error) {
                     return callBack(error);

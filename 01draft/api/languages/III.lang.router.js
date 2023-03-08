@@ -1,5 +1,5 @@
 /// Connects the SQL query executor functions with html requests
-const { createLang, updateLang, showAll, showLang, showCountriesByLanguage, createLangRequests, deleteLang } = require('./II.lang.controller');
+const { createLang, updateLang, showAll, showLang, showCountriesByLanguage, showLanguagesByCountry, createLangRequests, deleteLang } = require('./II.lang.controller');
 
 const router = require('express').Router();
 const { checkToken } = require('../../auth/auth');
@@ -10,6 +10,7 @@ router.post("/requests/", checkToken, createLangRequests);
 router.patch("/:id", checkToken, updateLang);
 router.get("/", showAll);
 router.get("/countries/:lang", showCountriesByLanguage);
+router.get("/languages/:country", showLanguagesByCountry);
 router.get("/:id", showLang);
 router.delete("/:id", checkToken, deleteLang);
 

@@ -1,7 +1,7 @@
 /// Executes the SQL queries and catches any immediate connection errors
 const winston = require('winston');
 
-const { create, update, showAll, showByID, showCountriesByLanguage, createLangRequests, deleteByID } = require('./I.lang.service');
+const { create, update, showAll, showByID, showCountriesByLanguage, showLanguagesByCountry, createLangRequests, deleteByID } = require('./I.lang.service');
 
 const status500 = function(res, err) {
     winston.error(err);
@@ -86,7 +86,20 @@ module.exports = {
                 winston.error('Could not find countries for language: ' + req.params.lang);
                 return res.status(404).send("Could not find countries");
             }
-            winston.info(results.length + ' ountries found for language: ' + req.params.lang);
+            winston.info(results.length + ' countries found for language: ' + req.params.lang);
+            return res.status(200).send(results);
+        });
+    },
+    showLanguagesByCountry: (req, res) => {
+        showLanguagesByCountry(req.params.country, (err, results) => {
+            if (err) {
+                status500(res, err);
+            }
+            if (results.length === 0) {
+                winston.error('Could not find languages for country: ' + req.params.country);
+                return res.status(404).send("Could not find languages");
+            }
+            winston.info(results.length + ' languages found for country: ' + req.params.country);
             return res.status(200).send(results);
         });
     },
