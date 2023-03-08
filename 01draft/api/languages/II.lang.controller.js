@@ -1,7 +1,7 @@
 /// Executes the SQL queries and catches any immediate connection errors
 const winston = require('winston');
 
-const { create, update, showAll, showByID, showCountriesByLanguage, deleteByID } = require('./I.lang.service');
+const { create, update, showAll, showByID, showCountriesByLanguage, createLangRequests, deleteByID } = require('./I.lang.service');
 
 const status500 = function(res, err) {
     winston.error(err);
@@ -66,6 +66,16 @@ module.exports = {
             winston.info('Language found. ISO code: '+req.params.id);
             return res.status(200).send(results);
         })
+    },
+    createLangRequests: (req, res) => {
+        const body = req.body;
+        createLangRequests(body, req, (err, results) => {
+            if (err) {
+                status500(res, err);
+            }
+            winston.info('success!!');
+            return res.status(200).send(results);
+        });
     },
     showCountriesByLanguage: (req, res) => {
         showCountriesByLanguage(req.params.id, (err, results) => {

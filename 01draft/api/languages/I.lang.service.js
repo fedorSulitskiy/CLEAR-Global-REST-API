@@ -3,19 +3,21 @@ const winston = require('winston');
 
 const pool = require('../../config/database');
 
+const { decode } = require('jsonwebtoken');
+
 module.exports = {
     createLang: (data, callBack) => { // create a basic language entry
         pool.query(
             `insert into languages(iso_id, lang_name, lang_status) 
                 values(?,?,?,?)`, // langs_info and languages have separate queries.
 
-            `insert into langs_info(lang_id, alternative_names, official, national, official_H2H, unofficial_H2H, total_speakers_nr,
-                first_lang_speakers_nr, second_lang_speakers_nr, internet_users_percent, TWB_machine_translation_development,
-                TWB_recommended_Pivot_langs, community_feasibility, reqruitment_feasibility, reqruitment_category,
-                total_score_15, level, latitude, longitude, aes_status, source_comment, alternative_names,
-                links, family_name) 
-                values((select lang_id from languages order by lang_id desc limit 1), ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,
-                ?, ?, ?, ?, ?, ?)`
+            // `insert into langs_info(lang_id, alternative_names, official, national, official_H2H, unofficial_H2H, total_speakers_nr,
+            //     first_lang_speakers_nr, second_lang_speakers_nr, internet_users_percent, TWB_machine_translation_development,
+            //     TWB_recommended_Pivot_langs, community_feasibility, reqruitment_feasibility, reqruitment_category,
+            //     total_score_15, level, latitude, longitude, aes_status, source_comment, alternative_names,
+            //     links, family_name) 
+            //     values((select lang_id from languages order by lang_id desc limit 1), ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,
+            //     ?, ?, ?, ?, ?, ?)`
             [
                 data.isoCode,
                 data.name,
@@ -51,12 +53,35 @@ module.exports = {
             }
         );
     },
-    createLangRequests: (data, callBack) => {  // create a basic lang request entry, borrow lang_id
+    createLangRequests: (data, req, callBack) => {
+        // user id extraction
+        let token = req.get("authorization");
+        token = token.slice(7);
+        const decoded = decode(token);
+        // current time
+        const currentDate = new Date();
+        const timestamp = Math.floor(currentDate.getTime() / 1000);
+
         pool.query(
-            `insert into language_requests(lang_id, lang_request_id) 
-                values((select lang_id from languages order by lang_id desc limit 1),?)`, // lang_id is fk, should be done when language is created
+            `insert into language_requests(
+                created_user_id, 
+                assigned_user_id, 
+                lr_end_date, 
+                lr_start_date, 
+                lang_id, 
+                lr_type, 
+                lr_content, 
+                lr_status) 
+                values(?,?,?,?,?,?,?,?)`,
             [
-                data.langReqId
+                decoded.result.user_id, 
+                data.assigned_user_id, 
+                0, 
+                timestamp, 
+                data.lang_id, 
+                data.lr_type, 
+                data.lr_content, 
+                data.lr_status
             ],
             (error, results, fields) => {
                 if (error) {
@@ -288,7 +313,5 @@ module.exports = {
                 return callBack(null, results);
             }
         );
-    },
-    
-    
+    }, 
 };

@@ -4,15 +4,36 @@ const pool = require('../../config/database');
 
 module.exports = {
     create: (data, callBack) => {
+        const currentDate = new Date();
+        const timestamp = Math.floor(currentDate.getTime() / 1000);
         pool.query(
-            `insert into users(first_name, last_name, email, password, user_type_id)
-                values(?,?,?,?,?)`,
+            `insert into users(
+                first_name, 
+                last_name, 
+                email, 
+                password, 
+                hash,
+                mobile,
+                user_type_id,
+                position,
+                company,
+                joined_date,
+                user_image,
+                status)
+                values(?,?,?,?,?,?,?,?,?,?,?,?)`,
             [
-                data.name,
-                data.surname,
+                data.first_name,
+                data.last_name,
                 data.email,
                 data.password,
-                data.type,
+                data.hash,
+                data.mobile,
+                data.user_type_id,
+                data.position,
+                data.company,
+                timestamp,
+                data.user_image,
+                data.status,
             ],
             (error, results, fields) => {
                 if (error) {
@@ -22,16 +43,35 @@ module.exports = {
             }
         );
     },
-    update: (id, data, callBack) => {
+    update: (user_id, data, callBack) => {
         pool.query(
-            `update users set first_name=?, last_name=?, email=?, password=?, user_type_id=? where user_id = ?`,
+            `update users set 
+            first_name = ?, 
+            last_name = ?, 
+            email = ?, 
+            password = ?, 
+            hash = ?,
+            mobile = ?,
+            user_type_id = ?,
+            position = ?,
+            company = ?,
+            joined_date = ?,
+            user_image = ?,
+            status where user_id = ?`,
             [
-                data.name,
-                data.surname,
+                data.first_name,
+                data.last_name,
                 data.email,
                 data.password,
-                data.type,
-                id
+                data.hash,
+                data.mobile,
+                data.user_type_id,
+                data.position,
+                data.company,
+                data.joined_date,
+                data.user_image,
+                data.status,
+                user_id
             ],
             (error, results, fields) => {
                 if (error) {
@@ -53,10 +93,10 @@ module.exports = {
             }
         );
     },
-    showUserById: (id, callBack) => {
+    showUserById: (user_id, callBack) => {
         pool.query(
             `select * from users where user_id = ?`,
-            [id],
+            [user_id],
             (error, results, fields) => {
                 if (error) {
                     return callBack(error);
@@ -77,10 +117,10 @@ module.exports = {
             }
         );
     },
-    deleteByID: (id, callBack) => {
+    deleteByID: (user_id, callBack) => {
         pool.query(
             `delete from users where user_id = ?`,
-            [id],
+            [user_id],
             (error, results, fields) => {
                 if (error) {
                     return callBack(error);
