@@ -20,7 +20,7 @@ module.exports = {
                 joined_date,
                 user_image,
                 status)
-                values(?,?,?,?,?,?,?,?,?,?,?,?)`,
+            values(?,?,?,?,?,?,?,?,?,?,?,?)`,
             [
                 data.first_name,
                 data.last_name,
@@ -46,18 +46,18 @@ module.exports = {
     update: (user_id, data, callBack) => {
         pool.query(
             `update users set 
-            first_name = ?, 
-            last_name = ?, 
-            email = ?, 
-            password = ?, 
-            hash = ?,
-            mobile = ?,
-            user_type_id = ?,
-            position = ?,
-            company = ?,
-            joined_date = ?,
-            user_image = ?,
-            status where user_id = ?`,
+                first_name = ?, 
+                last_name = ?, 
+                email = ?, 
+                password = ?, 
+                hash = ?,
+                mobile = ?,
+                user_type_id = ?,
+                position = ?,
+                company = ?,
+                joined_date = ?,
+                user_image = ?,
+            where user_id = ?`,
             [
                 data.first_name,
                 data.last_name,

@@ -8,12 +8,37 @@ const { decode } = require('jsonwebtoken');
 module.exports = {
     createLang: (data, callBack) => { // plan is to combine these into one table..
         pool.query(
-            `insert into languages(iso_id, lang_name, lang_status, reference_id, kato_id, source_id, glotto_ref,
-            alternative_names, official, national, official_H2H, unofficial_H2H, total_speakers_nr,
-            first_lang_speakers_nr, second_lang_speakers_nr, internet_users_percent, TWB_machine_translation_development,
-            TWB_recommended_Pivot_langs, community_feasibility, reqruitment_feasibility, reqruitment_category,
-            total_score_15, level, latitude, longitude, aes_status, source_comment, alternative_names,
-            links, family_name) 
+            `insert into languages(
+                iso_id, 
+                lang_name, 
+                lang_status, 
+                reference_id, 
+                no_of_trans, 
+                source_id, 
+                glotto_ref,
+                alternative_names, 
+                official, 
+                national, 
+                official_H2H, 
+                unofficial_H2H, 
+                total_speakers_nr,
+                first_lang_speakers_nr, 
+                second_lang_speakers_nr, 
+                internet_users_percent, 
+                TWB_machine_translation_development,
+                TWB_recommended_Pivot_langs, 
+                community_feasibility, 
+                reqruitment_feasibility, 
+                reqruitment_category,
+                total_score_15, 
+                level, 
+                latitude, 
+                longitude, 
+                aes_status, 
+                source_comment, 
+                alternative_names,
+                links, 
+                family_name) 
             values(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
             [
                 data.isoCode,
@@ -73,7 +98,7 @@ module.exports = {
                 lr_type, 
                 lr_content, 
                 lr_status) 
-                values(?,?,?,?,?,?,?,?)`,
+            values(?,?,?,?,?,?,?,?)`,
             [
                 decoded.result.user_id, 
                 data.assigned_user_id, 
@@ -94,12 +119,37 @@ module.exports = {
     },
     updateByISO: (isoCode, data, callBack) => { // do we actually need this? how often do iso codes change?
         pool.query(
-            `update languages set iso_id=?, lang_name=?, lang_status =?, reference_id=?, kato_id=?, source_id=?, glotto_ref=?,
-            alternative_names=?, official=?, national=?, official_H2H=?, unofficial_H2H=?, total_speakers_nr=?,
-            first_lang_speakers_nr=?, second_lang_speakers_nr=?, internet_users_percent=?, TWB_machine_translation_development=?,
-            TWB_recommended_Pivot_langs=?, community_feasibility=?, reqruitment_feasibility=?, reqruitment_category=?,
-            total_score_15=?, level=?, latitude=?, longitude=?, aes_status=?, source_comment=?, alternative_names=?,
-            links=?, family_name =?
+            `update languages set 
+                iso_id=?, 
+                lang_name=?, 
+                lang_status =?, 
+                reference_id=?, 
+                kato_id=?, 
+                source_id=?, 
+                glotto_ref=?,
+                alternative_names=?, 
+                official=?, 
+                national=?, 
+                official_H2H=?, 
+                unofficial_H2H=?, 
+                total_speakers_nr=?,
+                first_lang_speakers_nr=?, 
+                second_lang_speakers_nr=?, 
+                internet_users_percent=?, 
+                TWB_machine_translation_development=?,
+                TWB_recommended_Pivot_langs=?, 
+                community_feasibility=?, 
+                reqruitment_feasibility=?, 
+                reqruitment_category=?,
+                total_score_15=?, 
+                level=?, 
+                latitude=?, 
+                longitude=?, 
+                aes_status=?, 
+                source_comment=?, 
+                alternative_names=?,
+                links=?, 
+                family_name =?
             where iso_id=?`,
             [                        
                 data.newISOCode,
@@ -295,12 +345,37 @@ module.exports = {
     },
     updateByID: (id, data, callBack) => {
         pool.query(
-            `update languages set iso_id=?, lang_name=?, lang_status=? reference_id=?, kato_id=?, source_id=?, glotto_ref=?,
-            alternative_names=?, official=?, national=?, official_H2H=?, unofficial_H2H=?, total_speakers_nr=?,
-            first_lang_speakers_nr=?, second_lang_speakers_nr=?, internet_users_percent=?, TWB_machine_translation_development=?,
-            TWB_recommended_Pivot_langs=?, community_feasibility=?, reqruitment_feasibility=?, reqruitment_category=?,
-            total_score_15=?, level=?, latitude=?, longitude=?, aes_status=?, source_comment=?, alternative_names=?,
-            links=?, family_name=? 
+            `update languages set 
+                iso_id=?, 
+                lang_name=?, 
+                lang_status=?,
+                reference_id=?, 
+                kato_id=?, 
+                source_id=?, 
+                glotto_ref=?,
+                alternative_names=?, 
+                official=?, 
+                national=?, 
+                official_H2H=?, 
+                unofficial_H2H=?, 
+                total_speakers_nr=?,
+                first_lang_speakers_nr=?, 
+                second_lang_speakers_nr=?, 
+                internet_users_percent=?, 
+                TWB_machine_translation_development=?,
+                TWB_recommended_Pivot_langs=?, 
+                community_feasibility=?, 
+                reqruitment_feasibility=?, 
+                reqruitment_category=?,
+                total_score_15=?, 
+                level=?, 
+                latitude=?, 
+                longitude=?, 
+                aes_status=?, 
+                source_comment=?, 
+                alternative_names=?,
+                links=?, 
+                family_name=? 
             where lang_id=?`,
             [                       
                 data.isoCode,
@@ -344,8 +419,14 @@ module.exports = {
     },
     updateRequestsByID: (id, data, callBack) => {
         pool.query(
-            `update language_requests set created_user_id = ?, assigned_user_id = ?, lr_end_date = ?, lr_start_date = ?,
-            lr_type = ?, lr_content = ?, lr_status = ?
+            `update language_requests set 
+                created_user_id = ?, 
+                assigned_user_id = ?, 
+                lr_end_date = ?, 
+                lr_start_date = ?,
+                lr_type = ?, 
+                lr_content = ?, 
+                lr_status = ?
             where lang_requests_id=?`,
             [                        // all fields for langs_requests here, lang_requests_id is primary key
                 data.createdUserId,
