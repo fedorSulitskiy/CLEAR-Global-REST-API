@@ -45,7 +45,7 @@ module.exports = {
                 data.name,
                 data.status,
                 data.reference_id,
-                data.kato_id,
+                data.no_of_trans,
                 data.source_id,
                 data.glotto_ref,
                 data.alt_names,
@@ -124,7 +124,7 @@ module.exports = {
                 lang_name=?, 
                 lang_status =?, 
                 reference_id=?, 
-                kato_id=?, 
+                no_of_trans=?, 
                 source_id=?, 
                 glotto_ref=?,
                 alternative_names=?, 
@@ -156,7 +156,7 @@ module.exports = {
                 data.name,
                 data.status,
                 data.reference_id,
-                data.kato_id,
+                data.no_of_trans,
                 data.source_id,
                 data.glotto_ref,
                 data.alt_names,
@@ -266,7 +266,7 @@ module.exports = {
     },
     showAllInfoByID: (data, callBack) => {
         pool.query(
-            `select * from langs_info where lang_id = ?`,
+            `select * from languages where lang_id = ?`,
             [id],
             (error, results, fields) => {
                 if (error) {
@@ -350,7 +350,7 @@ module.exports = {
                 lang_name=?, 
                 lang_status=?,
                 reference_id=?, 
-                kato_id=?, 
+                no_of_trans=?, 
                 source_id=?, 
                 glotto_ref=?,
                 alternative_names=?, 
@@ -382,7 +382,7 @@ module.exports = {
                 data.name,
                 data.status,
                 data.reference_id,
-                data.kato_id,
+                data.no_of_trans,
                 data.source_id,
                 data.glotto_ref,
                 data.alt_names,
