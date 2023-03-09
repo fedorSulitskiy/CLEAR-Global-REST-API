@@ -3,6 +3,8 @@ const winston = require('winston');
 
 const pool = require('../../config/database');
 
+const { decode } = require('jsonwebtoken');
+
 module.exports = {
     createLang: (data, callBack) => { // plan is to combine these into one table..
         pool.query(
@@ -52,19 +54,34 @@ module.exports = {
             }
         );
     },
-    createLangRequests: (data, callBack) => {  // create a lang request entry, borrow lang_id
+    createLangRequests: (data, req, callBack) => {
+        // user id extraction
+        let token = req.get("authorization");
+        token = token.slice(7);
+        const decoded = decode(token);
+        // current time
+        const currentDate = new Date();
+        const timestamp = Math.floor(currentDate.getTime() / 1000);
+
         pool.query(
-            `insert into language_requests(lang_id, lang_request_id, created_user_id, assigned_user_id, lr_end_date, lr_type, lr_content, lr_status) 
-            values((select lang_id from languages order by lang_id desc limit 1),?, ?, ?, ?, ?, ?, ?)`, 
-                // lang_id is fk, how do we connect a request to the language? increment doesnt work as asynchronous 
-                //(ppl put requests in out of sync w language creation)
+            `insert into language_requests(
+                created_user_id, 
+                assigned_user_id, 
+                lr_end_date, 
+                lr_start_date, 
+                lang_id, 
+                lr_type, 
+                lr_content, 
+                lr_status) 
+                values(?,?,?,?,?,?,?,?)`,
             [
-                data.langReqId,
-                data.createdUserId,
-                data.assignedUserId,
-                data.lr_end,
-                data.lr_type,
-                data.lr_content,
+                decoded.result.user_id, 
+                data.assigned_user_id, 
+                0, 
+                timestamp, 
+                data.lang_id, 
+                data.lr_type, 
+                data.lr_content, 
                 data.lr_status
             ],
             (error, results, fields) => {
@@ -164,6 +181,7 @@ module.exports = {
         pool.query(
             `select * from languages_requests where lang_request_id = ?`,
             [data.requestsID,],
+            [data.requestsID,],
             (error, results, fields) => {
                 if (error) {
                     return callBack(error);
@@ -176,6 +194,97 @@ module.exports = {
         pool.query(
             `select * from languages_requests`,
             [],
+            (error, results, fields) => {
+                if (error) {
+                    return callBack(error);
+                }
+                return callBack(null, results);
+            }
+        );
+    },
+    showAllInfo: (data, callBack) => {
+        pool.query(
+            `select * from langs_info`,
+            [],
+            (error, results, fields) => {
+                if (error) {
+                    return callBack(error);
+                }
+                return callBack(null, results);
+            }
+        );
+    },
+    showAllInfoByID: (data, callBack) => {
+        pool.query(
+            `select * from langs_info where lang_id = ?`,
+            [id],
+            (error, results, fields) => {
+                if (error) {
+                    return callBack(error);
+                }
+                return callBack(null, results);
+            }
+        );
+    },
+    showCountriesByLanguage: (lang, callBack) => {
+        pool.query(
+            `SELECT 
+                countries.iso_code, 
+                countries.english_name, 
+                countries.french_name, 
+                countries.german_name, 
+                regions.region_name, 
+                subregions.subregion_name, 
+                intermediate_regions.int_region_name
+            FROM langs_countries 
+            INNER JOIN countries ON countries.country_id = langs_countries.country_id 
+            INNER JOIN regions ON countries.region_id = regions.region_id 
+            INNER JOIN subregions ON countries.subregion_id = subregions.subregion_id
+            INNER JOIN intermediate_regions ON countries.int_region_id = intermediate_regions.int_region_id
+            WHERE langs_countries.lang_id = (SELECT lang_id FROM languages WHERE lang_name = ?)`,
+            [lang],
+            (error, results, fields) => {
+                if (error) {
+                    return callBack(error);
+                }
+                return callBack(null, results);
+            }
+        );
+    },
+    showLanguagesByCountry: (country, callBack) => {
+        pool.query(
+            `SELECT 
+                languages.lang_name, 
+                languages.iso_code, 
+                languages.no_of_trans, 
+                languages.lang_status, 
+                languages.glotto_ref, 
+                languages.official, 
+                languages.national, 
+                languages.official_H2H, 
+                languages.unofficial_H2H, 
+                languages.total_speakers_nr, 
+                languages.first_lang_speakers_nr, 
+                languages.second_lang_speakers_nr, 
+                languages.internet_users_percent, 
+                languages.TWB_machine_translation_development, 
+                languages.TWB_recommended_Pivot_langs, 
+                languages.community_feasibility, 
+                languages.reqruitment_feasibility, 
+                languages.reqruitment_category, 
+                languages.total_score_15, 
+                languages.level, 
+                languages.latitude,
+                languages.longitude, 
+                languages.aes_status, 
+                languages.source_comment, 
+                languages.alternative_names, 
+                languages.links, 
+                languages.family_name
+            FROM langs_countries
+            INNER JOIN languages ON languages.lang_id = langs_countries.lang_id
+            WHERE langs_countries.country_id = (SELECT country_id FROM countries WHERE country_name = ?)`,
+            [country],
             (error, results, fields) => {
                 if (error) {
                     return callBack(error);
@@ -279,6 +388,5 @@ module.exports = {
                 return callBack(null, results);
             }
         );
-    },
-    
+    }, 
 };
