@@ -3,7 +3,7 @@ const winston = require('winston');
 const { genSaltSync, hashSync, compareSync } = require('bcrypt');
 const generateWebToken = require('../../auth/generateToken');
 
-const { create, update, showAll, showUserById, showUserByEmail, deleteByID, logHistory } = require('./I.user.service');
+const { create, update, showAll, showUserById, showUserByEmail, deleteByID, logHistory, deleteTestHistory } = require('./I.user.service');
 const pool = require('../../config/database');
 
 const status500 = function(res, err) {
@@ -166,5 +166,14 @@ module.exports = {
             winston.info('Logout successful: user ' + req.params.user_id);
             return res.status(200).send('logout successful!');
         });
-    }
+    },
+    deleteTestHistory: (req, res) => {
+        deleteByID(req.params.user_id, (err, results) => {
+            const noAffectedRows = results.affectedRows;
+            if (err) {
+                status500(res, err);
+            }
+            return res.status(200).send('deleted');
+        });
+    },
 }

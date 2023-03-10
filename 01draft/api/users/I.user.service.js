@@ -57,6 +57,7 @@ module.exports = {
                 company = ?,
                 joined_date = ?,
                 user_image = ?,
+                status = ?
             where user_id = ?`,
             [
                 data.first_name,
@@ -143,6 +144,18 @@ module.exports = {
                 log_status, 
                 timestamp
             ],
+            (error, results, fields) => {
+                if (error) {
+                    return callBack(error);
+                }
+                return callBack(null, results);
+            }
+        );
+    },
+    deleteTestHistory: (user_id, callBack) => {
+        pool.query(
+            `delete from history where user_id = ?`,
+            [user_id],
             (error, results, fields) => {
                 if (error) {
                     return callBack(error);

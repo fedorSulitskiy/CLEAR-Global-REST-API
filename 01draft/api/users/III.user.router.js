@@ -1,5 +1,5 @@
 /// Connects the SQL query executor functions with html requests
-const { createUser, updateUser, showAllUsers, showUserByID, showUserByEmail, deleteUser, login, logout } = require('./II.user.controller');
+const { createUser, updateUser, showAllUsers, showUserByID, showUserByEmail, deleteUser, login, logout, deleteTestHistory } = require('./II.user.controller');
 
 const router = require('express').Router();
 const { checkToken } = require('../../auth/auth');
@@ -11,6 +11,7 @@ router.get("/", showAllUsers);
 router.get("/:id(\\d+)", showUserByID);
 router.get("/:email", showUserByEmail);
 router.delete("/:id(\\d+)", checkToken, deleteUser);
+router.delete("/testing/:user_id(\\d+)", checkToken, deleteTestHistory);
 router.post("/login", login);
 router.post("/logout/:user_id", logout);
 
