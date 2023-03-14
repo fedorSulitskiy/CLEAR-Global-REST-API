@@ -418,7 +418,7 @@ module.exports = {
             }
         );
     },
-    showLanguagesByIntregion: (Intregion_name, callBack) => { // attempt to search by subregion;
+    showLanguagesByIntregion: (Intregion_name, callBack) => { // attempt to search by int region;
         pool.query(
             `SELECT 
             languages.lang_name, 
