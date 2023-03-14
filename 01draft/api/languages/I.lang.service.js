@@ -418,7 +418,7 @@ module.exports = {
             }
         );
     },
-    showLanguagesByIntregion: (Intregion_name, callBack) => { // attempt to search by int region;
+    showLanguagesByIntregion: (intregion_name, callBack) => { // attempt to search by int region;
         pool.query(
             `SELECT 
             languages.lang_name, 
@@ -452,7 +452,7 @@ module.exports = {
         INNER JOIN languages ON languages.lang_id = langs_countries.lang_id
         INNER JOIN intermediate_regions ON intermediate_regions.int_region_id = countries.int_region_id
         WHERE countries.int_region_id = (SELECT int_region_id FROM intermediate_regions WHERE int_region_name = ?)`,
-        [int_region_name],
+        [intregion_name],
             (error, results, fields) => {
                 if (error) {
                     return callBack(error);
