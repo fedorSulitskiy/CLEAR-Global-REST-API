@@ -6,7 +6,7 @@ const pool = require('../../config/database');
 const { decode } = require('jsonwebtoken');
 
 module.exports = {
-    createLang: (data, callBack) => { // plan is to combine these into one table..
+    createLang: (data, callBack) => {
         pool.query(
             `insert into languages(
                 iso_id, 
@@ -117,7 +117,7 @@ module.exports = {
             }
         );
     },
-    updateByISO: (isoCode, data, callBack) => { // do we actually need this? how often do iso codes change?
+    updateByISO: (isoCode, data, callBack) => {
         pool.query(
             `update languages set 
                 iso_id=?, 
@@ -252,18 +252,6 @@ module.exports = {
             }
         );
     },
-    showAllInfo: (data, callBack) => {
-        pool.query(
-            `select * from langs_info`,
-            [],
-            (error, results, fields) => {
-                if (error) {
-                    return callBack(error);
-                }
-                return callBack(null, results);
-            }
-        );
-    },
     showAllInfoByID: (data, callBack) => {
         pool.query(
             `select * from languages where lang_id = ?`,
@@ -335,6 +323,136 @@ module.exports = {
             INNER JOIN languages ON languages.lang_id = langs_countries.lang_id
             WHERE langs_countries.country_id = (SELECT country_id FROM countries WHERE country_name = ?)`,
             [country],
+            (error, results, fields) => {
+                if (error) {
+                    return callBack(error);
+                }
+                return callBack(null, results);
+            }
+        );
+    },
+    showLanguagesByRegion: (region_name, callBack) => { // attempt to search by region;
+        // problem is that languages and region arent directly connected. double join?
+        pool.query(
+            `SELECT 
+            languages.lang_name, 
+            languages.iso_code, 
+            languages.no_of_trans, 
+            languages.lang_status, 
+            languages.glotto_ref, 
+            languages.official, 
+            languages.national, 
+            languages.official_H2H, 
+            languages.unofficial_H2H, 
+            languages.total_speakers_nr, 
+            languages.first_lang_speakers_nr, 
+            languages.second_lang_speakers_nr, 
+            languages.internet_users_percent, 
+            languages.TWB_machine_translation_development, 
+            languages.TWB_recommended_Pivot_langs, 
+            languages.community_feasibility, 
+            languages.reqruitment_feasibility, 
+            languages.reqruitment_category, 
+            languages.total_score_15, 
+            languages.level, 
+            languages.latitude,
+            languages.longitude, 
+            languages.aes_status, 
+            languages.source_comment, 
+            languages.alternative_names, 
+            languages.links, 
+            languages.family_name
+        FROM langs_countries
+        INNER JOIN languages ON languages.lang_id = langs_countries.lang_id
+        INNER JOIN regions ON regions.region_id = countries.region_id
+        WHERE countries.region_id = (SELECT region_id FROM regions WHERE region_name = ?)`,
+        [region_name],
+            (error, results, fields) => {
+                if (error) {
+                    return callBack(error);
+                }
+                return callBack(null, results);
+            }
+        );
+    },
+    showLanguagesBySubregion: (subregion_name, callBack) => { // attempt to search by subregion;
+        pool.query(
+            `SELECT 
+            languages.lang_name, 
+            languages.iso_code, 
+            languages.no_of_trans, 
+            languages.lang_status, 
+            languages.glotto_ref, 
+            languages.official, 
+            languages.national, 
+            languages.official_H2H, 
+            languages.unofficial_H2H, 
+            languages.total_speakers_nr, 
+            languages.first_lang_speakers_nr, 
+            languages.second_lang_speakers_nr, 
+            languages.internet_users_percent, 
+            languages.TWB_machine_translation_development, 
+            languages.TWB_recommended_Pivot_langs, 
+            languages.community_feasibility, 
+            languages.reqruitment_feasibility, 
+            languages.reqruitment_category, 
+            languages.total_score_15, 
+            languages.level, 
+            languages.latitude,
+            languages.longitude, 
+            languages.aes_status, 
+            languages.source_comment, 
+            languages.alternative_names, 
+            languages.links, 
+            languages.family_name
+        FROM langs_countries
+        INNER JOIN languages ON languages.lang_id = langs_countries.lang_id
+        INNER JOIN subregions ON subregions.subregion_id = countries.subregion_id
+        WHERE countries.subregion_id = (SELECT subregion_id FROM subregions WHERE subregion_name = ?)`,
+        [subregion_name],
+            (error, results, fields) => {
+                if (error) {
+                    return callBack(error);
+                }
+                return callBack(null, results);
+            }
+        );
+    },
+    showLanguagesByIntregion: (Intregion_name, callBack) => { // attempt to search by subregion;
+        pool.query(
+            `SELECT 
+            languages.lang_name, 
+            languages.iso_code, 
+            languages.no_of_trans, 
+            languages.lang_status, 
+            languages.glotto_ref, 
+            languages.official, 
+            languages.national, 
+            languages.official_H2H, 
+            languages.unofficial_H2H, 
+            languages.total_speakers_nr, 
+            languages.first_lang_speakers_nr, 
+            languages.second_lang_speakers_nr, 
+            languages.internet_users_percent, 
+            languages.TWB_machine_translation_development, 
+            languages.TWB_recommended_Pivot_langs, 
+            languages.community_feasibility, 
+            languages.reqruitment_feasibility, 
+            languages.reqruitment_category, 
+            languages.total_score_15, 
+            languages.level, 
+            languages.latitude,
+            languages.longitude, 
+            languages.aes_status, 
+            languages.source_comment, 
+            languages.alternative_names, 
+            languages.links, 
+            languages.family_name
+        FROM langs_countries
+        INNER JOIN languages ON languages.lang_id = langs_countries.lang_id
+        INNER JOIN intermediate_regions ON intermediate_regions.int_region_id = countries.int_region_id
+        WHERE countries.int_region_id = (SELECT int_region_id FROM intermediate_regions WHERE int_region_name = ?)`,
+        [int_region_name],
             (error, results, fields) => {
                 if (error) {
                     return callBack(error);
