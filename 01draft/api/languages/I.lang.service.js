@@ -252,10 +252,24 @@ module.exports = {
             }
         );
     },
-    showAllInfoByID: (data, callBack) => { // is this not a copy of
+    showByAltName: (data, callBack) => {
         pool.query(
-            `select * from languages where lang_id = ?`,
-            [id],
+            `SELECT * from languages 
+            WHERE alternative_names = ?`,
+            [data.alt_names],
+            (error, results, fields) => {
+                if (error) {
+                    return callBack(error);
+                }
+                return callBack(null, results);
+            }
+        );
+    },
+    showAllDialects: (data, callBack) => {
+        pool.query(
+            `SELECT * from languages 
+            WHERE level = 'dialect'`,
+            [],
             (error, results, fields) => {
                 if (error) {
                     return callBack(error);
