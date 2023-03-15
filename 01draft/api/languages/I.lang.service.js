@@ -252,7 +252,7 @@ module.exports = {
             }
         );
     },
-    showAllInfoByID: (data, callBack) => {
+    showAllInfoByID: (data, callBack) => { // is this not a copy of
         pool.query(
             `select * from languages where lang_id = ?`,
             [id],
@@ -556,6 +556,46 @@ module.exports = {
                 data.lr_status,
                 id
             ],
+            (error, results, fields) => {
+                if (error) {
+                    return callBack(error);
+                }
+                return callBack(null, results);
+            }
+        );
+    },
+    showRequestHistory: (id, data, callBack) => { // search by request id, return completed requests
+        pool.query(
+            `SELECT * from languages_requests
+            WHERE lang_requests_id=?
+            AND lr_status='complete'`,
+            [id],
+            (error, results, fields) => {
+                if (error) {
+                    return callBack(error);
+                }
+                return callBack(null, results);
+            }
+        );
+    },
+    showOpenRequests: (id, data, callBack) => { // return open requests
+        pool.query(
+            `SELECT * from languages_requests
+            WHERE lr_status='in progress'`,
+            [id],
+            (error, results, fields) => {
+                if (error) {
+                    return callBack(error);
+                }
+                return callBack(null, results);
+            }
+        );
+    },
+    showPendingRequests: (id, data, callBack) => { // return pending requests
+        pool.query(
+            `SELECT * from languages_requests
+            WHERE lr_status='pending'`,
+            [id],
             (error, results, fields) => {
                 if (error) {
                     return callBack(error);
