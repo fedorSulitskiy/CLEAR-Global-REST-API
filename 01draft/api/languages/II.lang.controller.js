@@ -1,7 +1,7 @@
 /// Executes the SQL queries and catches any immediate connection errors
 const winston = require('winston');
 
-const { create, update, showAll, showByID, showByISO, showCountriesByLanguage, showLanguagesByCountry, createLangRequests, deleteByID, deleteByISO } = require('./I.lang.service');
+const { create, update, showAll, showByID, showByISO, showCountriesByLanguage, showLanguagesByCountry, showAllDialects, showLanguagesByRegion, showLanguagesBySubregion, showLanguagesByIntregion, showRequestHistory, showOpenRequests, showPendingRequests, showByAltName, createLangRequests, deleteByID, deleteByISO } = require('./I.lang.service');
 
 const status500 = function(res, err) {
     winston.error(err);

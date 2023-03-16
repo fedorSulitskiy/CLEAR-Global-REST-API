@@ -14,5 +14,6 @@ router.delete("/:id(\\d+)", checkToken, deleteUser);
 router.delete("/testing/:user_id(\\d+)", checkToken, deleteTestHistory);
 router.post("/login", login);
 router.post("/logout/:user_id", logout);
+// add something for language request history? suggested: /API/languages/history/
 
 module.exports = router;
