@@ -105,7 +105,7 @@ module.exports = {
             if (err) {
                 status500(res, err);
             }
-            winston.info(results.length+' langauges found');
+            winston.info(results.length+' languages found');
             return res.status(200).send(results);
         })
     },
@@ -166,6 +166,110 @@ module.exports = {
                 return res.status(404).send("Could not find languages");
             }
             winston.info(results.length + ' languages found for country: ' + req.params.country);
+            return res.status(200).send(results);
+        });
+    },
+    showLanguagesByRegion: (req, res) => {
+        showLanguagesByRegion(req.params.region_name, (err, results) => {
+            if (err) {
+                status500(res, err);
+            }
+            if (results.length === 0) {
+                winston.error('Could not find languages for region: ' + req.params.region_name);
+                return res.status(404).send("Could not find languages");
+            }
+            winston.info(results.length + ' languages found for region: ' + req.params.region_name);
+            return res.status(200).send(results);
+        });
+    },
+    showLanguagesBySubregion: (req, res) => {
+        showLanguagesBySubregion(req.params.subregion_name, (err, results) => {
+            if (err) {
+                status500(res, err);
+            }
+            if (results.length === 0) {
+                winston.error('Could not find languages for subregion: ' + req.params.subregion_name);
+                return res.status(404).send("Could not find languages");
+            }
+            winston.info(results.length + ' languages found for subregion: ' + req.params.subregion_name);
+            return res.status(200).send(results);
+        });
+    },
+    showLanguagesByIntregion: (req, res) => {
+        showLanguagesByIntregion(req.params.intregion_name, (err, results) => {
+            if (err) {
+                status500(res, err);
+            }
+            if (results.length === 0) {
+                winston.error('Could not find languages for intermediate region: ' + req.params.intregion_name);
+                return res.status(404).send("Could not find languages");
+            }
+            winston.info(results.length + ' languages found for intermediate region: ' + req.params.intregion_name);
+            return res.status(200).send(results);
+        });
+    },
+    showRequestHistory: (req, res) => {
+        showRequestHistory(req.params.id, (err, results) => {
+            if (err) {
+                status500(res, err);
+            }
+            if (results.length === 0) {
+                winston.error('Could not find request history for request ID: ' + req.params.id);
+                return res.status(404).send("Could not return request history.");
+            }
+            winston.info(results.length + ' requests found for ID: ' + req.params.id);
+            return res.status(200).send(results);
+        });
+    },
+    showOpenRequests: (req, res) => {
+        showOpenRequests((err, results) => {
+            if (err) {
+                status500(res, err);
+            }
+            if (results.length === 0) {
+                winston.error('Could not find any open requests.');
+                return res.status(404).send("Could not any open requests.");
+            }
+            winston.info(results.length + ' open requests. ');
+            return res.status(200).send(results);
+        });
+    },
+    showPendingRequests: (req, res) => {
+        showPendingRequests((err, results) => {
+            if (err) {
+                status500(res, err);
+            }
+            if (results.length === 0) {
+                winston.error('Could not find any pending requests.');
+                return res.status(404).send("Could not any pending requests.");
+            }
+            winston.info(results.length + ' pending requests. ');
+            return res.status(200).send(results);
+        });
+    },
+    showByAltName: (req, res) => {
+        showByAltName(req.params.alt_name, (err, results) => {
+            if (err) {
+                status500(res, err);
+            }
+            if (results.length === 0) {
+                winston.error('No results for: ' + req.params.alt_name);
+                return res.status(404).send("No results found.");
+            }
+            winston.info(results.length + ' results for: ' + req.params.alt_name);
+            return res.status(200).send(results);
+        });
+    },
+    showAllDialects: (req, res) => {
+        showAllDialects((err, results) => {
+            if (err) {
+                status500(res, err);
+            }
+            if (results.length === 0) {
+                winston.error('Could not find dialects.');
+                return res.status(404).send("Could not find dialects.");
+            }
+            winston.info(results.length + ' dialects found.');
             return res.status(200).send(results);
         });
     },
