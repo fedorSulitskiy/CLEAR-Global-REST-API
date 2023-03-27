@@ -7,13 +7,16 @@ const { checkToken } = require('../../auth/auth');
 
 router.post("/", checkToken, createUser);
 router.patch("/:id", checkToken, updateUser);
-router.get("/", showAllUsers);
-router.get("/:id(\\d+)", showUserByID);
-router.get("/:email", showUserByEmail);
 router.delete("/:id(\\d+)", checkToken, deleteUser);
+
+router.get("/show", showAllUsers);
+router.get("/show/:id(\\d+)", showUserByID);
+router.get("/show/:email", showUserByEmail);
+
 router.delete("/testing/:user_id(\\d+)", checkToken, deleteTestHistory);
+
 router.post("/login", login);
-router.post("/logout/:user_id", logout);
+router.post("/login/:user_id", logout);
 // add something for language request history? suggested: /API/languages/history/
 
 module.exports = router;
