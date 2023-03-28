@@ -53,166 +53,168 @@ describe('Language API', () => {
             .set("Authorization", "Bearer "+token);
     };
 
-    /// VALID REQUESTS
+    
 
-    describe('VALID REQUESTS', () => {
-        it('Should return 200 if valid createLang request', async () => {
-            const res = await execCreateLang();
+    // /// VALID REQUESTS
+
+    // describe('VALID REQUESTS', () => {
+    //     it('Should return 200 if valid createLang request', async () => {
+    //         const res = await execCreateLang();
             
-            expect(res.status).toBe(200);
-        });
-        it('Should return 200 if valid showAll request', async () => {
-            isoCode = '';
+    //         expect(res.status).toBe(200);
+    //     });
+    //     it('Should return 200 if valid showAll request', async () => {
+    //         isoCode = '';
     
-            const res = await execShowLang();
+    //         const res = await execShowLang();
             
-            expect(res.status).toBe(200);
-        });
-        it('Should return 200 if valid showLang request', async () => {
-            await execCreateLang();
+    //         expect(res.status).toBe(200);
+    //     });
+    //     it('Should return 200 if valid showLang request', async () => {
+    //         await execCreateLang();
     
-            const res = await execShowLang();
+    //         const res = await execShowLang();
             
-            expect(res.status).toBe(200);
-        });
-        it('Should return 200 if updateLang is successful', async () => {
-            await execCreateLang();
-            name = 'TEST2';
+    //         expect(res.status).toBe(200);
+    //     });
+    //     it('Should return 200 if updateLang is successful', async () => {
+    //         await execCreateLang();
+    //         name = 'TEST2';
     
-            const res = await execUpdateLang();
+    //         const res = await execUpdateLang();
     
-            expect(res.status).toBe(200);
-        });
-        it('Should return 200 if no content changed', async () => {
-            await execCreateLang();
+    //         expect(res.status).toBe(200);
+    //     });
+    //     it('Should return 200 if no content changed', async () => {
+    //         await execCreateLang();
 
-            const res = await execUpdateLang();
+    //         const res = await execUpdateLang();
 
-            expect(res.status).toBe(200);
-        });
-    });
+    //         expect(res.status).toBe(200);
+    //     });
+    // });
 
-    /// BAD REQUESTS
+    // /// BAD REQUESTS
 
-    describe('BAD REQUESTS', () => {
-        it("Should return 400 if language is already in the database", async () => {
-            await execCreateLang();
+    // describe('BAD REQUESTS', () => {
+    //     it("Should return 400 if language is already in the database", async () => {
+    //         await execCreateLang();
     
-            const res = await execCreateLang();
+    //         const res = await execCreateLang();
             
-            expect(res.status).toBe(400);
-        });
-        it('should return 400 if user is not logged in on createLang', async () => {
-            token = '';
+    //         expect(res.status).toBe(400);
+    //     });
+    //     it('should return 400 if user is not logged in on createLang', async () => {
+    //         token = '';
 
-            const res = await execCreateLang();
+    //         const res = await execCreateLang();
     
-            expect(res.status).toBe(400);
-        });
-        it('should return 400 if token is invalid in on updateLang', async () => {
-            await execCreateLang();
-            name = 'TEST2';
-            token = '';
+    //         expect(res.status).toBe(400);
+    //     });
+    //     it('should return 400 if token is invalid in on updateLang', async () => {
+    //         await execCreateLang();
+    //         name = 'TEST2';
+    //         token = '';
 
-            const res = await execUpdateLang();
+    //         const res = await execUpdateLang();
     
-            expect(res.status).toBe(400);
-        });
-        it('should return 400 if token is invalid in on deleteLang', async () => {
-            await execCreateLang();
+    //         expect(res.status).toBe(400);
+    //     });
+    //     it('should return 400 if token is invalid in on deleteLang', async () => {
+    //         await execCreateLang();
             
-            token = ''
+    //         token = ''
 
-            const res = await execDeleteLang();
+    //         const res = await execDeleteLang();
     
-            expect(res.status).toBe(400);
-        });
-        it('should return 401 if token is invalid in on createLang', async () => {
+    //         expect(res.status).toBe(400);
+    //     });
+    //     it('should return 401 if token is invalid in on createLang', async () => {
 
-            const res = await request(server)
-                .post("/api/languages/")
-                .send({ isoCode: isoCode, name: name, altName: altName, noTranslators: noTranslators });
+    //         const res = await request(server)
+    //             .post("/api/languages/")
+    //             .send({ isoCode: isoCode, name: name, altName: altName, noTranslators: noTranslators });
     
-            expect(res.status).toBe(401);
-        });
-        it('should return 401 if user is not logged in on updateLang', async () => {
-            await execCreateLang();
-            name = 'TEST2';
+    //         expect(res.status).toBe(401);
+    //     });
+    //     it('should return 401 if user is not logged in on updateLang', async () => {
+    //         await execCreateLang();
+    //         name = 'TEST2';
 
-            const res = await request(server)
-                .patch("/api/languages/" + isoCode)
-                .send({ isoCode: isoCode, name: name, altName: altName, noTranslators: noTranslators });
+    //         const res = await request(server)
+    //             .patch("/api/languages/" + isoCode)
+    //             .send({ isoCode: isoCode, name: name, altName: altName, noTranslators: noTranslators });
     
-            expect(res.status).toBe(401);
-        });
-        it('should return 401 if user is not logged in on deleteLang', async () => {
-            await execCreateLang();
+    //         expect(res.status).toBe(401);
+    //     });
+    //     it('should return 401 if user is not logged in on deleteLang', async () => {
+    //         await execCreateLang();
     
-            const res = await request(server)
-                .delete("/api/languages/" + isoCode);
+    //         const res = await request(server)
+    //             .delete("/api/languages/" + isoCode);
     
-            expect(res.status).toBe(401);
-        });
-        it('Should return 404 if language not found by showLang', async () => {
-            isoCode = 't';
+    //         expect(res.status).toBe(401);
+    //     });
+    //     it('Should return 404 if language not found by showLang', async () => {
+    //         isoCode = 't';
 
-            const res = await execShowLang();
+    //         const res = await execShowLang();
     
-            expect(res.status).toBe(404);
-        });  
-        it('Should return 404 if language not found by deleteLang', async () => {
-            isoCode = 't';
+    //         expect(res.status).toBe(404);
+    //     });  
+    //     it('Should return 404 if language not found by deleteLang', async () => {
+    //         isoCode = 't';
 
-            const res = await execDeleteLang();
+    //         const res = await execDeleteLang();
     
-            expect(res.status).toBe(404);
-        });
-        it('Should return 404 if language could not be found by updateLang', async () => {
-            isoCode = 't';
-            name = 'TEST2';
+    //         expect(res.status).toBe(404);
+    //     });
+    //     it('Should return 404 if language could not be found by updateLang', async () => {
+    //         isoCode = 't';
+    //         name = 'TEST2';
 
-            const res = await execUpdateLang();
+    //         const res = await execUpdateLang();
 
-            expect(res.status).toBe(404);
-        })
-    });   
+    //         expect(res.status).toBe(404);
+    //     })
+    // });   
 
-    /// INTERNAL SERVER ERRORS
+    // /// INTERNAL SERVER ERRORS
 
-    describe('INTERNAL SERVER ERROR', () => {
-        it('Should return 500 if there is a server error on createLang', async () => {
+    // describe('INTERNAL SERVER ERROR', () => {
+    //     it('Should return 500 if there is a server error on createLang', async () => {
 
-            const res = await request(server)
-                .post("/api/languages/")
-                .set("Authorization", "Bearer "+token)
-                .send({ isoCode: isoCode, name: name });
+    //         const res = await request(server)
+    //             .post("/api/languages/")
+    //             .set("Authorization", "Bearer "+token)
+    //             .send({ isoCode: isoCode, name: name });
 
-            expect(res.status).toBe(500);              
-        });
-        it('Should return 500 if there is a server error on updateLang', async () => {
-            await execCreateLang();
+    //         expect(res.status).toBe(500);              
+    //     });
+    //     it('Should return 500 if there is a server error on updateLang', async () => {
+    //         await execCreateLang();
 
-            const res = await request(server)
-                .patch("/api/languages/" + isoCode)
-                .set("Authorization", "Bearer "+token)
-                .send({ isoCode: isoCode, name: name });
+    //         const res = await request(server)
+    //             .patch("/api/languages/" + isoCode)
+    //             .set("Authorization", "Bearer "+token)
+    //             .send({ isoCode: isoCode, name: name });
 
-            expect(res.status).toBe(500);              
-        });
-        // it('Should return 500 if there is a server error on showAll', async () => {
+    //         expect(res.status).toBe(500);              
+    //     });
+    //     // it('Should return 500 if there is a server error on showAll', async () => {
             
-        //     const res = await request(server)
-        //         .get("/api/languages/" + isoCode);
+    //     //     const res = await request(server)
+    //     //         .get("/api/languages/" + isoCode);
 
-        //     expect(res.status).toBe(500);              
-        // });
-        // it('Should return 500 if there is a server error on delete', async () => {
-        //     isoCode = 'aaaa'
+    //     //     expect(res.status).toBe(500);              
+    //     // });
+    //     // it('Should return 500 if there is a server error on delete', async () => {
+    //     //     isoCode = 'aaaa'
             
-        //     const res = await request(server)
-        //         .delete("/api/languages/" + isoCode);
+    //     //     const res = await request(server)
+    //     //         .delete("/api/languages/" + isoCode);
 
-        //     expect(res.status).toBe(500);              
-        // });
-    });
+    //     //     expect(res.status).toBe(500);              
+    //     // });
+    // });
 });

@@ -32,14 +32,14 @@ const { checkToken } = require('../../auth/auth');
 // unregistered users can only see informationbut not change or add it
 
 /// General Languages Related Operations
-router.post("/", createLang);
-router.patch("/:id(\\d+)", updateLangByID);
-router.patch("/:isoCode", updateLangByISO);
+router.post("/", checkToken, createLang);
+router.patch("/:id(\\d+)", checkToken, updateLangByID);
+router.patch("/:isoCode", checkToken, updateLangByISO);
 router.get("/", showAll);
 router.get("/:id(\\d+)", showLangByID);
 router.get("/:isoCode(\[a-zA-Z]{3})", showLangByISO);
-router.delete("/:id(\\d+)", deleteLangByID);
-router.delete("/:isoCode(\[a-zA-Z]{3})", deleteLangByISO);
+router.delete("/:id(\\d+)", checkToken, deleteLangByID);
+router.delete("/:isoCode(\[a-zA-Z]{3})", checkToken, deleteLangByISO);
 
 /// Searching by Alternative Name
 router.get("/alt_name/:alt_name", showLangByAltName);
@@ -57,15 +57,15 @@ router.get("/country/:country", showLangByCountry); // works for only English na
 router.get("/showCountries/:lang", showCountriesByLanguage);
 
 /// Request related
-router.post("/requests", createLangRequests);
-router.patch("/requests/:id",updateRequestsByID);
-router.get("/requests/:id(\\d+)", showLangRequestsByID);
-router.get("/requests", showAllRequests);
-router.get("/requests/complete", showAllCompleteRequests);
-router.get("/requests/complete/:id(\\d+)", showCompleteRequestByLang);
-router.get("/requests/open", showAllOpenRequests);
-router.get("/requests/open/:id(\\d+)", showOpenRequestByLang);
-router.get("/requests/pending", showAllPendingRequests);
-router.get("/requests/pending/:id(\\d+)", showPendingRequestsByLang);
+router.post("/requests", checkToken, createLangRequests);
+router.patch("/requests/:id", checkToken, updateRequestsByID);
+router.get("/requests/:id(\\d+)", checkToken, showLangRequestsByID);
+router.get("/requests", checkToken, showAllRequests);
+router.get("/requests/complete", checkToken, showAllCompleteRequests);
+router.get("/requests/complete/:id(\\d+)", checkToken, showCompleteRequestByLang);
+router.get("/requests/open", checkToken, showAllOpenRequests);
+router.get("/requests/open/:id(\\d+)", checkToken, showOpenRequestByLang);
+router.get("/requests/pending", checkToken, showAllPendingRequests);
+router.get("/requests/pending/:id(\\d+)", checkToken, showPendingRequestsByLang);
 
 module.exports = router;
