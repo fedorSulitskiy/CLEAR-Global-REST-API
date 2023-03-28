@@ -9,67 +9,66 @@ module.exports = {
     createLang: (data, callBack) => {
         pool.query(
             `insert into languages(
-                iso_id, 
-                lang_name, 
-                lang_status, 
-                reference_id, 
-                no_of_trans, 
-                source_id, 
+                ref_id,
+                source_id,
+                lang_name,
+                iso_code,
+                no_of_trans,
+                lang_status,
                 glotto_ref,
-                alternative_names, 
-                official, 
-                national, 
-                official_H2H, 
-                unofficial_H2H, 
+                official,
+                national,
+                official_H2H,
+                unofficial_H2H,
                 total_speakers_nr,
-                first_lang_speakers_nr, 
-                second_lang_speakers_nr, 
-                internet_users_percent, 
+                first_lang_speakers_nr,
+                second_lang_speakers_nr,
+                internet_users_percent,
                 TWB_machine_translation_development,
-                TWB_recommended_Pivot_langs, 
-                community_feasibility, 
-                reqruitment_feasibility, 
-                reqruitment_category,
-                total_score_15, 
-                level, 
-                latitude, 
-                longitude, 
-                aes_status, 
-                source_comment, 
+                TWB_recommended_Pivot_langs,
+                community_feasibility,
+                recruitment_feasibility,
+                recruitment_category,
+                total_score_15,
+                level,
+                latitude,
+                longitude,
+                aes_status,
+                source_comment,
                 alternative_names,
-                links, 
+                links,
                 family_name) 
-            values(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+            values(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
             [
-                data.isoCode,
-                data.name,
-                data.status,
-                data.reference_id,
-                data.no_of_trans,
+                data.ref_id,
                 data.source_id,
+                data.lang_name,
+                data.iso_code,
+                data.no_of_trans,
+                data.lang_status,
                 data.glotto_ref,
-                data.alt_names,
                 data.official,
                 data.national,
-                data.official_h2h,
-                data.unoffical_h2h,
-                data.total_speakers,
-                data.first_lang_speakers,
-                data.second_lang_speakers,
-                data.internet_users_per,
-                data.twb_trans,
-                data.twb_rec_pivot,
-                data.community_feas,
-                data.recruitment_feas,
-                data.recruitment_cat,
-                data.total_score,
+                data.official_H2H,
+                data.unofficial_H2H,
+                data.total_speakers_nr,
+                data.first_lang_speakers_nr,
+                data.second_lang_speakers_nr,
+                data.internet_users_percent,
+                data.TWB_machine_translation_development,
+                data.TWB_recommended_Pivot_langs,
+                data.community_feasibility,
+                data.recruitment_feasibility,
+                data.recruitment_category,
+                data.total_score_15,
                 data.level,
                 data.latitude,
                 data.longitude,
-                data.aes_stat,
+                data.aes_status,
                 data.source_comment,
+                data.alternative_names,
                 data.links,
-                data.family_name,
+                data.family_name
             ],
             (error, results, fields) => {
                 if (error) {
@@ -117,71 +116,172 @@ module.exports = {
             }
         );
     },
-    updateByISO: (isoCode, data, callBack) => {
+    updateByID: (id, data, callBack) => {
         pool.query(
             `update languages set 
-                iso_id=?, 
-                lang_name=?, 
-                lang_status =?, 
-                reference_id=?, 
-                no_of_trans=?, 
-                source_id=?, 
-                glotto_ref=?,
-                alternative_names=?, 
-                official=?, 
-                national=?, 
-                official_H2H=?, 
-                unofficial_H2H=?, 
-                total_speakers_nr=?,
-                first_lang_speakers_nr=?, 
-                second_lang_speakers_nr=?, 
-                internet_users_percent=?, 
-                TWB_machine_translation_development=?,
-                TWB_recommended_Pivot_langs=?, 
-                community_feasibility=?, 
-                reqruitment_feasibility=?, 
-                reqruitment_category=?,
-                total_score_15=?, 
-                level=?, 
-                latitude=?, 
-                longitude=?, 
-                aes_status=?, 
-                source_comment=?, 
-                alternative_names=?,
-                links=?, 
-                family_name =?
-            where iso_id=?`,
-            [                        
-                data.newISOCode,
-                data.name,
-                data.status,
-                data.reference_id,
-                data.no_of_trans,
+                ref_id = ?,
+                source_id = ?,
+                lang_name = ?,
+                iso_code = ?,
+                no_of_trans = ?,
+                lang_status = ?,
+                glotto_ref = ?,
+                official = ?,
+                national = ?,
+                official_H2H = ?,
+                unofficial_H2H = ?,
+                total_speakers_nr = ?,
+                first_lang_speakers_nr = ?,
+                second_lang_speakers_nr = ?,
+                internet_users_percent = ?,
+                TWB_machine_translation_development = ?,
+                TWB_recommended_Pivot_langs = ?,
+                community_feasibility = ?,
+                recruitment_feasibility = ?,
+                recruitment_category = ?,
+                total_score_15 = ?,
+                level = ?,
+                latitude = ?,
+                longitude = ?,
+                aes_status = ?,
+                source_comment = ?,
+                alternative_names = ?,
+                links = ?,
+                family_name = ? 
+            where lang_id = ?`,
+            [                       
+                data.ref_id,
                 data.source_id,
+                data.lang_name,
+                data.iso_code,
+                data.no_of_trans,
+                data.lang_status,
                 data.glotto_ref,
-                data.alt_names,
                 data.official,
                 data.national,
-                data.official_h2h,
-                data.unoffical_h2h,
-                data.total_speakers,
-                data.first_lang_speakers,
-                data.second_lang_speakers,
-                data.internet_users_per,
-                data.twb_trans,
-                data.twb_rec_pivot,
-                data.community_feas,
-                data.recruitment_feas,
-                data.recruitment_cat,
-                data.total_score,
+                data.official_H2H,
+                data.unofficial_H2H,
+                data.total_speakers_nr,
+                data.first_lang_speakers_nr,
+                data.second_lang_speakers_nr,
+                data.internet_users_percent,
+                data.TWB_machine_translation_development,
+                data.TWB_recommended_Pivot_langs,
+                data.community_feasibility,
+                data.recruitment_feasibility,
+                data.recruitment_category,
+                data.total_score_15,
                 data.level,
                 data.latitude,
                 data.longitude,
-                data.aes_stat,
+                data.aes_status,
                 data.source_comment,
+                data.alternative_names,
+                data.links,
+                data.family_name,
+                id
+            ],
+            (error, results, fields) => {
+                if (error) {
+                    return callBack(error);
+                }
+                return callBack(null, results);
+            }
+        );
+    },
+    updateByISO: (isoCode, data, callBack) => {
+        pool.query(
+            `update languages set 
+                ref_id = ?,
+                source_id = ?,
+                lang_name = ?,
+                iso_code = ?,
+                no_of_trans = ?,
+                lang_status = ?,
+                glotto_ref = ?,
+                official = ?,
+                national = ?,
+                official_H2H = ?,
+                unofficial_H2H = ?,
+                total_speakers_nr = ?,
+                first_lang_speakers_nr = ?,
+                second_lang_speakers_nr = ?,
+                internet_users_percent = ?,
+                TWB_machine_translation_development = ?,
+                TWB_recommended_Pivot_langs = ?,
+                community_feasibility = ?,
+                recruitment_feasibility = ?,
+                recruitment_category = ?,
+                total_score_15 = ?,
+                level = ?,
+                latitude = ?,
+                longitude = ?,
+                aes_status = ?,
+                source_comment = ?,
+                alternative_names = ?,
+                links = ?,
+                family_name = ? 
+            where iso_code=?`,
+            [                        
+                data.ref_id,
+                data.source_id,
+                data.lang_name,
+                data.iso_code,
+                data.no_of_trans,
+                data.lang_status,
+                data.glotto_ref,
+                data.official,
+                data.national,
+                data.official_H2H,
+                data.unofficial_H2H,
+                data.total_speakers_nr,
+                data.first_lang_speakers_nr,
+                data.second_lang_speakers_nr,
+                data.internet_users_percent,
+                data.TWB_machine_translation_development,
+                data.TWB_recommended_Pivot_langs,
+                data.community_feasibility,
+                data.recruitment_feasibility,
+                data.recruitment_category,
+                data.total_score_15,
+                data.level,
+                data.latitude,
+                data.longitude,
+                data.aes_status,
+                data.source_comment,
+                data.alternative_names,
                 data.links,
                 data.family_name,
                 isoCode
+            ],
+            (error, results, fields) => {
+                if (error) {
+                    return callBack(error);
+                }
+                return callBack(null, results);
+            }
+        );
+    },
+    updateRequestsByID: (id, data, callBack) => {
+        pool.query(
+            `update language_requests set 
+                created_user_id = ?, 
+                assigned_user_id = ?, 
+                lr_end_date = ?, 
+                lr_start_date = ?,
+                lr_type = ?, 
+                lr_content = ?, 
+                lr_status = ?
+            where lang_request_id=?`,
+            [
+                data.createdUserId,
+                data.assignedUserId,
+                data.lr_end,
+                data.lr_start,
+                data.lr_type,
+                data.lr_content,
+                data.lr_status,
+                id
             ],
             (error, results, fields) => {
                 if (error) {
@@ -203,22 +303,10 @@ module.exports = {
             }
         );
     },
-    showByISO: (data, callBack) => {
-        pool.query(
-            `select * from languages where iso_id = ?`,
-            [data.isoCode],
-            (error, results, fields) => {
-                if (error) {
-                    return callBack(error);
-                }
-                return callBack(null, results);
-            }
-        );
-    },
-    showByID: (data, callBack) => {
+    showByID: (id, callBack) => {
         pool.query(
             `select * from languages where lang_id = ?`,
-            [data.id],
+            [id],
             (error, results, fields) => {
                 if (error) {
                     return callBack(error);
@@ -227,11 +315,10 @@ module.exports = {
             }
         );
     },
-    showRequestsByID: (data, callBack) => {
+    showByISO: (isoCode, callBack) => {
         pool.query(
-            `select * from languages_requests where lang_request_id = ?`,
-            [data.requestsID,],
-            [data.requestsID,],
+            `select * from languages where iso_code = ?`,
+            [isoCode],
             (error, results, fields) => {
                 if (error) {
                     return callBack(error);
@@ -240,9 +327,21 @@ module.exports = {
             }
         );
     },
-    showAllRequests: (data, callBack) => {
+    showRequestsByID: (requestID, callBack) => {
         pool.query(
-            `select * from languages_requests`,
+            `select * from language_requests where lang_request_id = ?`,
+            [requestID],
+            (error, results, fields) => {
+                if (error) {
+                    return callBack(error);
+                }
+                return callBack(null, results);
+            }
+        );
+    },
+    showAllRequests: (callBack) => {
+        pool.query(
+            `select * from language_requests`,
             [],
             (error, results, fields) => {
                 if (error) {
@@ -252,11 +351,11 @@ module.exports = {
             }
         );
     },
-    showByAltName: (data, callBack) => {
+    showByAltName: (alt_name, callBack) => {
         pool.query(
             `SELECT * from languages 
             WHERE alternative_names = ?`,
-            [data.alt_names],
+            [alt_name],
             (error, results, fields) => {
                 if (error) {
                     return callBack(error);
@@ -265,11 +364,81 @@ module.exports = {
             }
         );
     },
-    showAllDialects: (data, callBack) => {
+    showAllDialects: (callBack) => {
         pool.query(
             `SELECT * from languages 
             WHERE level = 'dialect'`,
             [],
+            (error, results, fields) => {
+                if (error) {
+                    return callBack(error);
+                }
+                return callBack(null, results);
+            }
+        );
+    },
+    showLanguagesByRegion: (region_name, callBack) => {
+        pool.query(
+            `SELECT DISTINCT 
+                languages.*
+            FROM languages 
+            JOIN langs_countries ON languages.lang_id = langs_countries.lang_id 
+            JOIN countries ON langs_countries.country_id = countries.country_id 
+            JOIN regions ON countries.region_id = regions.region_id 
+            WHERE regions.region_name = ?`,
+        [region_name],
+            (error, results, fields) => {
+                if (error) {
+                    return callBack(error);
+                }
+                return callBack(null, results);
+            }
+        );
+    },
+    showLanguagesBySubregion: (subregion_name, callBack) => {
+        pool.query(
+            `SELECT DISTINCT 
+                languages.*
+            FROM languages 
+            JOIN langs_countries ON languages.lang_id = langs_countries.lang_id 
+            JOIN countries ON langs_countries.country_id = countries.country_id 
+            JOIN subregions ON countries.subregion_id = subregions.subregion_id 
+            WHERE subregions.subregion_name = ?`,
+        [subregion_name],
+            (error, results, fields) => {
+                if (error) {
+                    return callBack(error);
+                }
+                return callBack(null, results);
+            }
+        );
+    },
+    showLanguagesByIntregion: (intregion_name, callBack) => {
+        pool.query(
+            `SELECT DISTINCT 
+                languages.*
+            FROM languages 
+            JOIN langs_countries ON languages.lang_id = langs_countries.lang_id 
+            JOIN countries ON langs_countries.country_id = countries.country_id 
+            JOIN intermediate_regions ON countries.int_region_id = intermediate_regions.int_region_id 
+            WHERE intermediate_regions.int_region_name = ?`,
+        [intregion_name],
+            (error, results, fields) => {
+                if (error) {
+                    return callBack(error);
+                }
+                return callBack(null, results);
+            }
+        );
+    },
+    showLanguagesByCountry: (country, callBack) => {
+        pool.query(
+            `SELECT 
+                languages.*
+            FROM langs_countries
+            INNER JOIN languages ON languages.lang_id = langs_countries.lang_id
+            WHERE langs_countries.country_id = (SELECT country_id FROM countries WHERE english_name = ?)`,
+            [country],
             (error, results, fields) => {
                 if (error) {
                     return callBack(error);
@@ -303,40 +472,12 @@ module.exports = {
             }
         );
     },
-    showLanguagesByCountry: (country, callBack) => {
+    showAllCompleteRequests: callBack => {
         pool.query(
-            `SELECT 
-                languages.lang_name, 
-                languages.iso_code, 
-                languages.no_of_trans, 
-                languages.lang_status, 
-                languages.glotto_ref, 
-                languages.official, 
-                languages.national, 
-                languages.official_H2H, 
-                languages.unofficial_H2H, 
-                languages.total_speakers_nr, 
-                languages.first_lang_speakers_nr, 
-                languages.second_lang_speakers_nr, 
-                languages.internet_users_percent, 
-                languages.TWB_machine_translation_development, 
-                languages.TWB_recommended_Pivot_langs, 
-                languages.community_feasibility, 
-                languages.reqruitment_feasibility, 
-                languages.reqruitment_category, 
-                languages.total_score_15, 
-                languages.level, 
-                languages.latitude,
-                languages.longitude, 
-                languages.aes_status, 
-                languages.source_comment, 
-                languages.alternative_names, 
-                languages.links, 
-                languages.family_name
-            FROM langs_countries
-            INNER JOIN languages ON languages.lang_id = langs_countries.lang_id
-            WHERE langs_countries.country_id = (SELECT country_id FROM countries WHERE country_name = ?)`,
-            [country],
+            `SELECT * 
+            FROM language_requests
+            WHERE lr_status='complete'`,
+            [],
             (error, results, fields) => {
                 if (error) {
                     return callBack(error);
@@ -345,243 +486,11 @@ module.exports = {
             }
         );
     },
-    showLanguagesByRegion: (region_name, callBack) => { // attempt to search by region;
-        // problem is that languages and region arent directly connected. double join?
+    showCompleteRequestByLang: (id, callBack) => { /// search by request id, return completed requests /// WHY NOT LANG_ID?
         pool.query(
-            `SELECT 
-            languages.lang_name, 
-            languages.iso_code, 
-            languages.no_of_trans, 
-            languages.lang_status, 
-            languages.glotto_ref, 
-            languages.official, 
-            languages.national, 
-            languages.official_H2H, 
-            languages.unofficial_H2H, 
-            languages.total_speakers_nr, 
-            languages.first_lang_speakers_nr, 
-            languages.second_lang_speakers_nr, 
-            languages.internet_users_percent, 
-            languages.TWB_machine_translation_development, 
-            languages.TWB_recommended_Pivot_langs, 
-            languages.community_feasibility, 
-            languages.reqruitment_feasibility, 
-            languages.reqruitment_category, 
-            languages.total_score_15, 
-            languages.level, 
-            languages.latitude,
-            languages.longitude, 
-            languages.aes_status, 
-            languages.source_comment, 
-            languages.alternative_names, 
-            languages.links, 
-            languages.family_name
-        FROM langs_countries
-        INNER JOIN languages ON languages.lang_id = langs_countries.lang_id
-        INNER JOIN regions ON regions.region_id = countries.region_id
-        WHERE countries.region_id = (SELECT region_id FROM regions WHERE region_name = ?)`,
-        [region_name],
-            (error, results, fields) => {
-                if (error) {
-                    return callBack(error);
-                }
-                return callBack(null, results);
-            }
-        );
-    },
-    showLanguagesBySubregion: (subregion_name, callBack) => { // attempt to search by subregion;
-        pool.query(
-            `SELECT 
-            languages.lang_name, 
-            languages.iso_code, 
-            languages.no_of_trans, 
-            languages.lang_status, 
-            languages.glotto_ref, 
-            languages.official, 
-            languages.national, 
-            languages.official_H2H, 
-            languages.unofficial_H2H, 
-            languages.total_speakers_nr, 
-            languages.first_lang_speakers_nr, 
-            languages.second_lang_speakers_nr, 
-            languages.internet_users_percent, 
-            languages.TWB_machine_translation_development, 
-            languages.TWB_recommended_Pivot_langs, 
-            languages.community_feasibility, 
-            languages.reqruitment_feasibility, 
-            languages.reqruitment_category, 
-            languages.total_score_15, 
-            languages.level, 
-            languages.latitude,
-            languages.longitude, 
-            languages.aes_status, 
-            languages.source_comment, 
-            languages.alternative_names, 
-            languages.links, 
-            languages.family_name
-        FROM langs_countries
-        INNER JOIN languages ON languages.lang_id = langs_countries.lang_id
-        INNER JOIN subregions ON subregions.subregion_id = countries.subregion_id
-        WHERE countries.subregion_id = (SELECT subregion_id FROM subregions WHERE subregion_name = ?)`,
-        [subregion_name],
-            (error, results, fields) => {
-                if (error) {
-                    return callBack(error);
-                }
-                return callBack(null, results);
-            }
-        );
-    },
-    showLanguagesByIntregion: (intregion_name, callBack) => { // attempt to search by int region;
-        pool.query(
-            `SELECT 
-            languages.lang_name, 
-            languages.iso_code, 
-            languages.no_of_trans, 
-            languages.lang_status, 
-            languages.glotto_ref, 
-            languages.official, 
-            languages.national, 
-            languages.official_H2H, 
-            languages.unofficial_H2H, 
-            languages.total_speakers_nr, 
-            languages.first_lang_speakers_nr, 
-            languages.second_lang_speakers_nr, 
-            languages.internet_users_percent, 
-            languages.TWB_machine_translation_development, 
-            languages.TWB_recommended_Pivot_langs, 
-            languages.community_feasibility, 
-            languages.reqruitment_feasibility, 
-            languages.reqruitment_category, 
-            languages.total_score_15, 
-            languages.level, 
-            languages.latitude,
-            languages.longitude, 
-            languages.aes_status, 
-            languages.source_comment, 
-            languages.alternative_names, 
-            languages.links, 
-            languages.family_name
-        FROM langs_countries
-        INNER JOIN languages ON languages.lang_id = langs_countries.lang_id
-        INNER JOIN intermediate_regions ON intermediate_regions.int_region_id = countries.int_region_id
-        WHERE countries.int_region_id = (SELECT int_region_id FROM intermediate_regions WHERE int_region_name = ?)`,
-        [intregion_name],
-            (error, results, fields) => {
-                if (error) {
-                    return callBack(error);
-                }
-                return callBack(null, results);
-            }
-        );
-    },
-    updateByID: (id, data, callBack) => {
-        pool.query(
-            `update languages set 
-                iso_id=?, 
-                lang_name=?, 
-                lang_status=?,
-                reference_id=?, 
-                no_of_trans=?, 
-                source_id=?, 
-                glotto_ref=?,
-                alternative_names=?, 
-                official=?, 
-                national=?, 
-                official_H2H=?, 
-                unofficial_H2H=?, 
-                total_speakers_nr=?,
-                first_lang_speakers_nr=?, 
-                second_lang_speakers_nr=?, 
-                internet_users_percent=?, 
-                TWB_machine_translation_development=?,
-                TWB_recommended_Pivot_langs=?, 
-                community_feasibility=?, 
-                reqruitment_feasibility=?, 
-                reqruitment_category=?,
-                total_score_15=?, 
-                level=?, 
-                latitude=?, 
-                longitude=?, 
-                aes_status=?, 
-                source_comment=?, 
-                alternative_names=?,
-                links=?, 
-                family_name=? 
-            where lang_id=?`,
-            [                       
-                data.isoCode,
-                data.name,
-                data.status,
-                data.reference_id,
-                data.no_of_trans,
-                data.source_id,
-                data.glotto_ref,
-                data.alt_names,
-                data.official,
-                data.national,
-                data.official_h2h,
-                data.unoffical_h2h,
-                data.total_speakers,
-                data.first_lang_speakers,
-                data.second_lang_speakers,
-                data.internet_users_per,
-                data.twb_trans,
-                data.twb_rec_pivot,
-                data.community_feas,
-                data.recruitment_feas,
-                data.recruitment_cat,
-                data.total_score,
-                data.level,
-                data.latitude,
-                data.longitude,
-                data.aes_stat,
-                data.source_comment,
-                data.links,
-                data.family_name,
-                id
-            ],
-            (error, results, fields) => {
-                if (error) {
-                    return callBack(error);
-                }
-                return callBack(null, results);
-            }
-        );
-    },
-    updateRequestsByID: (id, data, callBack) => {
-        pool.query(
-            `update language_requests set 
-                created_user_id = ?, 
-                assigned_user_id = ?, 
-                lr_end_date = ?, 
-                lr_start_date = ?,
-                lr_type = ?, 
-                lr_content = ?, 
-                lr_status = ?
-            where lang_requests_id=?`,
-            [                        // all fields for langs_requests here, lang_requests_id is primary key
-                data.createdUserId,
-                data.assignedUserId,
-                data.lr_end,
-                data.lr_start,
-                data.lr_type,
-                data.lr_content,
-                data.lr_status,
-                id
-            ],
-            (error, results, fields) => {
-                if (error) {
-                    return callBack(error);
-                }
-                return callBack(null, results);
-            }
-        );
-    },
-    showRequestHistory: (id, data, callBack) => { // search by request id, return completed requests
-        pool.query(
-            `SELECT * from languages_requests
-            WHERE lang_requests_id=?
+            `SELECT * 
+            FROM language_requests
+            WHERE lang_id=? 
             AND lr_status='complete'`,
             [id],
             (error, results, fields) => {
@@ -592,10 +501,24 @@ module.exports = {
             }
         );
     },
-    showOpenRequests: (id, data, callBack) => { // return open requests
+    showAllOpenRequests: callBack => {
         pool.query(
-            `SELECT * from languages_requests
+            `SELECT * from language_requests
             WHERE lr_status='in progress'`,
+            [],
+            (error, results, fields) => {
+                if (error) {
+                    return callBack(error);
+                }
+                return callBack(null, results);
+            }
+        );
+    },
+    showOpenRequestByLang: (id, callBack) => {
+        pool.query(
+            `SELECT * from language_requests
+            WHERE lang_id=? 
+            AND lr_status='in progress'`,
             [id],
             (error, results, fields) => {
                 if (error) {
@@ -605,10 +528,24 @@ module.exports = {
             }
         );
     },
-    showPendingRequests: (id, data, callBack) => { // return pending requests
+    showAllPendingRequests: callBack => {
         pool.query(
-            `SELECT * from languages_requests
+            `SELECT * from language_requests
             WHERE lr_status='pending'`,
+            [],
+            (error, results, fields) => {
+                if (error) {
+                    return callBack(error);
+                }
+                return callBack(null, results);
+            }
+        );
+    },
+    showPendingRequestsByLang: (id, callBack) => {
+        pool.query(
+            `SELECT * from language_requests
+            WHERE lang_id=? 
+            AND lr_status='pending'`,
             [id],
             (error, results, fields) => {
                 if (error) {
@@ -620,7 +557,7 @@ module.exports = {
     },
     deleteByISO: (id, callBack) => {
         pool.query(
-            `delete from languages where iso_id = ?`,
+            `DELETE FROM languages WHERE iso_code = ?`,
             [id],
             (error, results, fields) => {
                 if (error) {

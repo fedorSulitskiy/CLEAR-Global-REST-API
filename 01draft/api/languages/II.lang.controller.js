@@ -1,7 +1,33 @@
 /// Executes the SQL queries and catches any immediate connection errors
 const winston = require('winston');
 
-const { create, update, showAll, showByID, showByISO, showCountriesByLanguage, showLanguagesByCountry, showAllDialects, showLanguagesByRegion, showLanguagesBySubregion, showLanguagesByIntregion, showRequestHistory, showOpenRequests, showPendingRequests, showByAltName, createLangRequests, deleteByID, deleteByISO } = require('./I.lang.service');
+const { 
+    createLang, 
+    createLangRequests, 
+    updateByID,
+    updateByISO,
+    updateRequestsByID,
+    showAll,
+    showByID,
+    showByISO,
+    showRequestsByID,
+    showAllRequests,
+    showByAltName,
+    showAllDialects,
+    showLanguagesByRegion,
+    showLanguagesBySubregion,
+    showLanguagesByIntregion,
+    showLanguagesByCountry,
+    showCountriesByLanguage,
+    showAllCompleteRequests,
+    showCompleteRequestByLang,
+    showAllOpenRequests,
+    showOpenRequestByLang,
+    showAllPendingRequests,
+    showPendingRequestsByLang,
+    deleteByID,
+    deleteByISO
+} = require('./I.lang.service');
 
 const status500 = function(res, err) {
     winston.error(err);
@@ -11,7 +37,7 @@ const status500 = function(res, err) {
 module.exports = {
     createLang: (req, res) => {
         const body = req.body;
-        create(body, (err, results) => {
+        createLang(body, (err, results) => {
             if (err) {
                 if (err.code==='ER_DUP_ENTRY') {
                     winston.error(err)
@@ -25,7 +51,7 @@ module.exports = {
     },
     createLangRequests: (req, res) => {
         const body = req.body;
-        create(body, (err, results) => {
+        createLangRequests(body, req, (err, results) => {
             if (err) {
                 if (err.code==='ER_DUP_ENTRY') {
                     winston.error(err)
@@ -37,7 +63,7 @@ module.exports = {
             return res.status(200).send(results);
         });
     },
-    updateLang: (req, res) => {
+    updateLangByID: (req, res) => {
         const body = req.body;
         updateByID(req.params.id, body, (err, results) => {
             if (err) {
@@ -58,6 +84,9 @@ module.exports = {
             winston.info('Language updated. Language ID: '+req.params.id);
             return res.status(200).send(results);
         });
+    },
+    updateLangByISO: (req, res) => {
+        const body = req.body;
         updateByISO(req.params.isoCode, body, (err, results) => {
             if (err) {
                 status500(res, err);
@@ -80,7 +109,7 @@ module.exports = {
     },
     updateRequestsByID: (req, res) => { // should the above lang updates also use the keyword update?
         const body = req.body;
-        update(req.params.id, body, (err, results) => {
+        updateRequestsByID(req.params.id, body, (err, results) => {
             if (err) {
                 status500(res, err);
             }
@@ -100,16 +129,16 @@ module.exports = {
             return res.status(200).send(results);
         });
     },
-    showAll: (req, res) => { // should this be changed? why two?
+    showAll: (req, res) => { 
         showAll((err, results) => {
             if (err) {
                 status500(res, err);
             }
             winston.info(results.length+' languages found');
             return res.status(200).send(results);
-        })
+        });
     },
-    showLang: (req, res) => {
+    showLangByID: (req, res) => {
         showByID(req.params.id, (err, results) => { 
             if (err) {
                 status500(res, err);
@@ -120,7 +149,9 @@ module.exports = {
             }
             winston.info('Language found. Language ID: '+req.params.id);
             return res.status(200).send(results);
-        })
+        });   
+    },
+    showLangByISO: (req, res) => {
         showByISO(req.params.isoCode, (err, results) => { 
             if (err) {
                 status500(res, err);
@@ -129,134 +160,42 @@ module.exports = {
                 winston.error('Could not find language. Language ISO code: '+req.params.isoCode);
                 return res.status(404).send("Could not find language");
             }
-            winston.info('Language found. ISO code: '+req.params.id);
-            return res.status(200).send(results);
-        })
-    },
-    createLangRequests: (req, res) => {
-        const body = req.body;
-        createLangRequests(body, req, (err, results) => {
-            if (err) {
-                status500(res, err);
-            }
-            winston.info('success!!');
+            winston.info('Language found. ISO code: '+req.params.isoCode);
             return res.status(200).send(results);
         });
     },
-    showCountriesByLanguage: (req, res) => {
-        showCountriesByLanguage(req.params.lang, (err, results) => {
+    showLangRequestsByID: (req, res) => {
+        showRequestsByID(req.params.id, (err, results) => { 
             if (err) {
                 status500(res, err);
             }
             if (results.length === 0) {
-                winston.error('Could not find countries for language: ' + req.params.lang);
-                return res.status(404).send("Could not find countries");
+                winston.error('Could not find request. Language ID: '+req.params.isoCode);
+                return res.status(404).send("Could not find request");
             }
-            winston.info(results.length + ' countries found for language: ' + req.params.lang);
+            winston.info('Request found. Language ID: '+req.params.id);
             return res.status(200).send(results);
         });
     },
-    showLanguagesByCountry: (req, res) => {
-        showLanguagesByCountry(req.params.country, (err, results) => {
+    showAllRequests: (req, res) => {
+        showAllRequests((err, results) => {
+            if (err) {
+                status500(res, err);
+            }
+            winston.info(results.length+' requests found');
+            return res.status(200).send(results);
+        });
+    },
+    showLangByAltName: (req, res) => {
+        showByAltName(req.params.alt_name, (err, results) => { 
             if (err) {
                 status500(res, err);
             }
             if (results.length === 0) {
-                winston.error('Could not find languages for country: ' + req.params.country);
-                return res.status(404).send("Could not find languages");
+                winston.error('Could not find language. Language alternative name: '+req.params.alt_name);
+                return res.status(404).send("Could not find language");
             }
-            winston.info(results.length + ' languages found for country: ' + req.params.country);
-            return res.status(200).send(results);
-        });
-    },
-    showLanguagesByRegion: (req, res) => {
-        showLanguagesByRegion(req.params.region_name, (err, results) => {
-            if (err) {
-                status500(res, err);
-            }
-            if (results.length === 0) {
-                winston.error('Could not find languages for region: ' + req.params.region_name);
-                return res.status(404).send("Could not find languages");
-            }
-            winston.info(results.length + ' languages found for region: ' + req.params.region_name);
-            return res.status(200).send(results);
-        });
-    },
-    showLanguagesBySubregion: (req, res) => {
-        showLanguagesBySubregion(req.params.subregion_name, (err, results) => {
-            if (err) {
-                status500(res, err);
-            }
-            if (results.length === 0) {
-                winston.error('Could not find languages for subregion: ' + req.params.subregion_name);
-                return res.status(404).send("Could not find languages");
-            }
-            winston.info(results.length + ' languages found for subregion: ' + req.params.subregion_name);
-            return res.status(200).send(results);
-        });
-    },
-    showLanguagesByIntregion: (req, res) => {
-        showLanguagesByIntregion(req.params.intregion_name, (err, results) => {
-            if (err) {
-                status500(res, err);
-            }
-            if (results.length === 0) {
-                winston.error('Could not find languages for intermediate region: ' + req.params.intregion_name);
-                return res.status(404).send("Could not find languages");
-            }
-            winston.info(results.length + ' languages found for intermediate region: ' + req.params.intregion_name);
-            return res.status(200).send(results);
-        });
-    },
-    showRequestHistory: (req, res) => {
-        showRequestHistory(req.params.id, (err, results) => {
-            if (err) {
-                status500(res, err);
-            }
-            if (results.length === 0) {
-                winston.error('Could not find request history for request ID: ' + req.params.id);
-                return res.status(404).send("Could not return request history.");
-            }
-            winston.info(results.length + ' requests found for ID: ' + req.params.id);
-            return res.status(200).send(results);
-        });
-    },
-    showOpenRequests: (req, res) => {
-        showOpenRequests((err, results) => {
-            if (err) {
-                status500(res, err);
-            }
-            if (results.length === 0) {
-                winston.error('Could not find any open requests.');
-                return res.status(404).send("Could not any open requests.");
-            }
-            winston.info(results.length + ' open requests. ');
-            return res.status(200).send(results);
-        });
-    },
-    showPendingRequests: (req, res) => {
-        showPendingRequests((err, results) => {
-            if (err) {
-                status500(res, err);
-            }
-            if (results.length === 0) {
-                winston.error('Could not find any pending requests.');
-                return res.status(404).send("Could not any pending requests.");
-            }
-            winston.info(results.length + ' pending requests. ');
-            return res.status(200).send(results);
-        });
-    },
-    showByAltName: (req, res) => {
-        showByAltName(req.params.alt_name, (err, results) => {
-            if (err) {
-                status500(res, err);
-            }
-            if (results.length === 0) {
-                winston.error('No results for: ' + req.params.alt_name);
-                return res.status(404).send("No results found.");
-            }
-            winston.info(results.length + ' results for: ' + req.params.alt_name);
+            winston.info('Language found. Alternative name: '+req.params.alt_name);
             return res.status(200).send(results);
         });
     },
@@ -273,7 +212,146 @@ module.exports = {
             return res.status(200).send(results);
         });
     },
-    deleteLang: (req, res) => {
+    showLangByRegion: (req, res) => {
+        showLanguagesByRegion(req.params.region_name, (err, results) => {
+            if (err) {
+                status500(res, err);
+            }
+            if (results.length === 0) {
+                winston.error('Could not find languages for region: ' + req.params.region_name);
+                return res.status(404).send("Could not find languages");
+            }
+            winston.info(results.length + ' languages found for region: ' + req.params.region_name);
+            return res.status(200).send(results);
+        });
+    },
+    showLangBySubregion: (req, res) => {
+        showLanguagesBySubregion(req.params.subregion_name, (err, results) => {
+            if (err) {
+                status500(res, err);
+            }
+            if (results.length === 0) {
+                winston.error('Could not find languages for subregion: ' + req.params.subregion_name);
+                return res.status(404).send("Could not find languages");
+            }
+            winston.info(results.length + ' languages found for subregion: ' + req.params.subregion_name);
+            return res.status(200).send(results);
+        });
+    },
+    showLangByIntregion: (req, res) => {
+        showLanguagesByIntregion(req.params.intregion_name, (err, results) => {
+            if (err) {
+                status500(res, err);
+            }
+            if (results.length === 0) {
+                winston.error('Could not find languages for intermediate region: ' + req.params.intregion_name);
+                return res.status(404).send("Could not find languages");
+            }
+            winston.info(results.length + ' languages found for intermediate region: ' + req.params.intregion_name);
+            return res.status(200).send(results);
+        });
+    },
+    showLangByCountry: (req, res) => {
+        showLanguagesByCountry(req.params.country, (err, results) => {
+            if (err) {
+                status500(res, err);
+            }
+            if (results.length === 0) {
+                winston.error('Could not find languages for country: ' + req.params.country);
+                return res.status(404).send("Could not find languages");
+            }
+            winston.info(results.length + ' languages found for country: ' + req.params.country);
+            return res.status(200).send(results);
+        });
+    },
+    showCountriesByLanguage: (req, res) => {
+        showCountriesByLanguage(req.params.lang, (err, results) => {
+            if (err) {
+                status500(res, err);
+            }
+            if (results.length === 0) {
+                winston.error('Could not find countries for language: ' + req.params.lang);
+                return res.status(404).send("Could not find countries");
+            }
+            winston.info(results.length + ' countries found for language: ' + req.params.lang);
+            return res.status(200).send(results);
+        });
+    },
+    showAllCompleteRequests: (req, res) => {
+        showAllCompleteRequests((err, results) => {
+            if (err) {
+                status500(res, err);
+            }
+            winston.info(results.length+' requests found');
+            return res.status(200).send(results);
+        });
+    },
+    showCompleteRequestByLang: (req, res) => {
+        showCompleteRequestByLang(req.params.id, (err, results) => {
+            if (err) {
+                status500(res, err);
+            }
+            if (results.length === 0) {
+                winston.error('Could not find complete request history for language ID: ' + req.params.id);
+                return res.status(404).send("Could not return complete request history.");
+            }
+            winston.info(results.length + ' complete requests found for ID: ' + req.params.id);
+            return res.status(200).send(results);
+        });
+    },
+    showAllOpenRequests: (req, res) => {
+        showAllOpenRequests((err, results) => {
+            if (err) {
+                status500(res, err);
+            }
+            if (results.length === 0) {
+                winston.error('Could not find any open requests.');
+                return res.status(404).send("Could not any open requests.");
+            }
+            winston.info(results.length + ' open requests. ');
+            return res.status(200).send(results);
+        });
+    },
+    showOpenRequestByLang: (req, res) => {
+        showOpenRequestByLang(req.params.id, (err, results) => {
+            if (err) {
+                status500(res, err);
+            }
+            if (results.length === 0) {
+                winston.error('Could not find open request history for language ID: ' + req.params.id);
+                return res.status(404).send("Could not return open request history.");
+            }
+            winston.info(results.length + ' open requests found for ID: ' + req.params.id);
+            return res.status(200).send(results);
+        });
+    },
+    showAllPendingRequests: (req, res) => {
+        showAllPendingRequests((err, results) => {
+            if (err) {
+                status500(res, err);
+            }
+            if (results.length === 0) {
+                winston.error('Could not find any pending requests.');
+                return res.status(404).send("Could not any pending requests.");
+            }
+            winston.info(results.length + ' pending requests. ');
+            return res.status(200).send(results);
+        });
+    },
+    showPendingRequestsByLang: (req, res) => {
+        showPendingRequestsByLang(req.params.id, (err, results) => {
+            if (err) {
+                status500(res, err);
+            }
+            if (results.length === 0) {
+                winston.error('Could not find pending request history for language ID: ' + req.params.id);
+                return res.status(404).send("Could not return pending request history.");
+            }
+            winston.info(results.length + ' pending requests found for ID: ' + req.params.id);
+            return res.status(200).send(results);
+        });
+    },
+    deleteLangByID: (req, res) => {
         deleteByID(req.params.id, (err, results) => {
             const noAffectedRows = results.affectedRows;
             if (err) {
@@ -286,6 +364,8 @@ module.exports = {
             winston.info('Language deleted. ID code: '+req.params.id);
             return res.status(200).send(results);
         });
+    },
+    deleteLangByISO: (req, res) => {
         deleteByISO(req.params.isoCode, (err, results) => {
             const noAffectedRows = results.affectedRows;
             if (err) {
