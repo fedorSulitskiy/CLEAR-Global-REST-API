@@ -52,7 +52,7 @@ describe('User API', () => {
     });
     afterEach(async() => {
         trial_user_object = await request(server)
-            .get("/api/users/" + email);
+            .get("/api/users/show/" + email);
         user_id = trial_user_object.body.user_id;
 
         await request(server)
@@ -104,11 +104,11 @@ describe('User API', () => {
     };
     const execShowUserByID = () => {
         return request(server)
-            .get("/api/users/" + user_id);
+            .get("/api/users/show/" + user_id);
     };
     const execShowUserByEmail = () => {
         return request(server)
-            .get("/api/users/" + email);
+            .get("/api/users/show/" + email);
     };
     const execDeleteUser = () => {
         return request(server)
@@ -122,7 +122,7 @@ describe('User API', () => {
     };
     const execLogout = () => {
         return request(server)
-            .post("/api/users/logout/" + user_id)
+            .post("/api/users/login/" + user_id)
             .set("Authorization", "Bearer "+token);
     };
 
@@ -183,7 +183,7 @@ describe('User API', () => {
             await execCreateUser();
             first_name = 'TEST';
             trial_user_object = await request(server)
-                .get("/api/users/" + email);
+                .get("/api/users/show/" + email);
             user_id = trial_user_object.body.user_id;
     
             const res = await execUpdateUser();
@@ -194,7 +194,7 @@ describe('User API', () => {
             await execCreateUser();
 
             trial_user_object = await request(server)
-                .get("/api/users/" + email);
+                .get("/api/users/show/" + email);
                 user_id = trial_user_object.body.user_id;
 
             const res = await execUpdateUser();
@@ -218,7 +218,7 @@ describe('User API', () => {
             await execCreateUser();
             first_name = 'TEST';
             trial_user_object = await request(server)
-                .get("/api/users/" + email);
+                .get("/api/users/show/" + email);
             user_id = trial_user_object.body.id;
 
             const res = await request(server)
@@ -264,7 +264,7 @@ describe('User API', () => {
             await execCreateUser();
 
             trial_user_object = await request(server)
-                .get("/api/users/" + email);
+                .get("/api/users/show/" + email);
             user_id = trial_user_object.body.user_id;
     
             const res = await execShowUserByID();
@@ -302,7 +302,7 @@ describe('User API', () => {
             await execCreateUser();
 
             trial_user_object = await request(server)
-                .get("/api/users/" + email);
+                .get("/api/users/show/" + email);
             user_id = trial_user_object.body.user_id;
     
             const res = await execDeleteUser();
@@ -313,8 +313,12 @@ describe('User API', () => {
             await execCreateUser();
 
             trial_user_object = await request(server)
-                .get("/api/users/" + email);
+                .get("/api/users/show/" + email);
             user_id = trial_user_object.body.user_id;
+
+            console.log(trial_user_object.status);
+            console.log(trial_user_object.body);
+            console.log(user_id);
 
             token = '';
     
@@ -326,8 +330,12 @@ describe('User API', () => {
             await execCreateUser();
 
             trial_user_object = await request(server)
-                .get("/api/users/" + email);
+                .get("/api/users/show/" + email);
             user_id = trial_user_object.body.user_id;
+
+            console.log(trial_user_object.status);
+            console.log(trial_user_object.body);
+            console.log(user_id);
     
             const res = await request(server)
                 .delete("/api/users/" + user_id);
