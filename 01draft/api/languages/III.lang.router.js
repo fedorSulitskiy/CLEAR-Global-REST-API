@@ -27,7 +27,8 @@ const {
     showPendingRequestsByLang,
     deleteLangByID,
     deleteLangByISO,
-    deleteLangsCountry
+    deleteLangsCountry,
+    deleteRequest
 } = require('./II.lang.controller');
 
 const router = require('express').Router();
@@ -75,5 +76,6 @@ router.get("/requests/open", checkToken, showAllOpenRequests);
 router.get("/requests/open/:id(\\d+)", checkToken, showOpenRequestByLang);
 router.get("/requests/pending", checkToken, showAllPendingRequests);
 router.get("/requests/pending/:id(\\d+)", checkToken, showPendingRequestsByLang);
+router.delete("/requests/:id(\\d+)", checkToken, deleteRequest);
 
 module.exports = router;

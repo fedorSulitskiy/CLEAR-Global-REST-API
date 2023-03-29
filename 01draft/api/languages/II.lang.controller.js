@@ -29,7 +29,8 @@ const {
     showPendingRequestsByLang,
     deleteByID,
     deleteByISO,
-    deleteLangsCountry
+    deleteLangsCountry,
+    deleteRequest
 } = require('./I.lang.service');
 
 const status500 = function(res, err) {
@@ -70,19 +71,11 @@ module.exports = {
         const body = req.body;
         addCountryToLanguageByID(req.params.id, body, (err, results) => {
             if (err) {
+                if (err.code==='ER_DUP_ENTRY') {
+                    winston.error(err)
+                    return res.status(400).send(`Language with ID ${req.body.id} and country ID ${body.country_id} already exists`);
+                }
                 status500(res, err);
-            }
-            if (results) {
-                const noAffectedRows = results.affectedRows;
-                const noChangedRows = results.changedRows;
-                if (noAffectedRows === 0) {
-                    winston.error(err);
-                    return res.status(404).send("Could not find language");
-                }
-                if (noChangedRows === 0) {
-                    winston.info('No content has been changed. Language ISO code: '+req.params.id);
-                    return res.status(200).send('No changes implemented');
-                }
             }
             winston.info('Language location updated. Country ID: '+body.country_id+'. Language ID: '+req.params.id);
             return res.status(200).send(results);
@@ -92,19 +85,11 @@ module.exports = {
         const body = req.body;
         addCountryToLanguageByISO(req.params.isoCode, body, (err, results) => {
             if (err) {
+                if (err.code==='ER_DUP_ENTRY') {
+                    winston.error(err)
+                    return res.status(400).send(`Language with ISO Code ${req.params.isoCode} and country ID ${body.country_id} already exists`);
+                }
                 status500(res, err);
-            }
-            if (results) {
-                const noAffectedRows = results.affectedRows;
-                const noChangedRows = results.changedRows;
-                if (noAffectedRows === 0) {
-                    winston.error(err);
-                    return res.status(404).send("Could not find language");
-                }
-                if (noChangedRows === 0) {
-                    winston.info('No content has been changed. Language ISO code: '+req.params.isoCode);
-                    return res.status(200).send('No changes implemented');
-                }
             }
             winston.info('Language location updated. Country ID: '+body.country_id+'. ISO code: '+req.params.isoCode);
             return res.status(200).send(results);
@@ -250,10 +235,6 @@ module.exports = {
         showAllDialects((err, results) => {
             if (err) {
                 status500(res, err);
-            }
-            if (results.length === 0) {
-                winston.error('Could not find dialects.');
-                return res.status(404).send("Could not find dialects.");
             }
             winston.info(results.length + ' dialects found.');
             return res.status(200).send(results);
@@ -438,6 +419,20 @@ module.exports = {
                 return res.status(404).send("Could not find record");
             }
             winston.info('Record deleted. Language ID: '+body.lang_id+'. Country ID: '+body.country_id);
+            return res.status(200).send(results);
+        });
+    },
+    deleteRequest: (req, res) => {
+        deleteRequest(req.params.id, (err, results) => {
+            const noAffectedRows = results.affectedRows;
+            if (err) {
+                status500(res, err);
+            }
+            if (noAffectedRows === 0) {
+                winston.error('Could not find request. ID: '+req.params.id);
+                return res.status(404).send("Could not find request");
+            }
+            winston.info('Request deleted. ID: '+req.params.id);
             return res.status(200).send(results);
         });
     }

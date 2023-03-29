@@ -629,5 +629,17 @@ module.exports = {
                 return callBack(null, results);
             }
         );
+    },
+    deleteRequest: (id, callBack) => {
+        pool.query(
+            `DELETE FROM language_requests WHERE lang_request_id = ?`,
+            [id],
+            (error, results, fields) => {
+                if (error) {
+                    return callBack(error);
+                }
+                return callBack(null, results);
+            }
+        );
     }
 };
