@@ -316,10 +316,6 @@ describe('User API', () => {
                 .get("/api/users/show/" + email);
             user_id = trial_user_object.body.user_id;
 
-            console.log(trial_user_object.status);
-            console.log(trial_user_object.body);
-            console.log(user_id);
-
             token = '';
     
             const res = await execDeleteUser();
@@ -332,10 +328,6 @@ describe('User API', () => {
             trial_user_object = await request(server)
                 .get("/api/users/show/" + email);
             user_id = trial_user_object.body.user_id;
-
-            console.log(trial_user_object.status);
-            console.log(trial_user_object.body);
-            console.log(user_id);
     
             const res = await request(server)
                 .delete("/api/users/" + user_id);

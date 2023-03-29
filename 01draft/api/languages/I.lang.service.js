@@ -116,6 +116,42 @@ module.exports = {
             }
         );
     },
+    addCountryToLanguageByID: (id, data, callBack) => {
+        pool.query(
+            `INSERT INTO langs_countries(
+                country_id, 
+                lang_id) 
+            VALUES(?,?)`,
+            [                       
+                data.country_id,
+                id
+            ],
+            (error, results, fields) => {
+                if (error) {
+                    return callBack(error);
+                }
+                return callBack(null, results);
+            }
+        );
+    },
+    addCountryToLanguageByISO: (isoCode, data, callBack) => {
+        pool.query(
+            `INSERT INTO langs_countries(
+                country_id, 
+                lang_id) 
+            VALUES(?,(SELECT lang_id FROM languages WHERE iso_code=?))`,
+            [                       
+                data.country_id,
+                isoCode
+            ],
+            (error, results, fields) => {
+                if (error) {
+                    return callBack(error);
+                }
+                return callBack(null, results);
+            }
+        );
+    },
     updateByID: (id, data, callBack) => {
         pool.query(
             `update languages set 
@@ -578,5 +614,20 @@ module.exports = {
                 return callBack(null, results);
             }
         );
-    }, 
+    },
+    deleteLangsCountry: (data, callBack) => {
+        pool.query(
+            `DELETE FROM langs_countries WHERE lang_id = ? AND country_id = ?`,
+            [
+                data.lang_id,
+                data.country_id
+            ],
+            (error, results, fields) => {
+                if (error) {
+                    return callBack(error);
+                }
+                return callBack(null, results);
+            }
+        );
+    }
 };

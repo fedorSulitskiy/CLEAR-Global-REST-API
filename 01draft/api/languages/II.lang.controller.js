@@ -4,6 +4,8 @@ const winston = require('winston');
 const { 
     createLang, 
     createLangRequests, 
+    addCountryToLanguageByID,
+    addCountryToLanguageByISO,
     updateByID,
     updateByISO,
     updateRequestsByID,
@@ -26,7 +28,8 @@ const {
     showAllPendingRequests,
     showPendingRequestsByLang,
     deleteByID,
-    deleteByISO
+    deleteByISO,
+    deleteLangsCountry
 } = require('./I.lang.service');
 
 const status500 = function(res, err) {
@@ -41,7 +44,7 @@ module.exports = {
             if (err) {
                 if (err.code==='ER_DUP_ENTRY') {
                     winston.error(err)
-                    return res.status(400).send(`Language with isoCode ${req.body.isoCode} already exists`);
+                    return res.status(400).send(`Language with isoCode ${req.body.iso_code} already exists`);
                 }
                 status500(res, err);
             }
@@ -60,6 +63,50 @@ module.exports = {
                 status500(res, err);
             }
             winston.info('New language request created')
+            return res.status(200).send(results);
+        });
+    },
+    addCountryToLanguageByID: (req, res) => {
+        const body = req.body;
+        addCountryToLanguageByID(req.params.id, body, (err, results) => {
+            if (err) {
+                status500(res, err);
+            }
+            if (results) {
+                const noAffectedRows = results.affectedRows;
+                const noChangedRows = results.changedRows;
+                if (noAffectedRows === 0) {
+                    winston.error(err);
+                    return res.status(404).send("Could not find language");
+                }
+                if (noChangedRows === 0) {
+                    winston.info('No content has been changed. Language ISO code: '+req.params.id);
+                    return res.status(200).send('No changes implemented');
+                }
+            }
+            winston.info('Language location updated. Country ID: '+body.country_id+'. Language ID: '+req.params.id);
+            return res.status(200).send(results);
+        });
+    },
+    addCountryToLanguageByISO: (req, res) => {
+        const body = req.body;
+        addCountryToLanguageByISO(req.params.isoCode, body, (err, results) => {
+            if (err) {
+                status500(res, err);
+            }
+            if (results) {
+                const noAffectedRows = results.affectedRows;
+                const noChangedRows = results.changedRows;
+                if (noAffectedRows === 0) {
+                    winston.error(err);
+                    return res.status(404).send("Could not find language");
+                }
+                if (noChangedRows === 0) {
+                    winston.info('No content has been changed. Language ISO code: '+req.params.isoCode);
+                    return res.status(200).send('No changes implemented');
+                }
+            }
+            winston.info('Language location updated. Country ID: '+body.country_id+'. ISO code: '+req.params.isoCode);
             return res.status(200).send(results);
         });
     },
@@ -376,6 +423,21 @@ module.exports = {
                 return res.status(404).send("Could not find language");
             }
             winston.info('Language deleted. ISO code: '+req.params.id);
+            return res.status(200).send(results);
+        });
+    },
+    deleteLangsCountry: (req, res) => {
+        const body = req.body;
+        deleteLangsCountry(body, (err, results) => {
+            const noAffectedRows = results.affectedRows;
+            if (err) {
+                status500(res, err);
+            }
+            if (noAffectedRows === 0) {
+                winston.error('Could not find record. Language ID: '+body.lang_id+'. Country ID: '+body.country_id);
+                return res.status(404).send("Could not find record");
+            }
+            winston.info('Record deleted. Language ID: '+body.lang_id+'. Country ID: '+body.country_id);
             return res.status(200).send(results);
         });
     }
