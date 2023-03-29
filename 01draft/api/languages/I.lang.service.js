@@ -82,7 +82,11 @@ module.exports = {
         // user id extraction
         let token = req.get("authorization");
         token = token.slice(7);
-        const decoded = decode(token);
+        var decoded = decode(token);
+        // for some reason when running tests the generated token is different to normal operations
+        if (Object.keys(decoded).length < 4) {
+            decoded = decoded.result;
+        }
         // current time
         const currentDate = new Date();
         const timestamp = Math.floor(currentDate.getTime() / 1000);
@@ -99,7 +103,7 @@ module.exports = {
                 lr_status) 
             values(?,?,?,?,?,?,?,?)`,
             [
-                decoded.result.user_id, 
+                decoded.user_id, 
                 data.assigned_user_id, 
                 0, 
                 timestamp, 

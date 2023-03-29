@@ -57,10 +57,6 @@ module.exports = {
         const body = req.body;
         createLangRequests(body, req, (err, results) => {
             if (err) {
-                if (err.code==='ER_DUP_ENTRY') {
-                    winston.error(err)
-                    return res.status(400).send(`Language request with code ${req.body.langReqId} already exists`);
-                }
                 status500(res, err);
             }
             winston.info('New language request created')
@@ -332,10 +328,6 @@ module.exports = {
             if (err) {
                 status500(res, err);
             }
-            if (results.length === 0) {
-                winston.error('Could not find any open requests.');
-                return res.status(404).send("Could not any open requests.");
-            }
             winston.info(results.length + ' open requests. ');
             return res.status(200).send(results);
         });
@@ -357,10 +349,6 @@ module.exports = {
         showAllPendingRequests((err, results) => {
             if (err) {
                 status500(res, err);
-            }
-            if (results.length === 0) {
-                winston.error('Could not find any pending requests.');
-                return res.status(404).send("Could not any pending requests.");
             }
             winston.info(results.length + ' pending requests. ');
             return res.status(200).send(results);

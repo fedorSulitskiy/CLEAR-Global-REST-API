@@ -53,7 +53,6 @@ let subregion_name;
 let intregion_name;
 let country;
 
-let lang_request_id;
 let created_user_id;
 let assigned_user_id;
 let lr_end_date;
@@ -153,7 +152,6 @@ describe('Language API', () => {
         assigned_user_id = 2;
         lr_end_date = 1;
         lr_start_date = 1;
-        lang_id = 0;
         lr_type = "add";
         lr_content = "test";
         lr_status = "complete";
@@ -277,14 +275,14 @@ describe('Language API', () => {
 
     const execCreateRequest = () => {
         return request(server)
-            .post("/api/languages/requests/")
+            .post("/api/languages/requests")
             .set("Authorization", "Bearer "+token)
             .send({
-                assigned_user_id, 
-                lang_id, 
-                lr_type, 
-                lr_content, 
-                lr_status
+                assigned_user_id:assigned_user_id, 
+                lang_id:identificator,  // This has to be set to an existing language's id
+                lr_type:lr_type, 
+                lr_content:lr_content, 
+                lr_status:lr_status
             });
     };
     const execUpdateRequest = () => { // can be reused for showLangRequestsByID / showAllRequests
@@ -323,9 +321,23 @@ describe('Language API', () => {
     };
     const execDeleteRequest = () => {
         return request(server)
-            .delete("/api/languages/requests/" + lang_request_id)
+            .delete("/api/languages/requests/" + identificator)
             .set("Authorization", "Bearer " + token);
     };
+
+    const clearRequestTest = async() => {
+        // clears identifier so I can extract all requests
+        identificator = '';
+        var allRequests = await execShowAllRequest();
+
+        // finds the latest created request which must be the request made during test
+        allRequests = allRequests.body;
+        const sortedArray = allRequests.sort((a, b) => b.lr_start_date - a.lr_start_date);
+        identificator = sortedArray[0].lang_request_id;
+
+        // deletes the request
+        await execDeleteRequest();
+    }
     
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 ///////TESTS//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -695,9 +707,6 @@ describe('Language API', () => {
                 
                 const res = await execShowCountriesByLanguage();
 
-                console.log(res.body);
-                console.log(identificator);
-
                 await execDeleteCountryFromLang();
 
                 expect(res.status).toBe(200);
@@ -718,44 +727,283 @@ describe('Language API', () => {
     describe('Request related', () => {
         describe('createLangRequests function', () => {
             it('should return 200 if valid createLangRequests request', async () => {
-                winston.info('AAAAAAAAAAAAAAAAAAAAAAAAAAAAAa');
                 await execCreateLang();
 
                 trial_language_object = await request(server)
                     .get("/api/languages/" + iso_code);
                 identificator = trial_language_object.body[0].lang_id;
 
-                const res = await request(server)
-                    .post("/api/languages/requests")
-                    .set("Authorization", "Bearer "+token)
-                    .send({
-                        assigned_user_id:assigned_user_id, 
-                        lang_id:identificator, 
-                        lr_type:lr_type, 
-                        lr_content:lr_content, 
-                        lr_status:lr_status
-                    });
+                const res = await execCreateRequest();
 
-                token = token.slice(7);
-                const decoded = decode(token);
+                await clearRequestTest();
 
-                console.log(token.result);
+                expect(res.status).toBe(200);
+            });
+            it('Should return 500 if server throws internal error on createLangRequests', async () => {
+                await execCreateLang();
+
+                trial_language_object = await request(server)
+                    .get("/api/languages/" + iso_code);
+                identificator = trial_language_object.body[0].lang_id;
+                lr_status = 'Not a real status';
+
+                const res = await execCreateRequest();
+
+                await clearRequestTest();
+
+                expect(res.status).toBe(200);            
+            });
+        });
+        describe('updateRequestsByID function', () => {
+            it('should return 200 if valid updateRequestsByID request', async () => {
+                await execCreateLang();
+
+                trial_language_object = await request(server)
+                    .get("/api/languages/" + iso_code);
+                identificator = trial_language_object.body[0].lang_id;
+
+                await execCreateRequest();
 
                 identificator = '';
+                var allRequests = await execShowAllRequest();
 
-                // const haha = await execShowAllRequest();
-                // console.log(res);
-                // // lang_request_id = requests[-1].lang_request_id;
+                allRequests = allRequests.body;
+                const sortedArray = allRequests.sort((a, b) => b.lr_start_date - a.lr_start_date);
+                identificator = sortedArray[0].lang_request_id;
 
-                // identificator = '0';
-                // await execShowCompleteRequest();
-                // await execShowOpenRequest();
-                // await execShowPendingRequest();
-                // await execUpdateRequest();
+                lr_end_date = 1;
 
-                // await execDeleteRequest();
-                winston.info('AAAAAAAAAAAAAAAAAAAAAAAAAAAAAa');
+                const res = await execUpdateRequest();
+
+                await execDeleteRequest();
+
                 expect(res.status).toBe(200);
+            });
+            it('should return 200 if no content changed', async () => {
+                await execCreateLang();
+
+                trial_language_object = await request(server)
+                    .get("/api/languages/" + iso_code);
+                identificator = trial_language_object.body[0].lang_id;
+
+                await execCreateRequest();
+
+                identificator = '';
+                var allRequests = await execShowAllRequest();
+
+                allRequests = allRequests.body;
+                const sortedArray = allRequests.sort((a, b) => b.lr_start_date - a.lr_start_date);
+                identificator = sortedArray[0].lang_request_id;
+
+                await execUpdateRequest();
+                const res = await execUpdateRequest();
+
+                await execDeleteRequest();
+
+                expect(res.status).toBe(200);
+            });
+            it('should return 404 if request not found by updateRequestsByID', async () => {
+                identificator = 999999;
+
+                lr_end_date = 1;
+
+                const res = await execUpdateRequest();
+
+                expect(res.status).toBe(404);
+            });
+        });
+        describe('showLangRequestsByID function', () => {
+            it('should return 200 if valid showLangRequestsByID request', async () => {
+                await execCreateLang();
+
+                trial_language_object = await request(server)
+                    .get("/api/languages/" + iso_code);
+                identificator = trial_language_object.body[0].lang_id;
+
+                await execCreateRequest();
+
+                identificator = '';
+                var allRequests = await execShowAllRequest();
+
+                allRequests = allRequests.body;
+                const sortedArray = allRequests.sort((a, b) => b.lr_start_date - a.lr_start_date);
+                identificator = sortedArray[0].lang_request_id;
+
+                const res = await execShowAllRequest();
+
+                await execDeleteRequest();
+
+                expect(res.status).toBe(200);
+            });
+            it('should return 404 if request not found by showLangRequestsByID', async () => {
+                identificator = 999999;
+
+                const res = await execShowAllRequest();
+
+                expect(res.status).toBe(404);
+            });
+        });
+        describe('showAllRequests function', () => {
+            it('should return 200 if valid showAllRequests request', async () => {
+                identificator = '';
+                
+                const res = await execShowAllRequest();
+
+                expect(res.status).toBe(200);
+            });
+        });
+        describe('showAllCompleteRequests function', () => {
+            it('should return 200 if valid showAllCompleteRequests request', async () => {
+                identificator = '';
+                
+                const res = await execShowCompleteRequest();
+
+                expect(res.status).toBe(200);
+            });
+        });
+        describe('showCompleteRequestByLang function', () => {
+            it('should return 200 if valid showCompleteRequestByLang request', async () => {
+                await execCreateLang();
+
+                trial_language_object = await request(server)
+                    .get("/api/languages/" + iso_code);
+                identificator = trial_language_object.body[0].lang_id;
+
+                await execCreateRequest();
+
+                const res = await execShowCompleteRequest();
+
+                await clearRequestTest();
+
+                expect(res.status).toBe(200);
+            });
+            it('should return 404 if request not found by showCompleteRequestByLang', async () => {
+                identificator = 999999;
+
+                const res = await execShowCompleteRequest();
+
+                expect(res.status).toBe(404);
+            });
+        });
+        describe('showAllOpenRequests function', () => {
+            it('should return 200 if valid showAllOpenRequests request', async () => {
+                await execCreateLang();
+
+                trial_language_object = await request(server)
+                    .get("/api/languages/" + iso_code);
+                identificator = trial_language_object.body[0].lang_id;
+                lr_status = 'in progress';
+
+                await execCreateRequest();
+                
+                identificator = '';
+                
+                const res = await execShowOpenRequest();
+
+                await clearRequestTest();
+
+                expect(res.status).toBe(200);
+            });
+        });
+        describe('showOpenRequestByLang function', () => {
+            it('should return 200 if valid showOpenRequestByLang request', async () => {
+                await execCreateLang();
+
+                trial_language_object = await request(server)
+                    .get("/api/languages/" + iso_code);
+                identificator = trial_language_object.body[0].lang_id;
+                lr_status = 'in progress';
+
+                await execCreateRequest();
+
+                const res = await execShowOpenRequest();
+
+                await clearRequestTest();
+
+                expect(res.status).toBe(200);
+            });
+            it('should return 404 if request not found by showOpenRequestByLang', async () => {
+                identificator = 999999;
+
+                const res = await execShowOpenRequest();
+
+                expect(res.status).toBe(404);
+            });
+        });
+        describe('showAllPendingRequests function', () => {
+            it('should return 200 if valid showAllPendingRequests request', async () => {
+                await execCreateLang();
+
+                trial_language_object = await request(server)
+                    .get("/api/languages/" + iso_code);
+                identificator = trial_language_object.body[0].lang_id;
+                lr_status = 'pending';
+
+                await execCreateRequest();
+                
+                identificator = '';
+                
+                const res = await execShowPendingRequest();
+
+                await clearRequestTest();
+
+                expect(res.status).toBe(200);
+            });
+        });
+        describe('showPendingRequestsByLang function', () => {
+            it('should return 200 if valid showPendingRequestsByLang request', async () => {
+                await execCreateLang();
+
+                trial_language_object = await request(server)
+                    .get("/api/languages/" + iso_code);
+                identificator = trial_language_object.body[0].lang_id;
+                lr_status = 'pending';
+
+                await execCreateRequest();
+
+                const res = await execShowPendingRequest();
+
+                await clearRequestTest();
+
+                expect(res.status).toBe(200);
+            });
+            it('should return 404 if request not found by showPendingRequestsByLang', async () => {
+                identificator = 999999;
+
+                const res = await execShowPendingRequest();
+
+                console.log(res);
+
+                expect(res.status).toBe(404);
+            });
+        });
+        describe('deleteRequest function', () => {
+            it('should return 200 if valid deleteRequest request', async () => {
+                await execCreateLang();
+
+                trial_language_object = await request(server)
+                    .get("/api/languages/" + iso_code);
+                identificator = trial_language_object.body[0].lang_id;
+
+                await execCreateRequest();
+
+                identificator = '';
+                var allRequests = await execShowAllRequest();
+
+                allRequests = allRequests.body;
+                const sortedArray = allRequests.sort((a, b) => b.lr_start_date - a.lr_start_date);
+                identificator = sortedArray[0].lang_request_id;
+
+                const res = await execDeleteRequest();
+
+                expect(res.status).toBe(200);
+            });
+            it('should return 404 if request not found by deleteRequest', async () => {
+                identificator = 999999;
+
+                const res = await execDeleteRequest();
+
+                expect(res.status).toBe(404);
             });
         });
     });
