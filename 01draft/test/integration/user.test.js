@@ -181,11 +181,11 @@ describe('User API', () => {
     describe('update function', () => {
         it('Should return 200 if update is successful', async () => {
             await execCreateUser();
-            first_name = 'TEST';
+            
             trial_user_object = await request(server)
                 .get("/api/users/show/" + email);
             user_id = trial_user_object.body.user_id;
-    
+            first_name = 'UPDATED TEST';
             const res = await execUpdateUser();
     
             expect(res.status).toBe(200);
@@ -374,9 +374,33 @@ describe('User API', () => {
 
     describe('logout function', () => {
         it('Should return 200 if logout successful', async () => {
+            await execCreateUser();
+            
+            trial_user_object = await request(server)
+                .get("/api/users/show/" + email);
+            user_id = trial_user_object.body.user_id;
+
             const res = await execLogout();
             
             expect(res.status).toBe(200);
         });
     }); 
+
+    describe('delete testing history function' ,() => {
+        it('Should return 200 if deletion is successful', async () => {
+            await execCreateUser();
+            
+            await execLogin();
+
+            trial_user_object = await request(server)
+                .get("/api/users/show/" + email);
+            user_id = trial_user_object.body.user_id;
+            
+            const res = await request(server)
+                .delete("/api/users/testing/" +user_id)
+                .set("Authorization", "Bearer "+token);
+            
+            expect(res.status).toBe(200);
+        });
+    });
 });

@@ -43,10 +43,13 @@ module.exports = {
             return res.status(200).send(results);
         });
     },
-    updateUser: (req, res) => {
+    updateUser: async (req, res) => {
+        // problem here is because I'm hashing the password the password string will always change so even if no actual changes are introduced the 
+        // the password string will change due to new salts being generated meaning it's not possible to directly detect NO changes and this hashing
+        // must be factored in.
         const body = req.body;
-        const salt = genSaltSync(10);
-        body.password = hashPassword(res, body.password, salt);
+        const initial = await pool.promise().query('SELECT first_name, last_name, email, password, hash, mobile, user_type_id, position, company, user_image, status FROM users WHERE user_id = ?', [req.params.id]);
+        
         update(req.params.id, body, async (err, results) => {
             if (err) {
                 status500(res, err);
@@ -57,19 +60,21 @@ module.exports = {
                     winston.error(err);
                     return res.status(404).send("Could not find user");
                 }
-                // problem here is because I'm hashing the password the password string will always change so even if no actual changes are introduced the 
-                // the password string will change due to new salts being generated meaning it's not possible to directly detect NO changes and this hashing
-                // must be factored in.
-                const result = await pool.promise().query('SELECT first_name, last_name, email, password, user_type_id FROM users WHERE user_id = ?', [req.params.id]);
-                const resultBody = { ...result[0][0] };
+                
+                const intialBody = { ...initial[0][0] };
 
-                const salt = genSaltSync(10);
-                resultBody.password = hashSync(resultBody.password, salt);
-                body.password = hashPassword(res, body.password, salt);
-
-                if (JSON.stringify(resultBody) === JSON.stringify(body)) {
-                    winston.info('No content has been changed. User id: '+req.params.id);
-                    return res.status(200).send('No changes implemented');
+                noPasswordBody = {...body};
+                delete noPasswordBody.password;
+                noPasswordInitialBody = {...intialBody};
+                delete noPasswordInitialBody.password;
+                /// Check if all parts except password are the same or not
+                if (JSON.stringify(noPasswordBody) === JSON.stringify(noPasswordInitialBody)) {
+                    /// Check if passwords are the same
+                    const result = compareSync(body.password, intialBody.password);
+                    if(result) {
+                        winston.info('No content has been changed. User id: '+req.params.id);
+                        return res.status(200).send('No changes implemented');
+                    }
                 }
             }
             winston.info('User updated. User id: '+req.params.id);
@@ -168,8 +173,7 @@ module.exports = {
         });
     },
     deleteTestHistory: (req, res) => {
-        deleteByID(req.params.user_id, (err, results) => {
-            const noAffectedRows = results.affectedRows;
+        deleteTestHistory(req.params.user_id, (err, results) => {
             if (err) {
                 status500(res, err);
             }
