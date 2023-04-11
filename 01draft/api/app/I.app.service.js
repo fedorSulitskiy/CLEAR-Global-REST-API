@@ -78,7 +78,7 @@ module.exports = {
                 iso_code,
                 glotto_ref,
                 links,
-                alternative_names,
+                alternative_names
             FROM languages
             WHERE lang_name = ?`,
             [lang],
@@ -156,6 +156,7 @@ module.exports = {
             [
                 data.start_date,
                 data.end_date,
+                lang
             ],
             (error, results, fields) => {
                 if (error) {

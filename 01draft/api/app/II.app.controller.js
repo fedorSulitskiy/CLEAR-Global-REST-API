@@ -88,7 +88,7 @@ module.exports = {
         });
     },
     showRequestsBetweenDates: (req, res) => {
-        showRequestsBetweenDates(req.params.lang, (err, results) => {
+        showRequestsBetweenDates(req.params.lang, req.body, (err, results) => {
             if (err) {
                 return status500(res, err);
             }
