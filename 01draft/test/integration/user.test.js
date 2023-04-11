@@ -16,6 +16,8 @@ let position;
 let company;
 let user_image;
 let status;
+let address;
+let postcode;
 
 let trial_user_object;
 
@@ -33,8 +35,11 @@ describe('User API', () => {
         user_type_id = tud.user_type_id;
         position = tud.position;
         company = tud.company;
+        joined_date = tud.joined_date;
         user_image = tud.user_image;
         status = tud.status;
+        address = tud.address;
+        postcode = tud.postcode;
 
         token = generateWebToken({ 
             first_name: first_name,
@@ -82,6 +87,8 @@ describe('User API', () => {
                 company: company,
                 user_image: user_image,
                 status: status,
+                address: address,
+                postcode: postcode
             });
     };
     const execUpdateUser = () => {
@@ -98,8 +105,11 @@ describe('User API', () => {
                 user_type_id: user_type_id,
                 position: position,
                 company: company,
+                joined_date: joined_date,
                 user_image: user_image,
                 status: status,
+                address: address,
+                postcode: postcode
             });
     };
     const execShowUserByID = () => {

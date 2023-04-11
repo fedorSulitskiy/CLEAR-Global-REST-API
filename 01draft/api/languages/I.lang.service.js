@@ -31,14 +31,12 @@ module.exports = {
                 recruitment_category,
                 total_score_15,
                 level,
-                latitude,
-                longitude,
                 aes_status,
                 source_comment,
                 alternative_names,
                 links,
                 family_name) 
-            values(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+            values(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
             [
                 data.ref_id,
                 data.source_id,
@@ -62,8 +60,6 @@ module.exports = {
                 data.recruitment_category,
                 data.total_score_15,
                 data.level,
-                data.latitude,
-                data.longitude,
                 data.aes_status,
                 data.source_comment,
                 data.alternative_names,
@@ -99,9 +95,16 @@ module.exports = {
                 lr_start_date, 
                 lang_id, 
                 lr_type, 
-                lr_content, 
+                lr_title, 
+                lr_reason,
+                lr_lang_name,
+                lr_alternative_name,
+                lr_iso_code,
+                lr_glottocode,
+                lr_added_countries,
+                lr_removed_countries,
                 lr_status) 
-            values(?,?,?,?,?,?,?,?)`,
+            values(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)`,
             [
                 decoded.user_id, 
                 data.assigned_user_id, 
@@ -109,7 +112,14 @@ module.exports = {
                 timestamp, 
                 data.lang_id, 
                 data.lr_type, 
-                data.lr_content, 
+                data.lr_title, 
+                data.lr_reason,
+                data.lr_lang_name,
+                data.lr_alternative_name,
+                data.lr_iso_code,
+                data.lr_glottocode,
+                data.lr_added_countries,
+                data.lr_removed_countries, 
                 data.lr_status
             ],
             (error, results, fields) => {
@@ -123,11 +133,15 @@ module.exports = {
     addCountryToLanguageByID: (id, data, callBack) => {
         pool.query(
             `INSERT INTO langs_countries(
-                country_id, 
+                country_id,
+                official_language,
+                national_language,
                 lang_id) 
-            VALUES(?,?)`,
+            VALUES(?,?,?,?)`,
             [                       
                 data.country_id,
+                data.official_language,
+                data.national_language,
                 id
             ],
             (error, results, fields) => {
@@ -142,10 +156,14 @@ module.exports = {
         pool.query(
             `INSERT INTO langs_countries(
                 country_id, 
+                official_language,
+                national_language,
                 lang_id) 
-            VALUES(?,(SELECT lang_id FROM languages WHERE iso_code=?))`,
+            VALUES(?,?,?,(SELECT lang_id FROM languages WHERE iso_code=?))`,
             [                       
                 data.country_id,
+                data.official_language,
+                data.national_language,
                 isoCode
             ],
             (error, results, fields) => {
@@ -181,8 +199,6 @@ module.exports = {
                 recruitment_category = ?,
                 total_score_15 = ?,
                 level = ?,
-                latitude = ?,
-                longitude = ?,
                 aes_status = ?,
                 source_comment = ?,
                 alternative_names = ?,
@@ -212,8 +228,6 @@ module.exports = {
                 data.recruitment_category,
                 data.total_score_15,
                 data.level,
-                data.latitude,
-                data.longitude,
                 data.aes_status,
                 data.source_comment,
                 data.alternative_names,
@@ -254,8 +268,6 @@ module.exports = {
                 recruitment_category = ?,
                 total_score_15 = ?,
                 level = ?,
-                latitude = ?,
-                longitude = ?,
                 aes_status = ?,
                 source_comment = ?,
                 alternative_names = ?,
@@ -285,8 +297,6 @@ module.exports = {
                 data.recruitment_category,
                 data.total_score_15,
                 data.level,
-                data.latitude,
-                data.longitude,
                 data.aes_status,
                 data.source_comment,
                 data.alternative_names,
@@ -310,7 +320,14 @@ module.exports = {
                 lr_end_date = ?, 
                 lr_start_date = ?,
                 lr_type = ?, 
-                lr_content = ?, 
+                lr_title = ?, 
+                lr_reason = ?,
+                lr_lang_name = ?,
+                lr_alternative_name = ?,
+                lr_iso_code = ?,
+                lr_glottocode = ?,
+                lr_added_countries = ?,
+                lr_removed_countries = ?, 
                 lr_status = ?
             where lang_request_id=?`,
             [
@@ -319,7 +336,14 @@ module.exports = {
                 data.lr_end,
                 data.lr_start,
                 data.lr_type,
-                data.lr_content,
+                data.lr_title, 
+                data.lr_reason,
+                data.lr_lang_name,
+                data.lr_alternative_name,
+                data.lr_iso_code,
+                data.lr_glottocode,
+                data.lr_added_countries,
+                data.lr_removed_countries,
                 data.lr_status,
                 id
             ],

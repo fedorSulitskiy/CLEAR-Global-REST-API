@@ -15,7 +15,7 @@ const hashPassword = function(res, password, salt) {
     try {
         return hashSync(password, salt);
     } catch(ex) {
-        status500(res, ex);
+        return status500(res, ex);
     } 
 }
 
@@ -37,7 +37,7 @@ module.exports = {
 
         create(body, (err, results) => {
             if (err) {
-                status500(res, err);
+                return status500(res, err);
             }
             winston.info('New user created')
             return res.status(200).send(results);
@@ -52,7 +52,7 @@ module.exports = {
         
         update(req.params.id, body, async (err, results) => {
             if (err) {
-                status500(res, err);
+                return status500(res, err);
             }
             if (results) {
                 const noAffectedRows = results.affectedRows;
@@ -84,7 +84,7 @@ module.exports = {
     showAllUsers: (req, res) => {
         showAll((err, results) => {
             if (err) {
-                status500(res, err);
+                return status500(res, err);
             }
             winston.info(results.length+' users found');
             return res.status(200).send(results);
@@ -94,7 +94,7 @@ module.exports = {
         const id = req.params.id;
         showUserById(id, (err, results) => {
             if (err) {
-                status500(res, err);
+                return status500(res, err);
             }
             if (!results) {
                 winston.error('Could not find user. User id: '+req.params.id);
@@ -108,7 +108,7 @@ module.exports = {
         const email = req.params.email;
         showUserByEmail(req.params.email, (err, results) => {
             if (err) {
-                status500(res, err);
+                return status500(res, err);
             }
             if (!results) {
                 winston.error('Could not find user. User id: '+email);
@@ -122,7 +122,7 @@ module.exports = {
         deleteByID(req.params.id, (err, results) => {
             const noAffectedRows = results.affectedRows;
             if (err) {
-                status500(res, err);
+                return status500(res, err);
             }
             if (noAffectedRows === 0) {
                 winston.error('Could not find user. User id: '+req.params.id);
@@ -136,7 +136,7 @@ module.exports = {
         const body = req.body;
         showUserByEmail(body.email, (err, results) => {
             if (err) {
-                status500(res, err);
+                return status500(res, err);
             }
             if (!results) {
                 winston.error('Invalid email / No details provided - no results returned');
@@ -150,7 +150,7 @@ module.exports = {
 
                 logHistory(results.user_id, 'logged in', (err, results) => {
                     if (err) {
-                        status500(res, err);
+                        return status500(res, err);
                     }
                     winston.info('Login successful: user ' + results.user_id);
                     results['token'] = jsontoken;
@@ -166,7 +166,7 @@ module.exports = {
     logout: (req, res) => {
         logHistory(req.params.user_id, 'logged out', (err, results) => {
             if (err) {
-                status500(res, err);
+                return status500(res, err);
             }
             winston.info('Logout successful: user ' + req.params.user_id);
             return res.status(200).send('logout successful!');
@@ -175,7 +175,7 @@ module.exports = {
     deleteTestHistory: (req, res) => {
         deleteTestHistory(req.params.user_id, (err, results) => {
             if (err) {
-                status500(res, err);
+                return status500(res, err);
             }
             return res.status(200).send('deleted');
         });

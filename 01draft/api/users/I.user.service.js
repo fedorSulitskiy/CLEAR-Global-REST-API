@@ -19,8 +19,10 @@ module.exports = {
                 company,
                 joined_date,
                 user_image,
-                status)
-            values(?,?,?,?,?,?,?,?,?,?,?,?)`,
+                status,
+                address,
+                postcode)
+            values(?,?,?,?,?,?,?,?,?,?,?,?,?,?)`,
             [
                 data.first_name,
                 data.last_name,
@@ -34,6 +36,8 @@ module.exports = {
                 timestamp,
                 data.user_image,
                 data.status,
+                data.address,
+                data.postcode
             ],
             (error, results, fields) => {
                 if (error) {
@@ -57,7 +61,9 @@ module.exports = {
                 company = ?,
                 joined_date = ?,
                 user_image = ?,
-                status = ?
+                status = ?,
+                address = ?,
+                postcode = ?
             where user_id = ?`,
             [
                 data.first_name,
@@ -72,6 +78,8 @@ module.exports = {
                 data.joined_date,
                 data.user_image,
                 data.status,
+                data.address,
+                data.postcode,
                 user_id
             ],
             (error, results, fields) => {

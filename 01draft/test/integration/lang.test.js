@@ -38,8 +38,6 @@ let recruitment_feasibility;
 let recruitment_category;
 let total_score_15;
 let level;
-let latitude;
-let longitude;
 let aes_status;
 let source_comment;
 let alternative_names;
@@ -59,7 +57,14 @@ let lr_end_date;
 let lr_start_date;
 let lang_id;
 let lr_type;
-let lr_content;
+let lr_title;
+let lr_reason;
+let lr_lang_name;
+let lr_alternative_name;
+let lr_iso_code;
+let lr_glottocode;
+let lr_added_countries;
+let lr_removed_countries;
 let lr_status;
 
 let first_name;
@@ -73,6 +78,9 @@ let position;
 let company;
 let user_image;
 let status;
+
+let official_language;
+let national_language;
 
 describe('Language API', () => {
 
@@ -101,8 +109,6 @@ describe('Language API', () => {
         recruitment_category = 'test';
         total_score_15 = 0;
         level = 'language';
-        latitude = '0';
-        longitude = '0';
         aes_status = 'test';
         source_comment = 'test';
         alternative_names = 'Testenese';
@@ -132,8 +138,6 @@ describe('Language API', () => {
             recruitment_category,
             total_score_15,
             level,
-            latitude,
-            longitude,
             aes_status,
             source_comment,
             alternative_names,
@@ -141,7 +145,7 @@ describe('Language API', () => {
             family_name
         }
 
-        country_id = 10; /// This country must have proper reference to all regions / sub-regions / int-regions . id=1 wouldn't work cuz it belong to int-region=0 and int-region=0 doesn't exist
+        country_id = 10; /// This country must have proper reference to all regions / sub-regions / int-regions
 
         region_name = 'Africa';
         subregion_name = 'Northern Africa';
@@ -153,7 +157,14 @@ describe('Language API', () => {
         lr_end_date = 1;
         lr_start_date = 1;
         lr_type = "add";
-        lr_content = "test";
+        lr_title = 'Test', 
+        lr_reason = 'We need to test',
+        lr_lang_name = '',
+        lr_alternative_name = '',
+        lr_iso_code = '',
+        lr_glottocode = '',
+        lr_added_countries = '',
+        lr_removed_countries = '',
         lr_status = "complete";
 
         first_name = tud.first_name;
@@ -167,6 +178,9 @@ describe('Language API', () => {
         company = tud.company;
         user_image = tud.user_image;
         status = tud.status;
+
+        official_language = 'True';
+        national_language = 'False';
 
         token = generateWebToken({
             user_id: 0, 
@@ -219,7 +233,11 @@ describe('Language API', () => {
         return request(server)
             .post("/api/languages/newCountry/" + identificator) // can be id / iso_code
             .set("Authorization", "Bearer "+token) 
-            .send({country_id:country_id});
+            .send({
+                country_id:country_id,
+                official_language:official_language,
+                national_language:national_language
+            });
     };
     const execDeleteCountryFromLang = () => {
         return request(server)
@@ -281,7 +299,14 @@ describe('Language API', () => {
                 assigned_user_id:assigned_user_id, 
                 lang_id:identificator,  // This has to be set to an existing language's id
                 lr_type:lr_type, 
-                lr_content:lr_content, 
+                lr_title:lr_title, 
+                lr_reason:lr_reason,
+                lr_lang_name:lr_lang_name,
+                lr_alternative_name:lr_alternative_name,
+                lr_iso_code:lr_iso_code,
+                lr_glottocode:lr_glottocode,
+                lr_added_countries:lr_added_countries,
+                lr_removed_countries:lr_removed_countries,
                 lr_status:lr_status
             });
     };
@@ -295,7 +320,14 @@ describe('Language API', () => {
                 lr_end_date, 
                 lr_start_date, 
                 lr_type, 
-                lr_content, 
+                lr_title, 
+                lr_reason,
+                lr_lang_name,
+                lr_alternative_name,
+                lr_iso_code,
+                lr_glottocode,
+                lr_added_countries,
+                lr_removed_countries, 
                 lr_status
             });
     };
@@ -600,11 +632,13 @@ describe('Language API', () => {
                 expect(res.status).toBe(200);
             });
             it('should return 404 if language-country pair cannot be found by deleteLangsCountry', async () => {
+                winston.info('AAAAAAAAAAAAAAAAAAA');
                 identificator = 999999;
 
                 const res = await execDeleteCountryFromLang();
 
                 expect(res.status).toBe(404);
+                winston.info('AAAAAAAAAAAAAAAAAAA');
             });
         });
     });
@@ -708,7 +742,6 @@ describe('Language API', () => {
                 const res = await execShowCountriesByLanguage();
 
                 await execDeleteCountryFromLang();
-
                 expect(res.status).toBe(200);
             });
             it('should return 404 if no countries are found for a language', async () => {

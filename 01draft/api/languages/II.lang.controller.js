@@ -47,7 +47,7 @@ module.exports = {
                     winston.error(err)
                     return res.status(400).send(`Language with isoCode ${req.body.iso_code} already exists`);
                 }
-                status500(res, err);
+                return status500(res, err);
             }
             winston.info('New language created')
             return res.status(200).send(results);
@@ -57,7 +57,7 @@ module.exports = {
         const body = req.body;
         createLangRequests(body, req, (err, results) => {
             if (err) {
-                status500(res, err);
+                return status500(res, err);
             }
             winston.info('New language request created')
             return res.status(200).send(results);
@@ -71,7 +71,7 @@ module.exports = {
                     winston.error(err)
                     return res.status(400).send(`Language with ID ${req.body.id} and country ID ${body.country_id} already exists`);
                 }
-                status500(res, err);
+                return status500(res, err);
             }
             winston.info('Language location updated. Country ID: '+body.country_id+'. Language ID: '+req.params.id);
             return res.status(200).send(results);
@@ -85,7 +85,7 @@ module.exports = {
                     winston.error(err)
                     return res.status(400).send(`Language with ISO Code ${req.params.isoCode} and country ID ${body.country_id} already exists`);
                 }
-                status500(res, err);
+                return status500(res, err);
             }
             winston.info('Language location updated. Country ID: '+body.country_id+'. ISO code: '+req.params.isoCode);
             return res.status(200).send(results);
@@ -95,7 +95,7 @@ module.exports = {
         const body = req.body;
         updateByID(req.params.id, body, (err, results) => {
             if (err) {
-                status500(res, err);
+                return status500(res, err);
             }
             if (results) {
                 const noAffectedRows = results.affectedRows;
@@ -117,7 +117,7 @@ module.exports = {
         const body = req.body;
         updateByISO(req.params.isoCode, body, (err, results) => {
             if (err) {
-                status500(res, err);
+                return status500(res, err);
             }
             if (results) {
                 const noAffectedRows = results.affectedRows;
@@ -139,7 +139,7 @@ module.exports = {
         const body = req.body;
         updateRequestsByID(req.params.id, body, (err, results) => {
             if (err) {
-                status500(res, err);
+                return status500(res, err);
             }
             if (results) {
                 const noAffectedRows = results.affectedRows;
@@ -160,7 +160,7 @@ module.exports = {
     showAll: (req, res) => { 
         showAll((err, results) => {
             if (err) {
-                status500(res, err);
+                return status500(res, err);
             }
             winston.info(results.length+' languages found');
             return res.status(200).send(results);
@@ -169,7 +169,7 @@ module.exports = {
     showLangByID: (req, res) => {
         showByID(req.params.id, (err, results) => { 
             if (err) {
-                status500(res, err);
+                return status500(res, err);
             }
             if (results.length === 0) {
                 winston.error('Could not find language. Language ID: '+req.params.id);
@@ -182,7 +182,7 @@ module.exports = {
     showLangByISO: (req, res) => {
         showByISO(req.params.isoCode, (err, results) => { 
             if (err) {
-                status500(res, err);
+                return status500(res, err);
             }
             if (results.length === 0) {
                 winston.error('Could not find language. Language ISO code: '+req.params.isoCode);
@@ -195,7 +195,7 @@ module.exports = {
     showLangRequestsByID: (req, res) => {
         showRequestsByID(req.params.id, (err, results) => { 
             if (err) {
-                status500(res, err);
+                return status500(res, err);
             }
             if (results.length === 0) {
                 winston.error('Could not find request. Language ID: '+req.params.isoCode);
@@ -208,7 +208,7 @@ module.exports = {
     showAllRequests: (req, res) => {
         showAllRequests((err, results) => {
             if (err) {
-                status500(res, err);
+                return status500(res, err);
             }
             winston.info(results.length+' requests found');
             return res.status(200).send(results);
@@ -217,7 +217,7 @@ module.exports = {
     showLangByAltName: (req, res) => {
         showByAltName(req.params.alt_name, (err, results) => { 
             if (err) {
-                status500(res, err);
+                return status500(res, err);
             }
             if (results.length === 0) {
                 winston.error('Could not find language. Language alternative name: '+req.params.alt_name);
@@ -230,7 +230,7 @@ module.exports = {
     showAllDialects: (req, res) => {
         showAllDialects((err, results) => {
             if (err) {
-                status500(res, err);
+                return status500(res, err);
             }
             winston.info(results.length + ' dialects found.');
             return res.status(200).send(results);
@@ -239,7 +239,7 @@ module.exports = {
     showLangByRegion: (req, res) => {
         showLanguagesByRegion(req.params.region_name, (err, results) => {
             if (err) {
-                status500(res, err);
+                return status500(res, err);
             }
             if (results.length === 0) {
                 winston.error('Could not find languages for region: ' + req.params.region_name);
@@ -252,7 +252,7 @@ module.exports = {
     showLangBySubregion: (req, res) => {
         showLanguagesBySubregion(req.params.subregion_name, (err, results) => {
             if (err) {
-                status500(res, err);
+                return status500(res, err);
             }
             if (results.length === 0) {
                 winston.error('Could not find languages for subregion: ' + req.params.subregion_name);
@@ -265,7 +265,7 @@ module.exports = {
     showLangByIntregion: (req, res) => {
         showLanguagesByIntregion(req.params.intregion_name, (err, results) => {
             if (err) {
-                status500(res, err);
+                return status500(res, err);
             }
             if (results.length === 0) {
                 winston.error('Could not find languages for intermediate region: ' + req.params.intregion_name);
@@ -278,7 +278,7 @@ module.exports = {
     showLangByCountry: (req, res) => {
         showLanguagesByCountry(req.params.country, (err, results) => {
             if (err) {
-                status500(res, err);
+                return status500(res, err);
             }
             if (results.length === 0) {
                 winston.error('Could not find languages for country: ' + req.params.country);
@@ -291,7 +291,7 @@ module.exports = {
     showCountriesByLanguage: (req, res) => {
         showCountriesByLanguage(req.params.lang, (err, results) => {
             if (err) {
-                status500(res, err);
+                return status500(res, err);
             }
             if (results.length === 0) {
                 winston.error('Could not find countries for language: ' + req.params.lang);
@@ -304,7 +304,7 @@ module.exports = {
     showAllCompleteRequests: (req, res) => {
         showAllCompleteRequests((err, results) => {
             if (err) {
-                status500(res, err);
+                return status500(res, err);
             }
             winston.info(results.length+' requests found');
             return res.status(200).send(results);
@@ -313,7 +313,7 @@ module.exports = {
     showCompleteRequestByLang: (req, res) => {
         showCompleteRequestByLang(req.params.id, (err, results) => {
             if (err) {
-                status500(res, err);
+                return status500(res, err);
             }
             if (results.length === 0) {
                 winston.error('Could not find complete request history for language ID: ' + req.params.id);
@@ -326,7 +326,7 @@ module.exports = {
     showAllOpenRequests: (req, res) => {
         showAllOpenRequests((err, results) => {
             if (err) {
-                status500(res, err);
+                return status500(res, err);
             }
             winston.info(results.length + ' open requests. ');
             return res.status(200).send(results);
@@ -335,7 +335,7 @@ module.exports = {
     showOpenRequestByLang: (req, res) => {
         showOpenRequestByLang(req.params.id, (err, results) => {
             if (err) {
-                status500(res, err);
+                return status500(res, err);
             }
             if (results.length === 0) {
                 winston.error('Could not find open request history for language ID: ' + req.params.id);
@@ -348,7 +348,7 @@ module.exports = {
     showAllPendingRequests: (req, res) => {
         showAllPendingRequests((err, results) => {
             if (err) {
-                status500(res, err);
+                return status500(res, err);
             }
             winston.info(results.length + ' pending requests. ');
             return res.status(200).send(results);
@@ -357,7 +357,7 @@ module.exports = {
     showPendingRequestsByLang: (req, res) => {
         showPendingRequestsByLang(req.params.id, (err, results) => {
             if (err) {
-                status500(res, err);
+                return status500(res, err);
             }
             if (results.length === 0) {
                 winston.error('Could not find pending request history for language ID: ' + req.params.id);
@@ -371,7 +371,7 @@ module.exports = {
         deleteByID(req.params.id, (err, results) => {
             const noAffectedRows = results.affectedRows;
             if (err) {
-                status500(res, err);
+                return status500(res, err);
             }
             if (noAffectedRows === 0) {
                 winston.error('Could not find language. ID code: '+req.params.id);
@@ -385,7 +385,7 @@ module.exports = {
         deleteByISO(req.params.isoCode, (err, results) => {
             const noAffectedRows = results.affectedRows;
             if (err) {
-                status500(res, err);
+                return status500(res, err);
             }
             if (noAffectedRows === 0) {
                 winston.error('Could not find language. ISO code: '+req.params.isoCode);
@@ -400,7 +400,7 @@ module.exports = {
         deleteLangsCountry(body, (err, results) => {
             const noAffectedRows = results.affectedRows;
             if (err) {
-                status500(res, err);
+                return status500(res, err);
             }
             if (noAffectedRows === 0) {
                 winston.error('Could not find record. Language ID: '+body.lang_id+'. Country ID: '+body.country_id);
@@ -414,7 +414,7 @@ module.exports = {
         deleteRequest(req.params.id, (err, results) => {
             const noAffectedRows = results.affectedRows;
             if (err) {
-                status500(res, err);
+                return status500(res, err);
             }
             if (noAffectedRows === 0) {
                 winston.error('Could not find request. ID: '+req.params.id);
