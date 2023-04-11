@@ -632,13 +632,11 @@ describe('Language API', () => {
                 expect(res.status).toBe(200);
             });
             it('should return 404 if language-country pair cannot be found by deleteLangsCountry', async () => {
-                winston.info('AAAAAAAAAAAAAAAAAAA');
                 identificator = 999999;
 
                 const res = await execDeleteCountryFromLang();
 
                 expect(res.status).toBe(404);
-                winston.info('AAAAAAAAAAAAAAAAAAA');
             });
         });
     });
@@ -1004,8 +1002,6 @@ describe('Language API', () => {
                 identificator = 999999;
 
                 const res = await execShowPendingRequest();
-
-                console.log(res);
 
                 expect(res.status).toBe(404);
             });
