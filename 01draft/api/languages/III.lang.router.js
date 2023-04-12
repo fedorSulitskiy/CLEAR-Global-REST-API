@@ -14,9 +14,9 @@ const {
     showAllRequests,
     showLangByAltName,
     showAllDialects,
-    showLangByRegion,
-    showLangBySubregion,
-    showLangByIntregion,
+    showLanguagesByContinent,
+    showLanguagesByRegion,
+    showLanguagesByIntregion,
     showLangByCountry,
     showCountriesByLanguage,
     showAllCompleteRequests,
@@ -57,9 +57,9 @@ router.get("/alt_name/:alt_name", showLangByAltName);
 router.get("/dialects", showAllDialects);
 
 /// Regional Ones
-router.get("/region/:region_name", showLangByRegion);
-router.get("/subregion/:subregion_name", showLangBySubregion);
-router.get("/intregion/:intregion_name", showLangByIntregion);
+router.get("/continent/:continent", showLanguagesByContinent);
+router.get("/region/:region_name", showLanguagesByRegion);
+router.get("/intregion/:intregion_name", showLanguagesByIntregion);
 router.get("/country/:country", showLangByCountry); // works for only English names
 
 /// Show Countries

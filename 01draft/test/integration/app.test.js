@@ -21,8 +21,6 @@ let iso_code;
 let no_of_trans;
 let lang_status;
 let glotto_ref;
-let official;
-let national;
 let official_H2H;
 let unofficial_H2H;
 let total_speakers_nr;
@@ -60,9 +58,9 @@ let lr_status;
 let lang_request_id;
 
 // Data to manage country-language relationships
-let country_id;
-let official_language;
-let national_language;
+let country_iso_code;
+let official;
+let national;
 
 // Data to generate authorisation token
 let first_name;
@@ -179,9 +177,9 @@ describe('App API', () => {
         }
 
         // Data to manage country-language relationships
-        country_id = 10; // This country must have proper reference to all regions / sub-regions / int-regions
-        official_language = 'True';
-        national_language = 'False';
+        country_iso_code = 'ABW'; // This country must have proper reference to all regions / sub-regions / int-regions
+        official = 1;
+        national = 0;
 
         // Data to generate authorisation token
         first_name = tud.first_name;
@@ -238,25 +236,6 @@ describe('App API', () => {
         return request(server)
             .delete("/api/languages/requests/" + lang_request_id)
             .set("Authorization", "Bearer "+token);
-    };
-    const execAddCountryToLang = () => { // can be reused for deleteLangByID / deleteLangByISO
-        return request(server)
-            .post("/api/languages/newCountry/" + iso_code) // can be id / iso_code
-            .set("Authorization", "Bearer "+token) 
-            .send({
-                country_id:country_id,
-                official_language:official_language,
-                national_language:national_language
-            });
-    };
-    const execDeleteCountryFromLang = () => {
-        return request(server)
-            .delete("/api/languages/newCountry/") 
-            .set("Authorization", "Bearer "+token) 
-            .send({
-                country_id:country_id,
-                lang_id:lang_id
-            });
     };
 
     // Tested functions

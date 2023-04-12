@@ -133,15 +133,15 @@ module.exports = {
     addCountryToLanguageByID: (id, data, callBack) => {
         pool.query(
             `INSERT INTO langs_countries(
-                country_id,
-                official_language,
-                national_language,
+                country_iso_code,
+                official,
+                national,
                 lang_id) 
             VALUES(?,?,?,?)`,
             [                       
-                data.country_id,
-                data.official_language,
-                data.national_language,
+                data.country_iso_code,
+                data.official,
+                data.national,
                 id
             ],
             (error, results, fields) => {
@@ -155,15 +155,15 @@ module.exports = {
     addCountryToLanguageByISO: (isoCode, data, callBack) => {
         pool.query(
             `INSERT INTO langs_countries(
-                country_id, 
-                official_language,
-                national_language,
+                country_iso_code, 
+                official,
+                national,
                 lang_id) 
             VALUES(?,?,?,(SELECT lang_id FROM languages WHERE iso_code=?))`,
             [                       
-                data.country_id,
-                data.official_language,
-                data.national_language,
+                data.country_iso_code,
+                data.official,
+                data.national,
                 isoCode
             ],
             (error, results, fields) => {
@@ -441,16 +441,17 @@ module.exports = {
             }
         );
     },
-    showLanguagesByRegion: (region_name, callBack) => {
+    showLanguagesByContinent: (continent, callBack) => {
         pool.query(
             `SELECT DISTINCT 
                 languages.*
             FROM languages 
             JOIN langs_countries ON languages.lang_id = langs_countries.lang_id 
-            JOIN countries ON langs_countries.country_id = countries.country_id 
-            JOIN regions ON countries.region_id = regions.region_id 
-            WHERE regions.region_name = ?`,
-        [region_name],
+            JOIN countries ON langs_countries.country_iso_code = countries.country_iso_code 
+            JOIN countries_regions_int ON countries.country_iso_code = countries_regions_int.country_iso_code 
+            JOIN regions_continents ON regions_continents.regions = countries_regions_int.regions
+            WHERE regions_continents.continents = ?`,
+        [continent],
             (error, results, fields) => {
                 if (error) {
                     return callBack(error);
@@ -459,16 +460,16 @@ module.exports = {
             }
         );
     },
-    showLanguagesBySubregion: (subregion_name, callBack) => {
+    showLanguagesByRegion: (region, callBack) => {
         pool.query(
             `SELECT DISTINCT 
                 languages.*
             FROM languages 
             JOIN langs_countries ON languages.lang_id = langs_countries.lang_id 
-            JOIN countries ON langs_countries.country_id = countries.country_id 
-            JOIN subregions ON countries.subregion_id = subregions.subregion_id 
-            WHERE subregions.subregion_name = ?`,
-        [subregion_name],
+            JOIN countries ON langs_countries.country_iso_code = countries.country_iso_code 
+            JOIN countries_regions_int ON countries.country_iso_code = countries_regions_int.country_iso_code 
+            WHERE countries_regions_int.regions = ?`,
+        [region],
             (error, results, fields) => {
                 if (error) {
                     return callBack(error);
@@ -483,9 +484,9 @@ module.exports = {
                 languages.*
             FROM languages 
             JOIN langs_countries ON languages.lang_id = langs_countries.lang_id 
-            JOIN countries ON langs_countries.country_id = countries.country_id 
-            JOIN intermediate_regions ON countries.int_region_id = intermediate_regions.int_region_id 
-            WHERE intermediate_regions.int_region_name = ?`,
+            JOIN countries ON langs_countries.country_iso_code = countries.country_iso_code 
+            JOIN countries_regions_int ON countries.country_iso_code = countries_regions_int.country_iso_code 
+            WHERE countries_regions_int.intermediate_regions = ?`,
         [intregion_name],
             (error, results, fields) => {
                 if (error) {
@@ -497,11 +498,12 @@ module.exports = {
     },
     showLanguagesByCountry: (country, callBack) => {
         pool.query(
-            `SELECT 
+            `SELECT DISTINCT 
                 languages.*
-            FROM langs_countries
-            INNER JOIN languages ON languages.lang_id = langs_countries.lang_id
-            WHERE langs_countries.country_id = (SELECT country_id FROM countries WHERE english_name = ?)`,
+            FROM languages 
+            JOIN langs_countries ON languages.lang_id = langs_countries.lang_id 
+            JOIN countries ON langs_countries.country_iso_code = countries.country_iso_code 
+            WHERE countries.english_name = ?`,
             [country],
             (error, results, fields) => {
                 if (error) {
@@ -514,19 +516,18 @@ module.exports = {
     showCountriesByLanguage: (lang, callBack) => {
         pool.query(
             `SELECT 
-                countries.iso_code, 
+                countries.country_iso_code, 
                 countries.english_name, 
                 countries.french_name, 
                 countries.german_name, 
-                regions.region_name, 
-                subregions.subregion_name, 
-                intermediate_regions.int_region_name
+                regions_continents.continents, 
+                countries_regions_int.regions, 
+                countries_regions_int.intermediate_regions
             FROM langs_countries 
-            INNER JOIN countries ON countries.country_id = langs_countries.country_id 
-            INNER JOIN regions ON countries.region_id = regions.region_id 
-            INNER JOIN subregions ON countries.subregion_id = subregions.subregion_id
-            INNER JOIN intermediate_regions ON countries.int_region_id = intermediate_regions.int_region_id
-            WHERE langs_countries.lang_id = (SELECT lang_id FROM languages WHERE lang_name = ?)`,
+            JOIN countries ON langs_countries.country_iso_code = countries.country_iso_code 
+            JOIN countries_regions_int ON countries.country_iso_code = countries_regions_int.country_iso_code 
+            JOIN regions_continents ON regions_continents.regions = countries_regions_int.regions
+            WHERE langs_countries.lang_id = (SELECT lang_id FROM languages WHERE lang_name = ?);`,
             [lang],
             (error, results, fields) => {
                 if (error) {
@@ -645,10 +646,10 @@ module.exports = {
     },
     deleteLangsCountry: (data, callBack) => {
         pool.query(
-            `DELETE FROM langs_countries WHERE lang_id = ? AND country_id = ?`,
+            `DELETE FROM langs_countries WHERE lang_id = ? AND country_iso_code = ?`,
             [
                 data.lang_id,
-                data.country_id
+                data.country_iso_code
             ],
             (error, results, fields) => {
                 if (error) {

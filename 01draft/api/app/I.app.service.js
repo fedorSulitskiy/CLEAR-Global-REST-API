@@ -21,7 +21,7 @@ module.exports = {
             `SELECT 
                 countries.english_name
             FROM langs_countries 
-            INNER JOIN countries ON countries.country_id = langs_countries.country_id 
+            INNER JOIN countries ON countries.country_iso_code = langs_countries.country_iso_code 
             WHERE langs_countries.lang_id = (SELECT lang_id FROM languages WHERE lang_name = ?)`,
             [lang],
             (error, results, fields) => {
@@ -35,15 +35,14 @@ module.exports = {
     showCountryInfo: (country_name, callBack) => {
         pool.query(
             `SELECT 
-                countries.iso_code, 
-                countries.english_name, 
-                regions.region_name, 
-                subregions.subregion_name, 
-                intermediate_regions.int_region_name 
-            FROM countries 
-            INNER JOIN regions ON countries.region_id = regions.region_id 
-            INNER JOIN subregions ON countries.subregion_id = subregions.subregion_id 
-            INNER JOIN intermediate_regions ON countries.int_region_id = intermediate_regions.int_region_id 
+                c.country_iso_code, 
+                c.english_name, 
+                cri.regions, 
+                cri.intermediate_regions, 
+                rc.continents
+            FROM countries c
+            INNER JOIN countries_regions_int cri ON c.country_iso_code = cri.country_iso_code
+            INNER JOIN regions_continents rc ON cri.regions = rc.regions
             WHERE english_name = ?;
             `,
             [country_name],
@@ -104,48 +103,6 @@ module.exports = {
             }
         );
     },
-    // acceptChange: () => {
-    //     pool.query(
-    //         `update languages set 
-    //             ref_id = ?,
-    //             source_id = ?,
-    //             lang_name = ?,
-    //             iso_code = ?,
-    //             no_of_trans = ?,
-    //             lang_status = ?,
-    //             glotto_ref = ?,
-    //             official = ?,
-    //             national = ?,
-    //             official_H2H = ?,
-    //             unofficial_H2H = ?,
-    //             total_speakers_nr = ?,
-    //             first_lang_speakers_nr = ?,
-    //             second_lang_speakers_nr = ?,
-    //             internet_users_percent = ?,
-    //             TWB_machine_translation_development = ?,
-    //             TWB_recommended_Pivot_langs = ?,
-    //             community_feasibility = ?,
-    //             recruitment_feasibility = ?,
-    //             recruitment_category = ?,
-    //             total_score_15 = ?,
-    //             level = ?,
-    //             aes_status = ?,
-    //             source_comment = ?,
-    //             alternative_names = ?,
-    //             links = ?,
-    //             family_name = ? 
-    //         where iso_code=?`,
-    //         [                        
-                
-    //         ],
-    //         (error, results, fields) => {
-    //             if (error) {
-    //                 return callBack(error);
-    //             }
-    //             return callBack(null, results);
-    //         }
-    //     );
-    // },
     showRequestsBetweenDates: (lang, data, callBack) => {
         pool.query(
             `SELECT * 

@@ -50,8 +50,8 @@ let official_language;
 let national_language;
 
 // Geographical data for regional functions
+let continent;
 let region_name;
-let subregion_name;
 let intregion_name;
 let country;
 
@@ -155,8 +155,8 @@ describe('Language API', () => {
         national_language = 'False';
 
         // Georgraphical info regional functions
-        region_name = 'Africa';
-        subregion_name = 'Northern Africa';
+        continent = 'Africa';
+        region_name = 'Northern Africa';
         intregion_name = 'Eastern Africa';
         country = 'Algeria';
 
@@ -272,11 +272,11 @@ describe('Language API', () => {
 
     const execRegion = () => {
         return request(server)
-            .get("/api/languages/region/" + region_name);
+            .get("/api/languages/continent/" + continent);
     };
     const execSubRegion = () => {
         return request(server)
-            .get("/api/languages/subregion/" + subregion_name);
+            .get("/api/languages/region/" + region_name);
     };
     const execIntRegion = () => {
         return request(server)
@@ -680,7 +680,7 @@ describe('Language API', () => {
                 expect(res.status).toBe(200);
             });
             it('should return 404 if no languages are found for a region', async () => {
-                region_name = 'Narnia';
+                continent = 'Narnia';
 
                 const res = await execRegion();
 
@@ -694,7 +694,7 @@ describe('Language API', () => {
                 expect(res.status).toBe(200);
             });
             it('should return 404 if no languages are found for a subregion', async () => {
-                subregion_name = 'Narnia';
+                region_name = 'Narnia';
 
                 const res = await execSubRegion();
 

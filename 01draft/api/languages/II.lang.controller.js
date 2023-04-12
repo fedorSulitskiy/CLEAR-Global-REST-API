@@ -16,8 +16,8 @@ const {
     showAllRequests,
     showByAltName,
     showAllDialects,
+    showLanguagesByContinent,
     showLanguagesByRegion,
-    showLanguagesBySubregion,
     showLanguagesByIntregion,
     showLanguagesByCountry,
     showCountriesByLanguage,
@@ -69,11 +69,11 @@ module.exports = {
             if (err) {
                 if (err.code==='ER_DUP_ENTRY') {
                     winston.error(err)
-                    return res.status(400).send(`Language with ID ${req.body.id} and country ID ${body.country_id} already exists`);
+                    return res.status(400).send(`Language with ID ${req.body.id} and country ID ${body.country_iso_code} already exists`);
                 }
                 return status500(res, err);
             }
-            winston.info('Language location updated. Country ID: '+body.country_id+'. Language ID: '+req.params.id);
+            winston.info('Language location updated. Country ID: '+body.country_iso_code+'. Language ID: '+req.params.id);
             return res.status(200).send(results);
         });
     },
@@ -83,11 +83,11 @@ module.exports = {
             if (err) {
                 if (err.code==='ER_DUP_ENTRY') {
                     winston.error(err)
-                    return res.status(400).send(`Language with ISO Code ${req.params.isoCode} and country ID ${body.country_id} already exists`);
+                    return res.status(400).send(`Language with ISO Code ${req.params.isoCode} and country ID ${body.country_iso_code} already exists`);
                 }
                 return status500(res, err);
             }
-            winston.info('Language location updated. Country ID: '+body.country_id+'. ISO code: '+req.params.isoCode);
+            winston.info('Language location updated. Country ID: '+body.country_iso_code+'. ISO code: '+req.params.isoCode);
             return res.status(200).send(results);
         });
     },
@@ -236,7 +236,20 @@ module.exports = {
             return res.status(200).send(results);
         });
     },
-    showLangByRegion: (req, res) => {
+    showLanguagesByContinent: (req, res) => {
+        showLanguagesByContinent(req.params.continent, (err, results) => {
+            if (err) {
+                return status500(res, err);
+            }
+            if (results.length === 0) {
+                winston.error('Could not find languages for continent: ' + req.params.continent);
+                return res.status(404).send("Could not find languages");
+            }
+            winston.info(results.length + ' languages found for continent: ' + req.params.continent);
+            return res.status(200).send(results);
+        });
+    },
+    showLanguagesByRegion: (req, res) => {
         showLanguagesByRegion(req.params.region_name, (err, results) => {
             if (err) {
                 return status500(res, err);
@@ -249,20 +262,7 @@ module.exports = {
             return res.status(200).send(results);
         });
     },
-    showLangBySubregion: (req, res) => {
-        showLanguagesBySubregion(req.params.subregion_name, (err, results) => {
-            if (err) {
-                return status500(res, err);
-            }
-            if (results.length === 0) {
-                winston.error('Could not find languages for subregion: ' + req.params.subregion_name);
-                return res.status(404).send("Could not find languages");
-            }
-            winston.info(results.length + ' languages found for subregion: ' + req.params.subregion_name);
-            return res.status(200).send(results);
-        });
-    },
-    showLangByIntregion: (req, res) => {
+    showLanguagesByIntregion: (req, res) => {
         showLanguagesByIntregion(req.params.intregion_name, (err, results) => {
             if (err) {
                 return status500(res, err);
@@ -403,10 +403,10 @@ module.exports = {
                 return status500(res, err);
             }
             if (noAffectedRows === 0) {
-                winston.error('Could not find record. Language ID: '+body.lang_id+'. Country ID: '+body.country_id);
+                winston.error('Could not find record. Language ID: '+body.lang_id+'. Country ID: '+body.country_iso_code);
                 return res.status(404).send("Could not find record");
             }
-            winston.info('Record deleted. Language ID: '+body.lang_id+'. Country ID: '+body.country_id);
+            winston.info('Record deleted. Language ID: '+body.lang_id+'. Country ID: '+body.country_iso_code);
             return res.status(200).send(results);
         });
     },
