@@ -150,8 +150,8 @@ module.exports = {
         pool.query(
             `SELECT * 
             FROM language_requests
-            WHERE lr_start_date < ? 
-            AND lr_end_date > ?
+            WHERE lr_start_date > ? 
+            AND lr_start_date < ?
             AND lang_id = (SELECT lang_id FROM languages WHERE lang_name = ?)`,
             [
                 data.start_date,

@@ -105,10 +105,6 @@ module.exports = {
             if (err) {
                 return status500(res, err);
             }
-            if (results.length === 0) {
-                winston.error('Could not find requests');
-                return res.status(404).send("Could not find requests");
-            }
             winston.info('Most recent request found');
             return res.status(200).send(results);
         });

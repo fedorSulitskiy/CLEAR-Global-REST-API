@@ -5,10 +5,8 @@
 */       
 
 const request = require('supertest');
-const winston = require('winston');
 const generateWebToken = require('../../auth/generateToken');
 const tud = require('./_testUserDetails');
-const { decode } = require('jsonwebtoken');
 
 let server;
 let identificator;
@@ -146,6 +144,8 @@ describe('Language API', () => {
         }
 
         country_id = 10; /// This country must have proper reference to all regions / sub-regions / int-regions
+        official_language = 'True';
+        national_language = 'False';
 
         region_name = 'Africa';
         subregion_name = 'Northern Africa';
@@ -178,9 +178,6 @@ describe('Language API', () => {
         company = tud.company;
         user_image = tud.user_image;
         status = tud.status;
-
-        official_language = 'True';
-        national_language = 'False';
 
         token = generateWebToken({
             user_id: 0, 
