@@ -302,7 +302,18 @@ describe('App API', () => {
             .set("Authorization", "Bearer " + token);
     };
 
+    // Finding lang_request_id
+    const findRequestID = async () => {
+        // clears identifier so I can extract all requests
+        var allRequests = await execShowAllRequest();
 
+        // finds the latest created request which must be the request made during test
+        allRequests = allRequests.body;
+        const sortedArray = allRequests.sort((a, b) => b.lr_start_date - a.lr_start_date);
+        return sortedArray[0].lang_request_id;
+    };
+
+    /// Tests
     describe('Countries Output', () => {
         describe('showAllCountries', () => {
             it('should return 200 if valid showAllCountries request', async () => {
@@ -380,11 +391,7 @@ describe('App API', () => {
 
                 await execCreateRequest();
 
-                var allRequests = await execShowAllRequest();
-
-                allRequests = allRequests.body;
-                const sortedArray = allRequests.sort((a, b) => b.lr_start_date - a.lr_start_date);
-                lang_request_id = sortedArray[0].lang_request_id;
+                lang_request_id = findRequestID();
 
                 const res = await execShowRequestByLang();
 
@@ -410,11 +417,7 @@ describe('App API', () => {
 
                 await execCreateRequest();
 
-                var allRequests = await execShowAllRequest();
-
-                allRequests = allRequests.body;
-                const sortedArray = allRequests.sort((a, b) => b.lr_start_date - a.lr_start_date);
-                lang_request_id = sortedArray[0].lang_request_id;
+                lang_request_id = findRequestID();
 
                 const res = await execShowRequestBetweenDates();
 

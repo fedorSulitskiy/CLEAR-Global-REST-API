@@ -2,9 +2,11 @@ const request = require('supertest');
 const generateWebToken = require('../../auth/generateToken');
 const tud = require('./_testUserDetails');
 
+// General data to facilitate tests' functionality
 let user_id;
 let token;
 
+// Data to generate user and token
 let first_name;
 let last_name;
 let email; 
@@ -19,6 +21,7 @@ let status;
 let address;
 let postcode;
 
+// Data needed to find user id
 let trial_user_object;
 
 describe('User API', () => {
@@ -136,7 +139,7 @@ describe('User API', () => {
             .set("Authorization", "Bearer "+token);
     };
 
-    /// VALID REQUESTS
+    /// Tests
 
     describe('create function', () => {
         it('Should return 200 if valid createUser request', async () => {

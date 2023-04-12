@@ -8,12 +8,14 @@ const request = require('supertest');
 const generateWebToken = require('../../auth/generateToken');
 const tud = require('./_testUserDetails');
 
+/// General data for for facilitating tests' functionality
 let server;
 let identificator;
 let token;
 let details;
 let trial_language_object;
 
+// Data to generate a tester language
 let ref_id;
 let source_id;
 let lang_name;
@@ -42,13 +44,18 @@ let alternative_names;
 let links;
 let family_name;
 
+// Data to manupilate country-language relationships
 let country_id;
+let official_language;
+let national_language;
 
+// Geographical data for regional functions
 let region_name;
 let subregion_name;
 let intregion_name;
 let country;
 
+// Data for generating requests
 let created_user_id;
 let assigned_user_id;
 let lr_end_date;
@@ -65,6 +72,7 @@ let lr_added_countries;
 let lr_removed_countries;
 let lr_status;
 
+// Data for generating authentication tokens
 let first_name;
 let last_name;
 let email; 
@@ -77,14 +85,12 @@ let company;
 let user_image;
 let status;
 
-let official_language;
-let national_language;
-
 describe('Language API', () => {
 
     beforeEach(() => {
         server = require('../../index');
 
+        // Data for generating a tester language
         ref_id = 0;
         source_id = 0;
         lang_name = 'The Testing Language';
@@ -143,19 +149,20 @@ describe('Language API', () => {
             family_name
         }
 
+        // Data to manipulate country-language relationships
         country_id = 10; /// This country must have proper reference to all regions / sub-regions / int-regions
         official_language = 'True';
         national_language = 'False';
 
+        // Georgraphical info regional functions
         region_name = 'Africa';
         subregion_name = 'Northern Africa';
         intregion_name = 'Eastern Africa';
         country = 'Algeria';
 
+        // Data for generating requests
         created_user_id = 2;
         assigned_user_id = 2;
-        lr_end_date = 1;
-        lr_start_date = 1;
         lr_type = "add";
         lr_title = 'Test', 
         lr_reason = 'We need to test',
@@ -167,6 +174,7 @@ describe('Language API', () => {
         lr_removed_countries = '',
         lr_status = "complete";
 
+        // Data to generate authorisation token
         first_name = tud.first_name;
         last_name = tud.last_name;
         email = tud.email; 
@@ -368,10 +376,7 @@ describe('Language API', () => {
         await execDeleteRequest();
     }
     
-///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-///////TESTS//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
+    /// Tests
     describe('General Languages Related Operations', () => {
         describe('create language function', () => {
             it('should return 200 if valid createLang request', async () => {
