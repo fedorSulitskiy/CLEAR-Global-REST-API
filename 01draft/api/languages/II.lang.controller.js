@@ -38,6 +38,74 @@ const status500 = function(res, err) {
     return res.status(500).send('Database connection error');
 }
 
+const refactorMultipleLanguages = function(results) {
+    const result = {};
+    let string_links = [];
+    results.forEach((item) => {
+        if (!result[item.lang_name]) {
+            result[item.lang_name] = { language: {
+                source_id: item.source_id,
+                lang_name: item.lang_name,
+                iso_code: item.iso_code,
+                no_of_trans: item.no_of_trans,
+                lang_status: item.lang_status,
+                glottocode: item.glottocode,
+                total_speakers_nr: item.total_speakers_nr,
+                first_lang_speakers_nr: item.first_lang_speakers_nr,
+                second_lang_speakers_nr: item.second_lang_speakers_nr,
+                TWB_machine_translation_development: item.TWB_machine_translation_development,
+                TWB_recommended_Pivot_langs: item.TWB_recommended_Pivot_langs,
+                community_feasibility: item.community_feasibility,
+                recruitment_feasibility: item.recruitment_feasibility,
+                recruitment_category: item.recruitment_category,
+                total_score_15: item.total_score_15,
+                level: item.level,
+                aes_status: item.aes_status,
+                family_name: item.family_name
+            }, alternative_names: [], links: [] };
+        }
+        if (!result[item.lang_name].alternative_names.includes(item.alternative_name)) {
+            result[item.lang_name].alternative_names.push(item.alternative_name);
+        }
+        if (!string_links.includes(JSON.stringify({ link: item.link, description: item.description }))) {
+            result[item.lang_name].links.push({ link: item.link, description: item.description });
+            string_links.push(JSON.stringify({ link: item.link, description: item.description })); 
+        }                    
+    });
+    return result;
+};
+
+const refactorSingleLanguage = function(results) {
+    const language = [...new Set(results.map(item => JSON.stringify({ 
+        source_id: item.source_id,
+        lang_name: item.lang_name,
+        iso_code: item.iso_code,
+        no_of_trans: item.no_of_trans,
+        lang_status: item.lang_status,
+        glottocode: item.glottocode,
+        total_speakers_nr: item.total_speakers_nr,
+        first_lang_speakers_nr: item.first_lang_speakers_nr,
+        second_lang_speakers_nr: item.second_lang_speakers_nr,
+        TWB_machine_translation_development: item.TWB_machine_translation_development,
+        TWB_recommended_Pivot_langs: item.TWB_recommended_Pivot_langs,
+        community_feasibility: item.community_feasibility,
+        recruitment_feasibility: item.recruitment_feasibility,
+        recruitment_category: item.recruitment_category,
+        total_score_15: item.total_score_15,
+        level: item.level,
+        aes_status: item.aes_status,
+        family_name: item.family_name,
+    })))].map(JSON.parse)[0];
+    const alternativeNames = [...new Set(results.map(item => item.alternative_name))];
+    const links = [...new Set(results.map(item => JSON.stringify({ link: item.link, description: item.description })))].map(JSON.parse);
+    
+    return {
+        "language":language,
+        "alternative_names":alternativeNames,
+        "links":links
+    };
+}
+
 module.exports = {
     createLang: (req, res) => {
         const body = req.body;
@@ -163,42 +231,8 @@ module.exports = {
                 return status500(res, err);
             }
             winston.info(results.length+' languages found');
-
-            // returning readable data
-            const result = {};
-            let string_links = [];
-            results.forEach((item) => {
-                if (!result[item.lang_name]) {
-                    result[item.lang_name] = { langauge: {
-                        source_id: item.source_id,
-                        lang_name: item.lang_name,
-                        iso_code: item.iso_code,
-                        no_of_trans: item.no_of_trans,
-                        lang_status: item.lang_status,
-                        glottocode: item.glottocode,
-                        total_speakers_nr: item.total_speakers_nr,
-                        first_lang_speakers_nr: item.first_lang_speakers_nr,
-                        second_lang_speakers_nr: item.second_lang_speakers_nr,
-                        TWB_machine_translation_development: item.TWB_machine_translation_development,
-                        TWB_recommended_Pivot_langs: item.TWB_recommended_Pivot_langs,
-                        community_feasibility: item.community_feasibility,
-                        recruitment_feasibility: item.recruitment_feasibility,
-                        recruitment_category: item.recruitment_category,
-                        total_score_15: item.total_score_15,
-                        level: item.level,
-                        aes_status: item.aes_status,
-                        family_name: item.family_name
-                    }, alternative_names: [], links: [] };
-                }
-                if (!result[item.lang_name].alternative_names.includes(item.alternative_name)) {
-                    result[item.lang_name].alternative_names.push(item.alternative_name);
-                }
-                if (!string_links.includes(JSON.stringify({ link: item.link, description: item.description }))) {
-                    result[item.lang_name].links.push({ link: item.link, description: item.description });
-                    string_links.push(JSON.stringify({ link: item.link, description: item.description })); 
-                }  
-                             
-            });
+            
+            const result = refactorMultipleLanguages(results);
 
             return res.status(200).send(Object.values(result));
         });
@@ -214,37 +248,9 @@ module.exports = {
             }
             winston.info('Language found. Language ID: '+req.params.id);
 
-            // returning readable data
-            const language = [...new Set(results.map(item => JSON.stringify({ 
-                source_id: item.source_id,
-                lang_name: item.lang_name,
-                iso_code: item.iso_code,
-                no_of_trans: item.no_of_trans,
-                lang_status: item.lang_status,
-                glottocode: item.glottocode,
-                total_speakers_nr: item.total_speakers_nr,
-                first_lang_speakers_nr: item.first_lang_speakers_nr,
-                second_lang_speakers_nr: item.second_lang_speakers_nr,
-                TWB_machine_translation_development: item.TWB_machine_translation_development,
-                TWB_recommended_Pivot_langs: item.TWB_recommended_Pivot_langs,
-                community_feasibility: item.community_feasibility,
-                recruitment_feasibility: item.recruitment_feasibility,
-                recruitment_category: item.recruitment_category,
-                total_score_15: item.total_score_15,
-                level: item.level,
-                aes_status: item.aes_status,
-                family_name: item.family_name,
-            })))].map(JSON.parse)[0];
-            const alternativeNames = [...new Set(results.map(item => item.alternative_name))];
-            const links = [...new Set(results.map(item => JSON.stringify({ link: item.link, description: item.description })))].map(JSON.parse);
+            const result = refactorSingleLanguage(results);
             
-            results = {
-                "language":language,
-                "alternative_names":alternativeNames,
-                "links":links
-            };
-            
-            return res.status(200).send(results);
+            return res.status(200).send(result);
         });   
     },
     showLangByISO: (req, res) => {
@@ -258,37 +264,9 @@ module.exports = {
             }
             winston.info('Language found. ISO code: '+req.params.isoCode);
 
-            // returning readable data
-            const language = [...new Set(results.map(item => JSON.stringify({ 
-                source_id: item.source_id,
-                lang_name: item.lang_name,
-                iso_code: item.iso_code,
-                no_of_trans: item.no_of_trans,
-                lang_status: item.lang_status,
-                glottocode: item.glottocode,
-                total_speakers_nr: item.total_speakers_nr,
-                first_lang_speakers_nr: item.first_lang_speakers_nr,
-                second_lang_speakers_nr: item.second_lang_speakers_nr,
-                TWB_machine_translation_development: item.TWB_machine_translation_development,
-                TWB_recommended_Pivot_langs: item.TWB_recommended_Pivot_langs,
-                community_feasibility: item.community_feasibility,
-                recruitment_feasibility: item.recruitment_feasibility,
-                recruitment_category: item.recruitment_category,
-                total_score_15: item.total_score_15,
-                level: item.level,
-                aes_status: item.aes_status,
-                family_name: item.family_name,
-            })))].map(JSON.parse)[0];
-            const alternativeNames = [...new Set(results.map(item => item.alternative_name))];
-            const links = [...new Set(results.map(item => JSON.stringify({ link: item.link, description: item.description })))].map(JSON.parse);
-            
-            results = {
-                "language":language,
-                "alternative_names":alternativeNames,
-                "links":links
-            };
+            const result = refactorSingleLanguage(results);
 
-            return res.status(200).send(results);
+            return res.status(200).send(result);
         });
     },
     showLangRequestsByID: (req, res) => {
@@ -323,7 +301,10 @@ module.exports = {
                 return res.status(404).send("Could not find language");
             }
             winston.info('Language found. Alternative name: '+req.params.alt_name);
-            return res.status(200).send(results);
+
+            const result = refactorMultipleLanguages(results);
+
+            return res.status(200).send(Object.values(result));
         });
     },
     showAllDialects: (req, res) => {
@@ -332,7 +313,10 @@ module.exports = {
                 return status500(res, err);
             }
             winston.info(results.length + ' dialects found.');
-            return res.status(200).send(results);
+
+            const result = refactorMultipleLanguages(results);
+
+            return res.status(200).send(Object.values(result));
         });
     },
     showLanguagesByContinent: (req, res) => {
@@ -345,7 +329,10 @@ module.exports = {
                 return res.status(404).send("Could not find languages");
             }
             winston.info(results.length + ' languages found for continent: ' + req.params.continent);
-            return res.status(200).send(results);
+            
+            const result = refactorMultipleLanguages(results);
+
+            return res.status(200).send(Object.values(result));
         });
     },
     showLanguagesByRegion: (req, res) => {
@@ -358,7 +345,10 @@ module.exports = {
                 return res.status(404).send("Could not find languages");
             }
             winston.info(results.length + ' languages found for region: ' + req.params.region_name);
-            return res.status(200).send(results);
+            
+            const result = refactorMultipleLanguages(results);
+
+            return res.status(200).send(Object.values(result));
         });
     },
     showLanguagesByIntregion: (req, res) => {
@@ -371,7 +361,10 @@ module.exports = {
                 return res.status(404).send("Could not find languages");
             }
             winston.info(results.length + ' languages found for intermediate region: ' + req.params.intregion_name);
-            return res.status(200).send(results);
+            
+            const result = refactorMultipleLanguages(results);
+
+            return res.status(200).send(Object.values(result));
         });
     },
     showLangByCountry: (req, res) => {
@@ -384,7 +377,10 @@ module.exports = {
                 return res.status(404).send("Could not find languages");
             }
             winston.info(results.length + ' languages found for country: ' + req.params.country);
-            return res.status(200).send(results);
+            
+            const result = refactorMultipleLanguages(results);
+
+            return res.status(200).send(Object.values(result));
         });
     },
     showCountriesByLanguage: (req, res) => {

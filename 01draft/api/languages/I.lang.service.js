@@ -388,8 +388,15 @@ module.exports = {
     },
     showByAltName: (alt_name, callBack) => {
         pool.query(
-            `SELECT * from languages 
-            WHERE alternative_names = ?`,
+            `SELECT 
+                languages.*, 
+                links.link, 
+                links.description, 
+                alternative_names.alternative_name
+            FROM languages 
+            LEFT JOIN links ON languages.lang_id = links.lang_id
+            LEFT JOIN alternative_names ON languages.lang_id = alternative_names.lang_id
+            WHERE languages.lang_id = (SELECT lang_id FROM alternative_names WHERE alternative_name = ?);`,
             [alt_name],
             (error, results, fields) => {
                 if (error) {
@@ -401,8 +408,15 @@ module.exports = {
     },
     showAllDialects: (callBack) => {
         pool.query(
-            `SELECT * from languages 
-            WHERE level = 'dialect'`,
+            `SELECT 
+                languages.*, 
+                links.link, 
+                links.description, 
+                alternative_names.alternative_name
+            FROM languages 
+            LEFT JOIN links ON languages.lang_id = links.lang_id
+            LEFT JOIN alternative_names ON languages.lang_id = alternative_names.lang_id
+            WHERE languages.level = 'dialect'`,
             [],
             (error, results, fields) => {
                 if (error) {
@@ -415,8 +429,13 @@ module.exports = {
     showLanguagesByContinent: (continent, callBack) => {
         pool.query(
             `SELECT DISTINCT 
-                languages.*
+                languages.*, 
+                links.link, 
+                links.description, 
+                alternative_names.alternative_name
             FROM languages 
+            LEFT JOIN links ON languages.lang_id = links.lang_id
+            LEFT JOIN alternative_names ON languages.lang_id = alternative_names.lang_id
             JOIN langs_countries ON languages.lang_id = langs_countries.lang_id 
             JOIN countries ON langs_countries.country_iso_code = countries.country_iso_code 
             JOIN countries_regions_int ON countries.country_iso_code = countries_regions_int.country_iso_code 
@@ -434,8 +453,13 @@ module.exports = {
     showLanguagesByRegion: (region, callBack) => {
         pool.query(
             `SELECT DISTINCT 
-                languages.*
+                languages.*, 
+                links.link, 
+                links.description, 
+                alternative_names.alternative_name
             FROM languages 
+            LEFT JOIN links ON languages.lang_id = links.lang_id
+            LEFT JOIN alternative_names ON languages.lang_id = alternative_names.lang_id
             JOIN langs_countries ON languages.lang_id = langs_countries.lang_id 
             JOIN countries ON langs_countries.country_iso_code = countries.country_iso_code 
             JOIN countries_regions_int ON countries.country_iso_code = countries_regions_int.country_iso_code 
@@ -452,8 +476,13 @@ module.exports = {
     showLanguagesByIntregion: (intregion_name, callBack) => {
         pool.query(
             `SELECT DISTINCT 
-                languages.*
+                languages.*, 
+                links.link, 
+                links.description, 
+                alternative_names.alternative_name
             FROM languages 
+            LEFT JOIN links ON languages.lang_id = links.lang_id
+            LEFT JOIN alternative_names ON languages.lang_id = alternative_names.lang_id
             JOIN langs_countries ON languages.lang_id = langs_countries.lang_id 
             JOIN countries ON langs_countries.country_iso_code = countries.country_iso_code 
             JOIN countries_regions_int ON countries.country_iso_code = countries_regions_int.country_iso_code 
@@ -470,8 +499,13 @@ module.exports = {
     showLanguagesByCountry: (country, callBack) => {
         pool.query(
             `SELECT DISTINCT 
-                languages.*
+                languages.*, 
+                links.link, 
+                links.description, 
+                alternative_names.alternative_name
             FROM languages 
+            LEFT JOIN links ON languages.lang_id = links.lang_id
+            LEFT JOIN alternative_names ON languages.lang_id = alternative_names.lang_id
             JOIN langs_countries ON languages.lang_id = langs_countries.lang_id 
             JOIN countries ON langs_countries.country_iso_code = countries.country_iso_code 
             WHERE countries.english_name = ?`,
