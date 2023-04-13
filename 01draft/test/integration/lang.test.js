@@ -23,8 +23,6 @@ let iso_code;
 let no_of_trans;
 let lang_status;
 let glotto_ref;
-let official;
-let national;
 let official_H2H;
 let unofficial_H2H;
 let total_speakers_nr;
@@ -45,9 +43,9 @@ let links;
 let family_name;
 
 // Data to manupilate country-language relationships
-let country_id;
-let official_language;
-let national_language;
+let country_iso_code;
+let official;
+let national;
 
 // Geographical data for regional functions
 let continent;
@@ -150,9 +148,9 @@ describe('Language API', () => {
         }
 
         // Data to manipulate country-language relationships
-        country_id = 10; /// This country must have proper reference to all regions / sub-regions / int-regions
-        official_language = 'True';
-        national_language = 'False';
+        country_iso_code = 10; /// This country must have proper reference to all regions / sub-regions / int-regions
+        official = 'True';
+        national = 'False';
 
         // Georgraphical info regional functions
         continent = 'Africa';
@@ -239,9 +237,9 @@ describe('Language API', () => {
             .post("/api/languages/newCountry/" + identificator) // can be id / iso_code
             .set("Authorization", "Bearer "+token) 
             .send({
-                country_id:country_id,
-                official_language:official_language,
-                national_language:national_language
+                country_iso_code:country_iso_code,
+                official:official,
+                national:national
             });
     };
     const execDeleteCountryFromLang = () => {
@@ -249,7 +247,7 @@ describe('Language API', () => {
             .delete("/api/languages/newCountry/") 
             .set("Authorization", "Bearer "+token) 
             .send({
-                country_id:country_id,
+                country_iso_code:country_iso_code,
                 lang_id:identificator
             });
     };
