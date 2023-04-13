@@ -14,19 +14,15 @@ let end_date;
 let country_name;
 
 // Data to create a language
-let ref_id;
 let source_id;
 let lang_name;
 let iso_code;
 let no_of_trans;
 let lang_status;
-let glotto_ref;
-let official_H2H;
-let unofficial_H2H;
+let glottocode;
 let total_speakers_nr;
 let first_lang_speakers_nr;
 let second_lang_speakers_nr;
-let internet_users_percent;
 let TWB_machine_translation_development;
 let TWB_recommended_Pivot_langs;
 let community_feasibility;
@@ -35,9 +31,6 @@ let recruitment_category;
 let total_score_15;
 let level;
 let aes_status;
-let source_comment;
-let alternative_names;
-let links;
 let family_name;
 
 // Data to create a request
@@ -90,21 +83,15 @@ describe('App API', () => {
         country_name = 'Algeria';
 
         // Data to create a language
-        ref_id = 0;
-        source_id = 0;
+        source_id = 4;
         lang_name = 'The Testing Language';
         iso_code = 'TEST'; // Impossible 4 letter iso-code
         no_of_trans = 0;
-        lang_status = 0;
-        glotto_ref = 'test';
-        official = 'Yes';
-        national = 'Yes';
-        official_H2H = 'TRUE';
-        unofficial_H2H = 'TRUE';
+        lang_status = 'verified';
+        glottocode = 'test1234';
         total_speakers_nr = '0';
         first_lang_speakers_nr = '0';
         second_lang_speakers_nr = '0';
-        internet_users_percent = '0%';
         TWB_machine_translation_development = 0;
         TWB_recommended_Pivot_langs = 0;
         community_feasibility = 0;
@@ -113,27 +100,18 @@ describe('App API', () => {
         total_score_15 = 0;
         level = 'language';
         aes_status = 'test';
-        source_comment = 'test';
-        alternative_names = 'Testenese';
-        links = 'test';
         family_name = 'test';
 
         lang_details = {
-            ref_id,
             source_id,
             lang_name,
             iso_code,
             no_of_trans,
             lang_status,
-            glotto_ref,
-            official,
-            national,
-            official_H2H,
-            unofficial_H2H,
+            glottocode,
             total_speakers_nr,
             first_lang_speakers_nr,
             second_lang_speakers_nr,
-            internet_users_percent,
             TWB_machine_translation_development,
             TWB_recommended_Pivot_langs,
             community_feasibility,
@@ -142,9 +120,6 @@ describe('App API', () => {
             total_score_15,
             level,
             aes_status,
-            source_comment,
-            alternative_names,
-            links,
             family_name
         }
 
@@ -303,7 +278,7 @@ describe('App API', () => {
         });
         describe('showCountriesByLang', () => {
             it('should return 200 if valid showCountriesByLang request', async () => {
-                await execCreateLang();
+                lang_name = 'English';
 
                 const res = await execShowCountriesByLanguage();
                 
@@ -366,7 +341,7 @@ describe('App API', () => {
 
                 trial_language_object = await request(server)
                     .get("/api/languages/" + iso_code);
-                req_details.lang_id = trial_language_object.body[0].lang_id;
+                req_details.lang_id = trial_language_object.body.language.lang_id;
 
                 await execCreateRequest();
 
@@ -392,7 +367,7 @@ describe('App API', () => {
 
                 trial_language_object = await request(server)
                     .get("/api/languages/" + iso_code);
-                req_details.lang_id = trial_language_object.body[0].lang_id;
+                req_details.lang_id = trial_language_object.body.language.lang_id;
 
                 await execCreateRequest();
 

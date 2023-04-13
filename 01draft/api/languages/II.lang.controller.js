@@ -44,6 +44,7 @@ const refactorMultipleLanguages = function(results) {
     results.forEach((item) => {
         if (!result[item.lang_name]) {
             result[item.lang_name] = { language: {
+                lang_id: item.lang_id,
                 source_id: item.source_id,
                 lang_name: item.lang_name,
                 iso_code: item.iso_code,
@@ -77,6 +78,7 @@ const refactorMultipleLanguages = function(results) {
 
 const refactorSingleLanguage = function(results) {
     const language = [...new Set(results.map(item => JSON.stringify({ 
+        lang_id: item.lang_id,
         source_id: item.source_id,
         lang_name: item.lang_name,
         iso_code: item.iso_code,

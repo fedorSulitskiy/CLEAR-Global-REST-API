@@ -73,7 +73,7 @@ module.exports = {
             winston.info('Language found: '+req.params.lang);
 
             // returning readable data
-            const language = [...new Set(results.map(item => JSON.stringify({ lang_name: item.lang_name, iso_code: item.iso_code, glottocode: item.glottocode })))].map(JSON.parse)[0];
+            const language = [...new Set(results.map(item => JSON.stringify({ lang_id: item.lang_id, lang_name: item.lang_name, iso_code: item.iso_code, glottocode: item.glottocode })))].map(JSON.parse)[0];
             const alternativeNames = [...new Set(results.map(item => item.alternative_name))];
             const links = [...new Set(results.map(item => JSON.stringify({ link: item.link, description: item.description })))].map(JSON.parse);
             

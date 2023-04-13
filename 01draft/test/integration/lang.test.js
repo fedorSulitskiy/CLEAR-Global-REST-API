@@ -7,6 +7,7 @@
 const request = require('supertest');
 const generateWebToken = require('../../auth/generateToken');
 const tud = require('./_testUserDetails');
+const winston = require('winston');
 
 /// General data for for facilitating tests' functionality
 let server;
@@ -39,6 +40,7 @@ let family_name;
 let country_iso_code;
 let official;
 let national;
+let internet_users_percent;
 
 // Geographical data for regional functions
 let continent;
@@ -82,7 +84,7 @@ describe('Language API', () => {
         server = require('../../index');
 
         // Data for generating a tester language
-        source_id = 0;
+        source_id = 4;
         lang_name = 'The Testing Language';
         iso_code = 'TEST'; // Impossible 4 letter iso-code
         no_of_trans = 0;
@@ -123,9 +125,10 @@ describe('Language API', () => {
         }
 
         // Data to manipulate country-language relationships
-        country_iso_code = 10; /// This country must have proper reference to all regions / sub-regions / int-regions
+        country_iso_code = 'GB'; /// This country must have proper reference to all regions / sub-regions / int-regions
         official = 'True';
         national = 'False';
+        internet_users_percent = 10;
 
         // Georgraphical info regional functions
         continent = 'Africa';
@@ -214,7 +217,8 @@ describe('Language API', () => {
             .send({
                 country_iso_code:country_iso_code,
                 official:official,
-                national:national
+                national:national,
+                internet_users_percent:internet_users_percent
             });
     };
     const execDeleteCountryFromLang = () => {
@@ -394,8 +398,8 @@ describe('Language API', () => {
                 
                 trial_language_object = await request(server)
                     .get("/api/languages/" + iso_code);
-                identificator = trial_language_object.body[0].lang_id;
-
+                identificator = trial_language_object.body.language.lang_id;
+                
                 details.lang_name = 'UPDATED NAME';
     
                 const res = await execUpdateLang();
@@ -407,7 +411,7 @@ describe('Language API', () => {
                 
                 trial_language_object = await request(server)
                     .get("/api/languages/" + iso_code);
-                identificator = trial_language_object.body[0].lang_id;
+                identificator = trial_language_object.body.language.lang_id;
     
                 const res = await execUpdateLang();
                 expect(res.status).toBe(200);
@@ -464,7 +468,7 @@ describe('Language API', () => {
                 
                 trial_language_object = await request(server)
                     .get("/api/languages/" + iso_code);
-                identificator = trial_language_object.body[0].lang_id;
+                identificator = trial_language_object.body.language.lang_id;
     
                 const res = await execShowLang();
                 
@@ -502,7 +506,7 @@ describe('Language API', () => {
     
                 trial_language_object = await request(server)
                     .get("/api/languages/" + iso_code);
-                identificator = trial_language_object.body[0].lang_id;
+                identificator = trial_language_object.body.language.lang_id;
     
                 const res = await execDeleteLang();
                 
@@ -543,11 +547,10 @@ describe('Language API', () => {
                 
                 trial_language_object = await request(server)
                     .get("/api/languages/" + iso_code);
-                identificator = trial_language_object.body[0].lang_id;
+                identificator = trial_language_object.body.language.lang_id;
                 const res = await execAddCountryToLang();
 
                 await execDeleteCountryFromLang();
-
                 expect(res.status).toBe(200);
             });
             it('should return 400 if combination of language and country are already in the database', async () => {
@@ -555,7 +558,7 @@ describe('Language API', () => {
                 
                 trial_language_object = await request(server)
                     .get("/api/languages/" + iso_code);
-                identificator = trial_language_object.body[0].lang_id;
+                identificator = trial_language_object.body.language.lang_id;
                 await execAddCountryToLang();
                 const res = await execAddCountryToLang();
 
@@ -573,7 +576,7 @@ describe('Language API', () => {
 
                 trial_language_object = await request(server)
                     .get("/api/languages/" + iso_code);
-                identificator = trial_language_object.body[0].lang_id;
+                identificator = trial_language_object.body.language.lang_id;
                 await execDeleteCountryFromLang();
 
                 expect(res.status).toBe(200);
@@ -587,7 +590,7 @@ describe('Language API', () => {
 
                 trial_language_object = await request(server)
                     .get("/api/languages/" + iso_code);
-                identificator = trial_language_object.body[0].lang_id;
+                identificator = trial_language_object.body.language.lang_id;
                 await execDeleteCountryFromLang();
 
                 expect(res.status).toBe(400);
@@ -599,7 +602,7 @@ describe('Language API', () => {
                 
                 trial_language_object = await request(server)
                     .get("/api/languages/" + iso_code);
-                identificator = trial_language_object.body[0].lang_id;
+                identificator = trial_language_object.body.language.lang_id;
                 await execAddCountryToLang();
 
                 const res = await execDeleteCountryFromLang();
@@ -619,11 +622,13 @@ describe('Language API', () => {
     describe('Searching by Alternative Name', () => {
         describe('showLangByAltName function', () => {
             it('should return 200 if valid showLangByAltName request', async () => {
+                winston.info('AAAAAAAAAAAAAAAAAAA');
                 await execCreateLang();
 
                 const res = await execShowByAltName();
 
                 expect(res.status).toBe(200);
+                winston.info('AAAAAAAAAAAAAAAAAAA');
             });
             it('should return 404 if language not found by showLangByAltName', async () => {
                 alternative_names = 'This name is not in the db';
@@ -737,7 +742,7 @@ describe('Language API', () => {
 
                 trial_language_object = await request(server)
                     .get("/api/languages/" + iso_code);
-                identificator = trial_language_object.body[0].lang_id;
+                identificator = trial_language_object.body.language.lang_id;
 
                 const res = await execCreateRequest();
 
@@ -750,7 +755,7 @@ describe('Language API', () => {
 
                 trial_language_object = await request(server)
                     .get("/api/languages/" + iso_code);
-                identificator = trial_language_object.body[0].lang_id;
+                identificator = trial_language_object.body.language.lang_id;
                 lr_status = 'Not a real status';
 
                 const res = await execCreateRequest();
@@ -766,7 +771,7 @@ describe('Language API', () => {
 
                 trial_language_object = await request(server)
                     .get("/api/languages/" + iso_code);
-                identificator = trial_language_object.body[0].lang_id;
+                identificator = trial_language_object.body.language.lang_id;
 
                 await execCreateRequest();
 
@@ -790,7 +795,7 @@ describe('Language API', () => {
 
                 trial_language_object = await request(server)
                     .get("/api/languages/" + iso_code);
-                identificator = trial_language_object.body[0].lang_id;
+                identificator = trial_language_object.body.language.lang_id;
 
                 await execCreateRequest();
 
@@ -824,7 +829,7 @@ describe('Language API', () => {
 
                 trial_language_object = await request(server)
                     .get("/api/languages/" + iso_code);
-                identificator = trial_language_object.body[0].lang_id;
+                identificator = trial_language_object.body.language.lang_id;
 
                 await execCreateRequest();
 
@@ -873,7 +878,7 @@ describe('Language API', () => {
 
                 trial_language_object = await request(server)
                     .get("/api/languages/" + iso_code);
-                identificator = trial_language_object.body[0].lang_id;
+                identificator = trial_language_object.body.language.lang_id;
 
                 await execCreateRequest();
 
@@ -897,7 +902,7 @@ describe('Language API', () => {
 
                 trial_language_object = await request(server)
                     .get("/api/languages/" + iso_code);
-                identificator = trial_language_object.body[0].lang_id;
+                identificator = trial_language_object.body.language.lang_id;
                 lr_status = 'in progress';
 
                 await execCreateRequest();
@@ -917,7 +922,7 @@ describe('Language API', () => {
 
                 trial_language_object = await request(server)
                     .get("/api/languages/" + iso_code);
-                identificator = trial_language_object.body[0].lang_id;
+                identificator = trial_language_object.body.language.lang_id;
                 lr_status = 'in progress';
 
                 await execCreateRequest();
@@ -942,7 +947,7 @@ describe('Language API', () => {
 
                 trial_language_object = await request(server)
                     .get("/api/languages/" + iso_code);
-                identificator = trial_language_object.body[0].lang_id;
+                identificator = trial_language_object.body.language.lang_id;
                 lr_status = 'pending';
 
                 await execCreateRequest();
@@ -962,7 +967,7 @@ describe('Language API', () => {
 
                 trial_language_object = await request(server)
                     .get("/api/languages/" + iso_code);
-                identificator = trial_language_object.body[0].lang_id;
+                identificator = trial_language_object.body.language.lang_id;
                 lr_status = 'pending';
 
                 await execCreateRequest();
@@ -987,7 +992,7 @@ describe('Language API', () => {
 
                 trial_language_object = await request(server)
                     .get("/api/languages/" + iso_code);
-                identificator = trial_language_object.body[0].lang_id;
+                identificator = trial_language_object.body.language.lang_id;
 
                 await execCreateRequest();
 
