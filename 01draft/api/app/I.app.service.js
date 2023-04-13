@@ -72,14 +72,17 @@ module.exports = {
     },
     showLangDetails: (lang, callBack) => {
         pool.query(
-            `SELECT
-                lang_name,
-                iso_code,
-                glotto_ref,
-                links,
-                alternative_names
-            FROM languages
-            WHERE lang_name = ?`,
+            `SELECT 
+                languages.lang_name, 
+                languages.iso_code, 
+                languages.glottocode, 
+                links.link, 
+                links.description, 
+                alternative_names.alternative_name
+            FROM languages 
+            LEFT JOIN links ON languages.lang_id = links.lang_id
+            LEFT JOIN alternative_names ON languages.lang_id = alternative_names.lang_id
+            WHERE languages.lang_name = ?`,
             [lang],
             (error, results, fields) => {
                 if (error) {

@@ -163,7 +163,44 @@ module.exports = {
                 return status500(res, err);
             }
             winston.info(results.length+' languages found');
-            return res.status(200).send(results);
+
+            // returning readable data
+            const result = {};
+            let string_links = [];
+            results.forEach((item) => {
+                if (!result[item.lang_name]) {
+                    result[item.lang_name] = { langauge: {
+                        source_id: item.source_id,
+                        lang_name: item.lang_name,
+                        iso_code: item.iso_code,
+                        no_of_trans: item.no_of_trans,
+                        lang_status: item.lang_status,
+                        glottocode: item.glottocode,
+                        total_speakers_nr: item.total_speakers_nr,
+                        first_lang_speakers_nr: item.first_lang_speakers_nr,
+                        second_lang_speakers_nr: item.second_lang_speakers_nr,
+                        TWB_machine_translation_development: item.TWB_machine_translation_development,
+                        TWB_recommended_Pivot_langs: item.TWB_recommended_Pivot_langs,
+                        community_feasibility: item.community_feasibility,
+                        recruitment_feasibility: item.recruitment_feasibility,
+                        recruitment_category: item.recruitment_category,
+                        total_score_15: item.total_score_15,
+                        level: item.level,
+                        aes_status: item.aes_status,
+                        family_name: item.family_name
+                    }, alternative_names: [], links: [] };
+                }
+                if (!result[item.lang_name].alternative_names.includes(item.alternative_name)) {
+                    result[item.lang_name].alternative_names.push(item.alternative_name);
+                }
+                if (!string_links.includes(JSON.stringify({ link: item.link, description: item.description }))) {
+                    result[item.lang_name].links.push({ link: item.link, description: item.description });
+                    string_links.push(JSON.stringify({ link: item.link, description: item.description })); 
+                }  
+                             
+            });
+
+            return res.status(200).send(Object.values(result));
         });
     },
     showLangByID: (req, res) => {
@@ -176,6 +213,37 @@ module.exports = {
                 return res.status(404).send("Could not find language");
             }
             winston.info('Language found. Language ID: '+req.params.id);
+
+            // returning readable data
+            const language = [...new Set(results.map(item => JSON.stringify({ 
+                source_id: item.source_id,
+                lang_name: item.lang_name,
+                iso_code: item.iso_code,
+                no_of_trans: item.no_of_trans,
+                lang_status: item.lang_status,
+                glottocode: item.glottocode,
+                total_speakers_nr: item.total_speakers_nr,
+                first_lang_speakers_nr: item.first_lang_speakers_nr,
+                second_lang_speakers_nr: item.second_lang_speakers_nr,
+                TWB_machine_translation_development: item.TWB_machine_translation_development,
+                TWB_recommended_Pivot_langs: item.TWB_recommended_Pivot_langs,
+                community_feasibility: item.community_feasibility,
+                recruitment_feasibility: item.recruitment_feasibility,
+                recruitment_category: item.recruitment_category,
+                total_score_15: item.total_score_15,
+                level: item.level,
+                aes_status: item.aes_status,
+                family_name: item.family_name,
+            })))].map(JSON.parse)[0];
+            const alternativeNames = [...new Set(results.map(item => item.alternative_name))];
+            const links = [...new Set(results.map(item => JSON.stringify({ link: item.link, description: item.description })))].map(JSON.parse);
+            
+            results = {
+                "language":language,
+                "alternative_names":alternativeNames,
+                "links":links
+            };
+            
             return res.status(200).send(results);
         });   
     },
@@ -189,6 +257,37 @@ module.exports = {
                 return res.status(404).send("Could not find language");
             }
             winston.info('Language found. ISO code: '+req.params.isoCode);
+
+            // returning readable data
+            const language = [...new Set(results.map(item => JSON.stringify({ 
+                source_id: item.source_id,
+                lang_name: item.lang_name,
+                iso_code: item.iso_code,
+                no_of_trans: item.no_of_trans,
+                lang_status: item.lang_status,
+                glottocode: item.glottocode,
+                total_speakers_nr: item.total_speakers_nr,
+                first_lang_speakers_nr: item.first_lang_speakers_nr,
+                second_lang_speakers_nr: item.second_lang_speakers_nr,
+                TWB_machine_translation_development: item.TWB_machine_translation_development,
+                TWB_recommended_Pivot_langs: item.TWB_recommended_Pivot_langs,
+                community_feasibility: item.community_feasibility,
+                recruitment_feasibility: item.recruitment_feasibility,
+                recruitment_category: item.recruitment_category,
+                total_score_15: item.total_score_15,
+                level: item.level,
+                aes_status: item.aes_status,
+                family_name: item.family_name,
+            })))].map(JSON.parse)[0];
+            const alternativeNames = [...new Set(results.map(item => item.alternative_name))];
+            const links = [...new Set(results.map(item => JSON.stringify({ link: item.link, description: item.description })))].map(JSON.parse);
+            
+            results = {
+                "language":language,
+                "alternative_names":alternativeNames,
+                "links":links
+            };
+
             return res.status(200).send(results);
         });
     },

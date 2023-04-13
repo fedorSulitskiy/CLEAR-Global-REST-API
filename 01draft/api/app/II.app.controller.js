@@ -71,6 +71,18 @@ module.exports = {
                 return res.status(404).send("Could not find language");
             }
             winston.info('Language found: '+req.params.lang);
+
+            // returning readable data
+            const language = [...new Set(results.map(item => JSON.stringify({ lang_name: item.lang_name, iso_code: item.iso_code, glottocode: item.glottocode })))].map(JSON.parse)[0];
+            const alternativeNames = [...new Set(results.map(item => item.alternative_name))];
+            const links = [...new Set(results.map(item => JSON.stringify({ link: item.link, description: item.description })))].map(JSON.parse);
+            
+            results = {
+                "language":language,
+                "alternative_names":alternativeNames,
+                "links":links
+            };
+
             return res.status(200).send(results);
         });
     },
