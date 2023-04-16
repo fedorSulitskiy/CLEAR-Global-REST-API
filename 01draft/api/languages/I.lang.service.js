@@ -158,6 +158,89 @@ module.exports = {
             }
         );
     },
+    addRefs: (data, callBack) => {
+        pool.query(
+            `
+            BEGIN;
+
+            INSERT INTO refs (glottolog_ref_id, lgcode, bib)
+            VALUES (?, ?, ?);
+
+            INSERT INTO lang_ref (ref_id, lang_id)
+            VALUES (12, ?);
+
+            COMMIT;
+            `,
+            [
+                data.glottolog_ref_id,
+                data.lgcode,
+                data.bib,
+                data.lang_id
+            ],
+            (error, results, fields) => {
+                if (error) {
+                    return callBack(error);
+                }
+                return callBack(null, results);
+            }
+        );
+    },
+    addSourceComment: (id, data, callBack) => {
+        pool.query(
+            `
+            INSERT INTO source_comment (lang_id, comment)
+            VALUES (?, ?);
+            `,
+            [
+                id,
+                data.comment
+            ],
+            (error, results, fields) => {
+                if (error) {
+                    return callBack(error);
+                }
+                return callBack(null, results);
+            }
+        );
+    },
+    addAlternativeName: (id, data, callBack) => {
+        pool.query(
+            `
+            INSERT INTO alternative_names (lang_id, alternative_name, source)
+            VALUES (?, ?);
+            `,
+            [
+                id,
+                data.alternative_name,
+                data.source
+            ],
+            (error, results, fields) => {
+                if (error) {
+                    return callBack(error);
+                }
+                return callBack(null, results);
+            }
+        );
+    },
+    addLinks: (id, data, callBack) => {
+        pool.query(
+            `
+            INSERT INTO alternative_names (lang_id, link, description)
+            VALUES (?, ?, ?);
+            `,
+            [
+                id,
+                data.link,
+                data.description
+            ],
+            (error, results, fields) => {
+                if (error) {
+                    return callBack(error);
+                }
+                return callBack(null, results);
+            }
+        );
+    },
     updateByID: (id, data, callBack) => {
         pool.query(
             `UPDATE languages SET 

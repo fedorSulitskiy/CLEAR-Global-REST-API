@@ -6,6 +6,10 @@ const {
     createLangRequests, 
     addCountryToLanguageByID,
     addCountryToLanguageByISO,
+    addRefs,
+    addSourceComment,
+    addAlternativeName,
+    addLinks,
     updateByID,
     updateByISO,
     updateRequestsByID,
@@ -36,7 +40,7 @@ const {
 const status500 = function(res, err) {
     winston.error(err);
     return res.status(500).send('Database connection error');
-}
+};
 
 const refactorMultipleLanguages = function(results) {
     const result = {};
@@ -106,7 +110,7 @@ const refactorSingleLanguage = function(results) {
         "alternative_names":alternativeNames,
         "links":links
     };
-}
+};
 
 module.exports = {
     createLang: (req, res) => {
@@ -158,6 +162,62 @@ module.exports = {
                 return status500(res, err);
             }
             winston.info('Language location updated. Country ID: '+body.country_iso_code+'. ISO code: '+req.params.isoCode);
+            return res.status(200).send(results);
+        });
+    },
+    addRefs: (req, res) => {
+        const body = req.body;
+        addRefs(body, (err, results) => {
+            if (err) {
+                if (err.code==='ER_DUP_ENTRY') {
+                    winston.error(err)
+                    return res.status(400).send(`Reference for language with id: ${body.lang_id} already exists`);
+                }
+                return status500(res, err);
+            }
+            winston.info('New references added, for language with id: '+body.lang_id)
+            return res.status(200).send(results);
+        });
+    },
+    addSourceComment: (req, res) => {
+        const body = req.body;
+        addSourceComment(req.params.id, body, (err, results) => {
+            if (err) {
+                if (err.code==='ER_DUP_ENTRY') {
+                    winston.error(err)
+                    return res.status(400).send(`Source comment for language with id: ${req.params.id} already exists`);
+                }
+                return status500(res, err);
+            }
+            winston.info('New source comment added, for language with id: '+req.params.id)
+            return res.status(200).send(results);
+        });
+    },
+    addAlternativeName: (req, res) => {
+        const body = req.body;
+        addAlternativeName(req.params.id, body, (err, results) => {
+            if (err) {
+                if (err.code==='ER_DUP_ENTRY') {
+                    winston.error(err)
+                    return res.status(400).send(`Alternative names for language with id: ${req.params.id} already exist`);
+                }
+                return status500(res, err);
+            }
+            winston.info('New alternative names added, for language with id: '+req.params.id)
+            return res.status(200).send(results);
+        });
+    },
+    addLinks: (req, res) => {
+        const body = req.body;
+        addLinks(req.params.id, body, (err, results) => {
+            if (err) {
+                if (err.code==='ER_DUP_ENTRY') {
+                    winston.error(err)
+                    return res.status(400).send(`Links for language with id: ${req.params.id} already exist`);
+                }
+                return status500(res, err);
+            }
+            winston.info('New links added, for language with id: '+req.params.id)
             return res.status(200).send(results);
         });
     },
