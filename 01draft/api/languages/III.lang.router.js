@@ -11,6 +11,8 @@ const {
     updateLangByID,
     updateLangByISO,
     updateRequestsByID,
+    updateRefs,
+    updateLinks,
     showAll,
     showLangByID,
     showLangByISO,
@@ -32,7 +34,11 @@ const {
     deleteLangByID,
     deleteLangByISO,
     deleteLangsCountry,
-    deleteRequest
+    deleteRequest,
+    deleteRefs,
+    deleteSourceComment,
+    deleteAlternativeName,
+    deleteLink,
 } = require('./II.lang.controller');
 
 const router = require('express').Router();
@@ -41,17 +47,23 @@ const { checkToken } = require('../../auth/auth');
 
 /// General Languages Related Operations
 router.post("/", checkToken, createLang);
-router.post("/refs/", addRefs);
+router.post("/refs/:id", addRefs);
 router.post("/sourceComment/:id", addSourceComment);
 router.post("/alternativeNames/:id", addAlternativeName);
 router.post("/links/:id", addLinks);
 router.patch("/:id(\\d+)", checkToken, updateLangByID);
 router.patch("/:isoCode(\[a-zA-Z]{2,4})", checkToken, updateLangByISO);
+router.patch("/refs/:id", updateRefs);
+router.patch("/links/:id", updateLinks);
 router.get("/", showAll);
 router.get("/:id(\\d+)", showLangByID);
 router.get("/:isoCode(\[a-zA-Z]{2,4})", showLangByISO); // ISO codes can't go above 3 but I made it 4 to allow to create an impossible test ISO code, verification on it being 3 should be done at front-end
 router.delete("/:id(\\d+)", checkToken, deleteLangByID);
 router.delete("/:isoCode(\[a-zA-Z]{2,4})", checkToken, deleteLangByISO);
+router.delete("/refs/:id", deleteRefs);
+router.delete("/sourceComment/", deleteSourceComment);
+router.delete("/alternativeNames/", deleteAlternativeName);
+router.delete("/links/:id", deleteLink);
 
 /// Adding Countries
 router.post("/newCountry/:id(\\d+)", checkToken, addCountryToLanguageByID);

@@ -158,24 +158,17 @@ module.exports = {
             }
         );
     },
-    addRefs: (data, callBack) => {
+    addRefs: (id, data, callBack) => {
         pool.query(
-            `
-            BEGIN;
-
-            INSERT INTO refs (glottolog_ref_id, lgcode, bib)
-            VALUES (?, ?, ?);
-
-            INSERT INTO lang_ref (ref_id, lang_id)
-            VALUES (12, ?);
-
-            COMMIT;
-            `,
+            `BEGIN; \
+            INSERT INTO refs(glottolog_ref_id, lgcode, bib) VALUES(?, ?, ?); \
+            INSERT INTO lang_ref(ref_id, lang_id) VALUES(LAST_INSERT_ID(), ?); \
+            COMMIT;`,
             [
                 data.glottolog_ref_id,
                 data.lgcode,
                 data.bib,
-                data.lang_id
+                id
             ],
             (error, results, fields) => {
                 if (error) {
@@ -207,7 +200,7 @@ module.exports = {
         pool.query(
             `
             INSERT INTO alternative_names (lang_id, alternative_name, source)
-            VALUES (?, ?);
+            VALUES (?, ?, ?);
             `,
             [
                 id,
@@ -225,7 +218,7 @@ module.exports = {
     addLinks: (id, data, callBack) => {
         pool.query(
             `
-            INSERT INTO alternative_names (lang_id, link, description)
+            INSERT INTO links (lang_id, link, description)
             VALUES (?, ?, ?);
             `,
             [
@@ -376,6 +369,48 @@ module.exports = {
                 data.lr_added_countries,
                 data.lr_removed_countries,
                 data.lr_status,
+                id
+            ],
+            (error, results, fields) => {
+                if (error) {
+                    return callBack(error);
+                }
+                return callBack(null, results);
+            }
+        );
+    },
+    updateRefs: (id, data, callBack) => {
+        pool.query(
+            `UPDATE refs SET 
+                glottolog_ref_id = ?, 
+                lgcode = ?,
+                bib = ?
+            WHERE ref_id = ?`,
+            [   
+                data.glottolog_ref_id,
+                data.lgcode,
+                data.bib,
+                id
+            ],
+            (error, results, fields) => {
+                if (error) {
+                    return callBack(error);
+                }
+                return callBack(null, results);
+            }
+        );
+    },
+    updateLinks: (id, data, callBack) => {
+        pool.query(
+            `UPDATE links SET 
+                lang_id = ?,
+                link = ?,
+                description = ?
+            WHERE link_id = ?`,
+            [   
+                data.lang_id,
+                data.link,
+                data.description,
                 id
             ],
             (error, results, fields) => {
@@ -758,5 +793,65 @@ module.exports = {
                 return callBack(null, results);
             }
         );
-    }
+    },
+    deleteRefs: (id, callBack) => {
+        pool.query(
+            `BEGIN;
+            DELETE FROM lang_ref WHERE ref_id = ?;
+            DELETE FROM refs WHERE ref_id = ?;
+            COMMIT;`,
+            [id, id],
+            (error, results, fields) => {
+                if (error) {
+                    return callBack(error);
+                }
+                return callBack(null, results);
+            }
+        );
+    },
+    deleteSourceComment: (data, callBack) => {
+        pool.query(
+            `DELETE FROM source_comment WHERE lang_id = ? AND comment = ?`,
+            [
+                data.lang_id,
+                data.comment
+            ],
+            (error, results, fields) => {
+                if (error) {
+                    return callBack(error);
+                }
+                return callBack(null, results);
+            }
+        );
+    },
+    deleteAlternativeName: (data, callBack) => {
+        pool.query(
+            `DELETE FROM alternative_names WHERE lang_id = ? AND alternative_name = ? AND source = ?`,
+            [
+                data.lang_id,
+                data.alternative_name,
+                data.source
+            ],
+            (error, results, fields) => {
+                if (error) {
+                    return callBack(error);
+                }
+                return callBack(null, results);
+            }
+        );
+    },
+    deleteLink: (id, callBack) => {
+        pool.query(
+            `DELETE FROM links WHERE link_id = ?`,
+            [
+                id
+            ],
+            (error, results, fields) => {
+                if (error) {
+                    return callBack(error);
+                }
+                return callBack(null, results);
+            }
+        );
+    },
 };

@@ -13,6 +13,8 @@ const {
     updateByID,
     updateByISO,
     updateRequestsByID,
+    updateRefs,
+    updateLinks,
     showAll,
     showByID,
     showByISO,
@@ -34,7 +36,11 @@ const {
     deleteByID,
     deleteByISO,
     deleteLangsCountry,
-    deleteRequest
+    deleteRequest,
+    deleteRefs,
+    deleteSourceComment,
+    deleteAlternativeName,
+    deleteLink
 } = require('./I.lang.service');
 
 const status500 = function(res, err) {
@@ -167,15 +173,15 @@ module.exports = {
     },
     addRefs: (req, res) => {
         const body = req.body;
-        addRefs(body, (err, results) => {
+        addRefs(req.params.id, body, (err, results) => {
             if (err) {
                 if (err.code==='ER_DUP_ENTRY') {
                     winston.error(err)
-                    return res.status(400).send(`Reference for language with id: ${body.lang_id} already exists`);
+                    return res.status(400).send(`Reference for language with id: ${req.params.id} already exists`);
                 }
                 return status500(res, err);
             }
-            winston.info('New references added, for language with id: '+body.lang_id)
+            winston.info('New references added, for language with id: '+req.params.id)
             return res.status(200).send(results);
         });
     },
@@ -284,6 +290,50 @@ module.exports = {
                 }
             }
             winston.info('Language updated. Language ID: '+req.params.id);
+            return res.status(200).send(results);
+        });
+    },
+    updateRefs: (req, res) => {
+        const body = req.body;
+        updateRefs(req.params.id, body, (err, results) => {
+            if (err) {
+                return status500(res, err);
+            }
+            if (results) {
+                const noAffectedRows = results.affectedRows;
+                const noChangedRows = results.changedRows;
+                if (noAffectedRows === 0) {
+                    winston.error(err);
+                    return res.status(404).send("Could not find reference");
+                }
+                if (noChangedRows === 0) {
+                    winston.info('No content has been changed. Reference ID code: '+req.params.id);
+                    return res.status(200).send('No changes implemented');
+                }
+            }
+            winston.info('Reference updated. Reference ID: '+req.params.id);
+            return res.status(200).send(results);
+        });
+    },
+    updateLinks: (req, res) => {
+        const body = req.body;
+        updateLinks(req.params.id, body, (err, results) => {
+            if (err) {
+                return status500(res, err);
+            }
+            if (results) {
+                const noAffectedRows = results.affectedRows;
+                const noChangedRows = results.changedRows;
+                if (noAffectedRows === 0) {
+                    winston.error(err);
+                    return res.status(404).send("Could not find link");
+                }
+                if (noChangedRows === 0) {
+                    winston.info('No content has been changed. Link ID: '+req.params.id);
+                    return res.status(200).send('No changes implemented');
+                }
+            }
+            winston.info('Link updated. Link ID: '+req.params.id);
             return res.status(200).send(results);
         });
     },
@@ -580,5 +630,63 @@ module.exports = {
             winston.info('Request deleted. ID: '+req.params.id);
             return res.status(200).send(results);
         });
-    }
+    },
+    deleteRefs: (req, res) => {
+        deleteRefs(req.params.id, (err, results) => {
+            const noAffectedRows = results.affectedRows;
+            if (err) {
+                return status500(res, err);
+            }
+            if (noAffectedRows === 0) {
+                winston.error('Could not find reference. ID: '+req.params.id);
+                return res.status(404).send("Could not find reference");
+            }
+            winston.info('Reference deleted. ID: '+req.params.id);
+            return res.status(200).send(results);
+        });
+    },
+    deleteSourceComment: (req, res) => {
+        body = req.body;
+        deleteSourceComment(body, (err, results) => {
+            const noAffectedRows = results.affectedRows;
+            if (err) {
+                return status500(res, err);
+            }
+            if (noAffectedRows === 0) {
+                winston.error('Could not find source comment. Details: '+body);
+                return res.status(404).send("Could not find source comment");
+            }
+            winston.info('Source comment deleted. Details: '+body);
+            return res.status(200).send(results);
+        });
+    },
+    deleteAlternativeName: (req, res) => {
+        body = req.body;
+        deleteAlternativeName(body, (err, results) => {
+            const noAffectedRows = results.affectedRows;
+            if (err) {
+                return status500(res, err);
+            }
+            if (noAffectedRows === 0) {
+                winston.error('Could not find alternative name. Details: '+body);
+                return res.status(404).send("Could not find alternative name");
+            }
+            winston.info('Alternative name deleted. Details: '+body);
+            return res.status(200).send(results);
+        });
+    },
+    deleteLink: (req, res) => {
+        deleteLink(req.params.id, (err, results) => {
+            const noAffectedRows = results.affectedRows;
+            if (err) {
+                return status500(res, err);
+            }
+            if (noAffectedRows === 0) {
+                winston.error('Could not find link. Link ID: '+req.params.id);
+                return res.status(404).send("Could not find link");
+            }
+            winston.info('Link deleted. Link ID: '+req.params.id);
+            return res.status(200).send(results);
+        });
+    },
 }
