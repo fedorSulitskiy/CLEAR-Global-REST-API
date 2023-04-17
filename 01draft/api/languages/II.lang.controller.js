@@ -10,6 +10,9 @@ const {
     addSourceComment,
     addAlternativeName,
     addLinks,
+    addHDXLinks,
+    addPublicTableauLinks,
+    addClearGlobalLinks,
     updateByID,
     updateByISO,
     updateRequestsByID,
@@ -40,7 +43,10 @@ const {
     deleteRefs,
     deleteSourceComment,
     deleteAlternativeName,
-    deleteLink
+    deleteLink,
+    deleteHDXLink,
+    deletePublicTableauLink,
+    deleteClearGlobalLink
 } = require('./I.lang.service');
 
 const status500 = function(res, err) {
@@ -224,6 +230,48 @@ module.exports = {
                 return status500(res, err);
             }
             winston.info('New links added, for language with id: '+req.params.id)
+            return res.status(200).send(results);
+        });
+    },
+    addHDXLinks: (req, res) => {
+        const body = req.body;
+        addHDXLinks(req.params.isoCode, body, (err, results) => {
+            if (err) {
+                if (err.code==='ER_DUP_ENTRY') {
+                    winston.error(err)
+                    return res.status(400).send(`Links for country with iso_code: ${req.params.isoCode} already exist`);
+                }
+                return status500(res, err);
+            }
+            winston.info('New links added, for country with iso_code: '+req.params.isoCode)
+            return res.status(200).send(results);
+        });
+    },
+    addPublicTableauLinks: (req, res) => {
+        const body = req.body;
+        addPublicTableauLinks(req.params.isoCode, body, (err, results) => {
+            if (err) {
+                if (err.code==='ER_DUP_ENTRY') {
+                    winston.error(err)
+                    return res.status(400).send(`Links for country with iso_code: ${req.params.isoCode} already exist`);
+                }
+                return status500(res, err);
+            }
+            winston.info('New links added, for country with iso_code: '+req.params.isoCode)
+            return res.status(200).send(results);
+        });
+    },
+    addClearGlobalLinks: (req, res) => {
+        const body = req.body;
+        addClearGlobalLinks(req.params.isoCode, body, (err, results) => {
+            if (err) {
+                if (err.code==='ER_DUP_ENTRY') {
+                    winston.error(err)
+                    return res.status(400).send(`Links for country with iso_code: ${req.params.isoCode} already exist`);
+                }
+                return status500(res, err);
+            }
+            winston.info('New links added, for country with iso_code: '+req.params.isoCode)
             return res.status(200).send(results);
         });
     },
@@ -686,6 +734,51 @@ module.exports = {
                 return res.status(404).send("Could not find link");
             }
             winston.info('Link deleted. Link ID: '+req.params.id);
+            return res.status(200).send(results);
+        });
+    },
+    deleteHDXLink: (req, res) => {
+        body = req.body;
+        deleteHDXLink(req.params.isoCode, body, (err, results) => {
+            const noAffectedRows = results.affectedRows;
+            if (err) {
+                return status500(res, err);
+            }
+            if (noAffectedRows === 0) {
+                winston.error('Could not find link. Details: ' + body);
+                return res.status(404).send("Could not find link");
+            }
+            winston.info('Link deleted. Details: ' + body);
+            return res.status(200).send(results);
+        });
+    },
+    deletePublicTableauLink: (req, res) => {
+        body = req.body;
+        deletePublicTableauLink(req.params.isoCode, body, (err, results) => {
+            const noAffectedRows = results.affectedRows;
+            if (err) {
+                return status500(res, err);
+            }
+            if (noAffectedRows === 0) {
+                winston.error('Could not find link. Details: ' + body);
+                return res.status(404).send("Could not find link");
+            }
+            winston.info('Link deleted. Details: ' + body);
+            return res.status(200).send(results);
+        });
+    },
+    deleteClearGlobalLink: (req, res) => {
+        body = req.body;
+        deleteClearGlobalLink(req.params.isoCode, body, (err, results) => {
+            const noAffectedRows = results.affectedRows;
+            if (err) {
+                return status500(res, err);
+            }
+            if (noAffectedRows === 0) {
+                winston.error('Could not find link. Details: ' + body);
+                return res.status(404).send("Could not find link");
+            }
+            winston.info('Link deleted. Details: ' + body);
             return res.status(200).send(results);
         });
     },

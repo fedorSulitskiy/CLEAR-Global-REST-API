@@ -8,6 +8,9 @@ const {
     addSourceComment,
     addAlternativeName,
     addLinks,
+    addHDXLinks,
+    addPublicTableauLinks,
+    addClearGlobalLinks,
     updateLangByID,
     updateLangByISO,
     updateRequestsByID,
@@ -39,6 +42,9 @@ const {
     deleteSourceComment,
     deleteAlternativeName,
     deleteLink,
+    deleteHDXLink,
+    deletePublicTableauLink,
+    deleteClearGlobalLink
 } = require('./II.lang.controller');
 
 const router = require('express').Router();
@@ -69,6 +75,14 @@ router.delete("/links/:id", deleteLink);
 router.post("/newCountry/:id(\\d+)", checkToken, addCountryToLanguageByID);
 router.post("/newCountry/:isoCode(\[a-zA-Z]{2,4})", checkToken, addCountryToLanguageByISO);
 router.delete("/newCountry", checkToken, deleteLangsCountry);
+
+/// Country links
+router.post("/hdx/:isoCode", addHDXLinks);
+router.post("/pt/:isoCode", addPublicTableauLinks);
+router.post("/clearglobal/:isoCode", addClearGlobalLinks);
+router.delete("/hdx/:isoCode", deleteHDXLink);
+router.delete("/pt/:isoCode", deletePublicTableauLink);
+router.delete("/clearglobal/:isoCode", deleteClearGlobalLink);
 
 /// Searching by Alternative Name
 router.get("/alt_name/:alt_name", showLangByAltName);

@@ -234,6 +234,63 @@ module.exports = {
             }
         );
     },
+    addHDXLinks: (isoCode, data, callBack) => {
+        pool.query(
+            `
+            INSERT INTO hdx_links (country_iso_code, link, description)
+            VALUES (?, ?, ?);
+            `,
+            [
+                isoCode,
+                data.link,
+                data.description
+            ],
+            (error, results, fields) => {
+                if (error) {
+                    return callBack(error);
+                }
+                return callBack(null, results);
+            }
+        );
+    },
+    addPublicTableauLinks: (isoCode, data, callBack) => {
+        pool.query(
+            `
+            INSERT INTO pt_links (country_iso_code, link, description)
+            VALUES (?, ?, ?);
+            `,
+            [
+                isoCode,
+                data.link,
+                data.description
+            ],
+            (error, results, fields) => {
+                if (error) {
+                    return callBack(error);
+                }
+                return callBack(null, results);
+            }
+        );
+    },
+    addClearGlobalLinks: (isoCode, data, callBack) => {
+        pool.query(
+            `
+            INSERT INTO clearglobal_links (country_iso_code, link, description)
+            VALUES (?, ?, ?);
+            `,
+            [
+                isoCode,
+                data.link,
+                data.description
+            ],
+            (error, results, fields) => {
+                if (error) {
+                    return callBack(error);
+                }
+                return callBack(null, results);
+            }
+        );
+    },
     updateByID: (id, data, callBack) => {
         pool.query(
             `UPDATE languages SET 
@@ -757,7 +814,7 @@ module.exports = {
     },
     deleteByID: (id, callBack) => {
         pool.query(
-            `delete from languages where lang_id = ?`,
+            `DELETE FROM languages WHERE lang_id = ?`,
             [id],
             (error, results, fields) => {
                 if (error) {
@@ -796,11 +853,11 @@ module.exports = {
     },
     deleteRefs: (id, callBack) => {
         pool.query(
-            `BEGIN;
-            DELETE FROM lang_ref WHERE ref_id = ?;
-            DELETE FROM refs WHERE ref_id = ?;
-            COMMIT;`,
-            [id, id],
+            `DELETE lang_ref, refs 
+            FROM lang_ref 
+            JOIN refs ON refs.ref_id = lang_ref.ref_id 
+            WHERE lang_ref.ref_id = ?`,
+            [id],
             (error, results, fields) => {
                 if (error) {
                     return callBack(error);
@@ -845,6 +902,51 @@ module.exports = {
             `DELETE FROM links WHERE link_id = ?`,
             [
                 id
+            ],
+            (error, results, fields) => {
+                if (error) {
+                    return callBack(error);
+                }
+                return callBack(null, results);
+            }
+        );
+    },
+    deleteHDXLink: (isoCode, data, callBack) => {
+        pool.query(
+            `DELETE FROM hdx_links WHERE country_iso_code = ? AND link = ?`,
+            [
+                isoCode,
+                data.link
+            ],
+            (error, results, fields) => {
+                if (error) {
+                    return callBack(error);
+                }
+                return callBack(null, results);
+            }
+        );
+    },
+    deletePublicTableauLink: (isoCode, data, callBack) => {
+        pool.query(
+            `DELETE FROM pt_links WHERE country_iso_code = ? AND link = ?`,
+            [
+                isoCode,
+                data.link
+            ],
+            (error, results, fields) => {
+                if (error) {
+                    return callBack(error);
+                }
+                return callBack(null, results);
+            }
+        );
+    },
+    deleteClearGlobalLink: (isoCode, data, callBack) => {
+        pool.query(
+            `DELETE FROM clearglobal_links WHERE country_iso_code = ? AND link = ?`,
+            [
+                isoCode,
+                data.link
             ],
             (error, results, fields) => {
                 if (error) {
