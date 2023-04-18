@@ -5,6 +5,7 @@
 */
 
 /// IMPORTANT TIP FOR VSCODE: CTRL + K + CTRL + 2 closes all 2nd level blocks allowing for immidiately easier navigation
+/// IMPORTANT TIP FOR TESTS: If tests start failing due to "Exceeded timeout of 5000 ms for a testfalse." then run the following command: npm run clear_jest, it will clear the cache of jest testing library. It may help sometimes
 
 const request = require('supertest');
 const generateWebToken = require('../../auth/generateToken');
@@ -398,7 +399,7 @@ describe('Language API', () => {
 
     const execShowByAltName = () => {
         return request(server)
-            .get("/api/languages/alt_name/" + alternative_names);
+            .get("/api/languages/alt_name/" + alternative_name);
     };
 
     /// See all dialects
@@ -514,7 +515,14 @@ describe('Language API', () => {
 
         // deletes the request
         await execDeleteRequest();
-    }
+    };
+    const findIdentificator = async() => { 
+        /* This fucntion helps to reduce repetitive code that helps find lang_id
+        but I can't seem to make this work every time... */
+        trial_language_object = await request(server)
+            .get("/api/languages/" + iso_code);
+        return trial_language_object.body.language.lang_id;
+    };
     
     /// Tests
     describe('General Languages Related Operations', () => {
@@ -553,6 +561,126 @@ describe('Language API', () => {
                     .send({ nonsense: 'this will cause an SQL error' });
     
                 expect(res.status).toBe(500);              
+            });
+        });
+        describe('addRefs function', () => {
+            it('should return 200 if valid addRefs request', async () => {
+                await execCreateLang();
+
+                lang_id = findIdentificator();
+                const res = await execAddRefs();
+
+                trial_language_object = await request(server)
+                    .get("/api/languages/" + iso_code);
+                ref_id = trial_language_object.body.refs[0].ref_id;
+                await execDeleteRefs();
+                expect(res.status).toBe(200);
+            });
+            it('should return 404 if language not found by addRefs', async () => {
+                lang_id = 999999;
+    
+                const res = await execAddRefs();
+                expect(res.status).toBe(404);
+            });
+            
+        });
+        describe('addSourceComment function', () => {
+            it('should return 200 if valid addSourceComment request', async () => {
+                await execCreateLang();
+
+                trial_language_object = await request(server)
+                    .get("/api/languages/" + iso_code);
+                lang_id = trial_language_object.body.language.lang_id;
+                const res = await execAddSourceComment();
+                
+                await execDeleteSourceComment();
+                expect(res.status).toBe(200);
+            });
+            it('should return 400 if source comment already exists', async () => {
+                await execCreateLang();
+
+                trial_language_object = await request(server)
+                    .get("/api/languages/" + iso_code);
+                lang_id = trial_language_object.body.language.lang_id;
+                await execAddSourceComment();
+                const res = await execAddSourceComment();
+                
+                await execDeleteSourceComment();
+                expect(res.status).toBe(400);
+            });
+            it('should return 404 if language not found by addSourceComment', async () => {
+                lang_id = 999999;
+    
+                const res = await execAddSourceComment();
+                expect(res.status).toBe(404);
+            });
+        });
+        describe('addAlternativeName function', () => {
+            it('should return 200 if valid addAlternativeName request', async () => {
+                await execCreateLang();
+
+                trial_language_object = await request(server)
+                    .get("/api/languages/" + iso_code);
+                lang_id = trial_language_object.body.language.lang_id;
+                const res = await execAddAlternativeNames();
+                
+                await execDeleteAlternativeName();
+                expect(res.status).toBe(200);
+            });
+            it('should return 400 if alternative name already exists', async () => {
+                await execCreateLang();
+
+                trial_language_object = await request(server)
+                    .get("/api/languages/" + iso_code);
+                lang_id = trial_language_object.body.language.lang_id;
+                await execAddAlternativeNames();
+                const res = await execAddAlternativeNames();
+                
+                await execDeleteAlternativeName();
+                expect(res.status).toBe(400);
+            });
+            it('should return 404 if language not found by addAlternativeName', async () => {
+                lang_id = 999999;
+    
+                const res = await execAddAlternativeNames();
+                expect(res.status).toBe(404);
+            });
+        });
+        describe('addLinks function', () => {
+            it('should return 200 if valid addLinks request', async () => {
+                await execCreateLang();
+
+                trial_language_object = await request(server)
+                    .get("/api/languages/" + iso_code);
+                lang_id = trial_language_object.body.language.lang_id;
+                const res = await execAddLinks();
+
+                trial_language_object = await request(server)
+                    .get("/api/languages/" + iso_code);
+                link_id = trial_language_object.body.links[0].link_id;                
+                await execDeleteLink();
+                expect(res.status).toBe(200);
+            });
+            it('should return 400 if link already exists', async () => {
+                await execCreateLang();
+
+                trial_language_object = await request(server)
+                    .get("/api/languages/" + iso_code);
+                lang_id = trial_language_object.body.language.lang_id;
+                await execAddLinks();
+                const res = await execAddLinks();
+                
+                trial_language_object = await request(server)
+                    .get("/api/languages/" + iso_code);
+                link_id = trial_language_object.body.links[0].link_id;                
+                await execDeleteLink();
+                expect(res.status).toBe(400);
+            });
+            it('should return 404 if language not found by addLinks', async () => {
+                lang_id = 999999;
+    
+                const res = await execAddLinks();
+                expect(res.status).toBe(404);
             });
         });
         describe('update by ID language function', () => {
@@ -788,13 +916,21 @@ describe('Language API', () => {
                 winston.info('AAAAAAAAAAAAAAAAAAA');
                 await execCreateLang();
 
+                trial_language_object = await request(server)
+                    .get("/api/languages/" + iso_code);
+                lang_id = trial_language_object.body.language.lang_id;
+
+                await execAddAlternativeNames();
+
                 const res = await execShowByAltName();
+
+                await execDeleteAlternativeName();
 
                 expect(res.status).toBe(200);
                 winston.info('AAAAAAAAAAAAAAAAAAA');
             });
             it('should return 404 if language not found by showLangByAltName', async () => {
-                alternative_names = 'This name is not in the db';
+                alternative_name = 'This name is not in the db';
 
                 const res = await execShowByAltName();
 

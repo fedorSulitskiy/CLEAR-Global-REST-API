@@ -1,4 +1,5 @@
 /// IMPORTANT TIP FOR VSCODE: CTRL + K + CTRL + 2 closes all 2nd level blocks allowing for immidiately easier navigation
+/// IMPORTANT TIP FOR TESTS: If tests start failing due to "Exceeded timeout of 5000 ms for a testfalse." then run the following command: npm run clear_jest, it will clear the cache of jest testing library. It may help sometimes.
 
 const request = require('supertest');
 const generateWebToken = require('../../auth/generateToken');

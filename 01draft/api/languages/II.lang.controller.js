@@ -228,9 +228,9 @@ module.exports = {
         const body = req.body;
         addRefs(req.params.id, body, (err, results) => {
             if (err) {
-                if (err.code==='ER_DUP_ENTRY') {
+                if (err.code==='ER_NO_REFERENCED_ROW_2') {
                     winston.error(err)
-                    return res.status(400).send(`Reference for language with id: ${req.params.id} already exists`);
+                    return res.status(404).send(`Language with id ${req.params.id} not found`);
                 }
                 return status500(res, err);
             }
@@ -244,7 +244,11 @@ module.exports = {
             if (err) {
                 if (err.code==='ER_DUP_ENTRY') {
                     winston.error(err)
-                    return res.status(400).send(`Source comment for language with id: ${req.params.id} already exists`);
+                    return res.status(400).send(`Source comment ${body.comment} for language with id: ${req.params.id} already exists`);
+                }
+                if (err.code==='ER_NO_REFERENCED_ROW_2') {
+                    winston.error(err)
+                    return res.status(404).send(`Language with id ${req.params.id} not found`);
                 }
                 return status500(res, err);
             }
@@ -258,7 +262,11 @@ module.exports = {
             if (err) {
                 if (err.code==='ER_DUP_ENTRY') {
                     winston.error(err)
-                    return res.status(400).send(`Alternative names for language with id: ${req.params.id} already exist`);
+                    return res.status(400).send(`Alternative name ${body.alternative_name} for language with id: ${req.params.id} already exist`);
+                }
+                if (err.code==='ER_NO_REFERENCED_ROW_2') {
+                    winston.error(err)
+                    return res.status(404).send(`Language with id ${req.params.id} not found`);
                 }
                 return status500(res, err);
             }
@@ -272,7 +280,11 @@ module.exports = {
             if (err) {
                 if (err.code==='ER_DUP_ENTRY') {
                     winston.error(err)
-                    return res.status(400).send(`Links for language with id: ${req.params.id} already exist`);
+                    return res.status(400).send(`Link ${body.link} for language with id: ${req.params.id} already exist`);
+                }
+                if (err.code==='ER_NO_REFERENCED_ROW_2') {
+                    winston.error(err)
+                    return res.status(404).send(`Language with id ${req.params.id} not found`);
                 }
                 return status500(res, err);
             }
