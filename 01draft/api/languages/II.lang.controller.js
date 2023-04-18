@@ -59,7 +59,9 @@ const status500 = function(res, err) {
 const refactorMultipleLanguages = function(results) {
     const result = {};
     let string_links = [];
+    let string_refs = [];
     results.forEach((item) => {
+        // main body of info
         if (!result[item.lang_name]) {
             result[item.lang_name] = { language: {
                 lang_id: item.lang_id,
@@ -81,20 +83,41 @@ const refactorMultipleLanguages = function(results) {
                 level: item.level,
                 aes_status: item.aes_status,
                 family_name: item.family_name
-            }, alternative_names: [], links: [] };
+            }, alternative_names: [], links: [], source_comments: [], refs: [] };
         }
+        // alternative names
         if (!result[item.lang_name].alternative_names.includes(item.alternative_name)) {
-            result[item.lang_name].alternative_names.push(item.alternative_name);
+            if (item.alternative_names) {
+                result[item.lang_name].alternative_names.push(item.alternative_name);
+            }
         }
+        // source comments
+        if (!result[item.lang_name].source_comments.includes(item.comment)) {
+            if (item.comment !== null) {
+                result[item.lang_name].source_comments.push(item.comment);
+            }
+        } 
+        // refs
+        if (!string_refs.includes(JSON.stringify({ ref_id: item.ref_id, glottolog_ref_id: item.glottolog_ref_id, lgcode: item.lgcode, bib: item.bib }))) {
+            if (item.ref_id !== null && item.glottolog_ref_id !== null && item.lgcode !== null && item.bib !== null) {
+                result[item.lang_name].refs.push({ ref_id: item.ref_id, glottolog_ref_id: item.glottolog_ref_id, lgcode: item.lgcode, bib: item.bib });
+            }
+            string_refs.push(JSON.stringify({ ref_id: item.ref_id, glottolog_ref_id: item.glottolog_ref_id, lgcode: item.lgcode, bib: item.bib })); 
+        }
+        // links
         if (!string_links.includes(JSON.stringify({ link: item.link, description: item.description }))) {
-            result[item.lang_name].links.push({ link: item.link, description: item.description });
+            if (item.link !== null && item.description !== null) {
+                result[item.lang_name].links.push({ link: item.link, description: item.description });
+            }
             string_links.push(JSON.stringify({ link: item.link, description: item.description })); 
-        }                    
+        }
+                         
     });
     return result;
 };
 
 const refactorSingleLanguage = function(results) {
+    // main body of info
     const language = [...new Set(results.map(item => JSON.stringify({ 
         lang_id: item.lang_id,
         source_id: item.source_id,
@@ -116,13 +139,35 @@ const refactorSingleLanguage = function(results) {
         aes_status: item.aes_status,
         family_name: item.family_name,
     })))].map(JSON.parse)[0];
-    const alternativeNames = [...new Set(results.map(item => item.alternative_name))];
-    const links = [...new Set(results.map(item => JSON.stringify({ link: item.link, description: item.description })))].map(JSON.parse);
-    
+    // alternative names
+    const alternativeNames = [...new Set(results.map(item => item.alternative_name !== null ? item.alternative_name : null))].filter(Boolean);
+    // links
+    const links = results.filter(item => item.link !== null && item.description !== null)
+        .reduce((uniqueLinks, item) => {
+            const linkDescObj = { link: item.link, description: item.description };
+            if (!uniqueLinks.some(link => JSON.stringify(link) === JSON.stringify(linkDescObj))) {
+                uniqueLinks.push(linkDescObj);
+            }
+            return uniqueLinks;
+        }, []);
+    // source comments
+    const source_comments = [...new Set(results.map(item => item.comment !== null ? item.comment : null))].filter(Boolean);
+    // refs
+    const refs = results.filter(item => item.ref_id !== null && item.glottolog_ref_id !== null && item.lgcode !== null && item.bib !== null)
+        .reduce((uniqueRefs, item) => {
+            const refDescObj = { ref_id: item.ref_id, glottolog_ref_id: item.glottolog_ref_id, lgcode: item.lgcode, bib: item.bib };
+            if (!uniqueRefs.some(link => JSON.stringify(link) === JSON.stringify(linkDescObj))) {
+                uniqueRefs.push(refDescObj);
+            }
+            return uniqueRefs;
+        }, []);
+
     return {
         "language":language,
         "alternative_names":alternativeNames,
-        "links":links
+        "links":links,
+        "source_comments": source_comments,
+        "refs": refs
     };
 };
 

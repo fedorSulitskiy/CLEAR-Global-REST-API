@@ -484,12 +484,17 @@ module.exports = {
         pool.query(
             `SELECT 
                 languages.*, 
+                refs.*, 
                 links.link, 
-                links.description, 
-                alternative_names.alternative_name
+                links.description,
+                alternative_names.alternative_name, 
+                source_comment.comment 
             FROM languages 
-            LEFT JOIN links ON languages.lang_id = links.lang_id
-            LEFT JOIN alternative_names ON languages.lang_id = alternative_names.lang_id`,
+            LEFT JOIN lang_ref ON languages.lang_id = lang_ref.lang_id 
+            LEFT JOIN refs ON lang_ref.ref_id = refs.ref_id 
+            LEFT JOIN links ON languages.lang_id = links.lang_id 
+            LEFT JOIN alternative_names ON languages.lang_id = alternative_names.lang_id 
+            LEFT JOIN source_comment ON languages.lang_id = source_comment.lang_id`,
             [],
             (error, results, fields) => {
                 if (error) {
@@ -503,12 +508,17 @@ module.exports = {
         pool.query(
             `SELECT 
                 languages.*, 
+                refs.*, 
                 links.link, 
-                links.description, 
-                alternative_names.alternative_name
+                links.description,
+                alternative_names.alternative_name, 
+                source_comment.comment 
             FROM languages 
-            LEFT JOIN links ON languages.lang_id = links.lang_id
-            LEFT JOIN alternative_names ON languages.lang_id = alternative_names.lang_id
+            LEFT JOIN lang_ref ON languages.lang_id = lang_ref.lang_id 
+            LEFT JOIN refs ON lang_ref.ref_id = refs.ref_id 
+            LEFT JOIN links ON languages.lang_id = links.lang_id 
+            LEFT JOIN alternative_names ON languages.lang_id = alternative_names.lang_id 
+            LEFT JOIN source_comment ON languages.lang_id = source_comment.lang_id
             WHERE languages.lang_id = ?`,
             [id],
             (error, results, fields) => {
@@ -523,12 +533,17 @@ module.exports = {
         pool.query(
             `SELECT 
                 languages.*, 
+                refs.*, 
                 links.link, 
-                links.description, 
-                alternative_names.alternative_name
+                links.description,
+                alternative_names.alternative_name, 
+                source_comment.comment 
             FROM languages 
-            LEFT JOIN links ON languages.lang_id = links.lang_id
-            LEFT JOIN alternative_names ON languages.lang_id = alternative_names.lang_id
+            LEFT JOIN lang_ref ON languages.lang_id = lang_ref.lang_id 
+            LEFT JOIN refs ON lang_ref.ref_id = refs.ref_id 
+            LEFT JOIN links ON languages.lang_id = links.lang_id 
+            LEFT JOIN alternative_names ON languages.lang_id = alternative_names.lang_id 
+            LEFT JOIN source_comment ON languages.lang_id = source_comment.lang_id
             WHERE languages.iso_code = ?`,
             [isoCode],
             (error, results, fields) => {
@@ -567,12 +582,17 @@ module.exports = {
         pool.query(
             `SELECT 
                 languages.*, 
+                refs.*, 
                 links.link, 
-                links.description, 
-                alternative_names.alternative_name
+                links.description,
+                alternative_names.alternative_name, 
+                source_comment.comment 
             FROM languages 
-            LEFT JOIN links ON languages.lang_id = links.lang_id
-            LEFT JOIN alternative_names ON languages.lang_id = alternative_names.lang_id
+            LEFT JOIN lang_ref ON languages.lang_id = lang_ref.lang_id 
+            LEFT JOIN refs ON lang_ref.ref_id = refs.ref_id 
+            LEFT JOIN links ON languages.lang_id = links.lang_id 
+            LEFT JOIN alternative_names ON languages.lang_id = alternative_names.lang_id 
+            LEFT JOIN source_comment ON languages.lang_id = source_comment.lang_id
             WHERE languages.lang_id = (SELECT lang_id FROM alternative_names WHERE alternative_name = ?);`,
             [alt_name],
             (error, results, fields) => {
@@ -587,12 +607,17 @@ module.exports = {
         pool.query(
             `SELECT 
                 languages.*, 
+                refs.*, 
                 links.link, 
-                links.description, 
-                alternative_names.alternative_name
+                links.description,
+                alternative_names.alternative_name, 
+                source_comment.comment 
             FROM languages 
-            LEFT JOIN links ON languages.lang_id = links.lang_id
-            LEFT JOIN alternative_names ON languages.lang_id = alternative_names.lang_id
+            LEFT JOIN lang_ref ON languages.lang_id = lang_ref.lang_id 
+            LEFT JOIN refs ON lang_ref.ref_id = refs.ref_id 
+            LEFT JOIN links ON languages.lang_id = links.lang_id 
+            LEFT JOIN alternative_names ON languages.lang_id = alternative_names.lang_id 
+            LEFT JOIN source_comment ON languages.lang_id = source_comment.lang_id
             WHERE languages.level = 'dialect'`,
             [],
             (error, results, fields) => {
@@ -607,12 +632,17 @@ module.exports = {
         pool.query(
             `SELECT DISTINCT 
                 languages.*, 
+                refs.*, 
                 links.link, 
-                links.description, 
-                alternative_names.alternative_name
+                links.description,
+                alternative_names.alternative_name, 
+                source_comment.comment 
             FROM languages 
-            LEFT JOIN links ON languages.lang_id = links.lang_id
-            LEFT JOIN alternative_names ON languages.lang_id = alternative_names.lang_id
+            LEFT JOIN lang_ref ON languages.lang_id = lang_ref.lang_id 
+            LEFT JOIN refs ON lang_ref.ref_id = refs.ref_id 
+            LEFT JOIN links ON languages.lang_id = links.lang_id 
+            LEFT JOIN alternative_names ON languages.lang_id = alternative_names.lang_id 
+            LEFT JOIN source_comment ON languages.lang_id = source_comment.lang_id
             JOIN langs_countries ON languages.lang_id = langs_countries.lang_id 
             JOIN countries ON langs_countries.country_iso_code = countries.country_iso_code 
             JOIN countries_regions_int ON countries.country_iso_code = countries_regions_int.country_iso_code 
@@ -631,12 +661,17 @@ module.exports = {
         pool.query(
             `SELECT DISTINCT 
                 languages.*, 
+                refs.*, 
                 links.link, 
-                links.description, 
-                alternative_names.alternative_name
+                links.description,
+                alternative_names.alternative_name, 
+                source_comment.comment 
             FROM languages 
-            LEFT JOIN links ON languages.lang_id = links.lang_id
-            LEFT JOIN alternative_names ON languages.lang_id = alternative_names.lang_id
+            LEFT JOIN lang_ref ON languages.lang_id = lang_ref.lang_id 
+            LEFT JOIN refs ON lang_ref.ref_id = refs.ref_id 
+            LEFT JOIN links ON languages.lang_id = links.lang_id 
+            LEFT JOIN alternative_names ON languages.lang_id = alternative_names.lang_id 
+            LEFT JOIN source_comment ON languages.lang_id = source_comment.lang_id
             JOIN langs_countries ON languages.lang_id = langs_countries.lang_id 
             JOIN countries ON langs_countries.country_iso_code = countries.country_iso_code 
             JOIN countries_regions_int ON countries.country_iso_code = countries_regions_int.country_iso_code 
@@ -654,12 +689,17 @@ module.exports = {
         pool.query(
             `SELECT DISTINCT 
                 languages.*, 
+                refs.*, 
                 links.link, 
-                links.description, 
-                alternative_names.alternative_name
+                links.description,
+                alternative_names.alternative_name, 
+                source_comment.comment 
             FROM languages 
-            LEFT JOIN links ON languages.lang_id = links.lang_id
-            LEFT JOIN alternative_names ON languages.lang_id = alternative_names.lang_id
+            LEFT JOIN lang_ref ON languages.lang_id = lang_ref.lang_id 
+            LEFT JOIN refs ON lang_ref.ref_id = refs.ref_id 
+            LEFT JOIN links ON languages.lang_id = links.lang_id 
+            LEFT JOIN alternative_names ON languages.lang_id = alternative_names.lang_id 
+            LEFT JOIN source_comment ON languages.lang_id = source_comment.lang_id
             JOIN langs_countries ON languages.lang_id = langs_countries.lang_id 
             JOIN countries ON langs_countries.country_iso_code = countries.country_iso_code 
             JOIN countries_regions_int ON countries.country_iso_code = countries_regions_int.country_iso_code 
@@ -677,12 +717,17 @@ module.exports = {
         pool.query(
             `SELECT DISTINCT 
                 languages.*, 
+                refs.*, 
                 links.link, 
-                links.description, 
-                alternative_names.alternative_name
+                links.description,
+                alternative_names.alternative_name, 
+                source_comment.comment 
             FROM languages 
-            LEFT JOIN links ON languages.lang_id = links.lang_id
-            LEFT JOIN alternative_names ON languages.lang_id = alternative_names.lang_id
+            LEFT JOIN lang_ref ON languages.lang_id = lang_ref.lang_id 
+            LEFT JOIN refs ON lang_ref.ref_id = refs.ref_id 
+            LEFT JOIN links ON languages.lang_id = links.lang_id 
+            LEFT JOIN alternative_names ON languages.lang_id = alternative_names.lang_id 
+            LEFT JOIN source_comment ON languages.lang_id = source_comment.lang_id
             JOIN langs_countries ON languages.lang_id = langs_countries.lang_id 
             JOIN countries ON langs_countries.country_iso_code = countries.country_iso_code 
             WHERE countries.english_name = ?`,

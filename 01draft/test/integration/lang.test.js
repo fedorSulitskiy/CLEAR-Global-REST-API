@@ -38,6 +38,18 @@ let level;
 let aes_status;
 let family_name;
 
+// Data for adding links to languages
+let ref_id;
+let link_id;
+let glottolog_ref_id;
+let lgcode;
+let bib;
+let comment;
+let alternative_name;
+let source;
+let link;
+let description;
+
 // Data to manupilate country-language relationships
 let country_iso_code;
 let official;
@@ -126,6 +138,16 @@ describe('Language API', () => {
             family_name
         }
 
+        // Data for adding links to languages
+        glottolog_ref_id = '12345678';
+        lgcode = 'Test = testing time';
+        bib = '@test';
+        comment = 'J. Symons';
+        alternative_name = 'Testenese';
+        source = 'We made it up';
+        link = 'https://clearglobal.org/';
+        description = 'CLEAR Global';
+
         // Data to manipulate country-language relationships
         country_iso_code = 'GB'; /// This country must have proper reference to all regions / sub-regions / int-regions
         official = 'True';
@@ -194,11 +216,67 @@ describe('Language API', () => {
             .set("Authorization", "Bearer "+token)
             .send(details);
     };
+    const execAddRefs = () => {
+        return request(server)
+            .post("/api/languages/refs/"+lang_id)
+            .set("Authorization", "Bearer "+token)
+            .send({
+                glottolog_ref_id:glottolog_ref_id,
+                lgcode:lgcode,
+                bib:bib
+            });
+    };
+    const execAddSourceComment = () => {
+        return request(server)
+            .post("/api/languages/sourceComment/"+lang_id)
+            .set("Authorization", "Bearer "+token)
+            .send({
+                comment:comment
+            });
+    };
+    const execAddAlternativeNames = () => {
+        return request(server)
+            .post("/api/languages/alternativeNames/"+lang_id)
+            .set("Authorization", "Bearer "+token)
+            .send({
+                alternative_name:alternative_name,
+                source:source
+            });
+    };
+    const execAddLinks = () => {
+        return request(server)
+            .post("/api/languages/links/"+lang_id)
+            .set("Authorization", "Bearer "+token)
+            .send({
+                link:link,
+                description:description
+            });
+    };
     const execUpdateLang = () => { // can be reused for updateLangByID / updateLangByISO
         return request(server)
             .patch("/api/languages/" + identificator) // can be id / iso_code
             .set("Authorization", "Bearer "+token)
             .send(details);
+    };
+    const execUpdateRefs = () => {
+        return request(server)
+            .patch("/api/languages/refs/" + ref_id)
+            .set("Authorization", "Bearer "+token)
+            .send({
+                glottolog_ref_id:glottolog_ref_id,
+                lgcode:lgcode,
+                bib:bib
+            });
+    };
+    const execUpdateLinks = () => {
+        return request(server)
+            .patch("/api/languages/links/" + link_id)
+            .set("Authorization", "Bearer "+token)
+            .send({
+                lang_id:lang_id,
+                link:link,
+                description:description
+            });
     };
     const execShowLang = () => { // can be reused for showAll / showLangByID / showLangByISO
         return request(server)
@@ -207,6 +285,35 @@ describe('Language API', () => {
     const execDeleteLang = () => { // can be reused for deleteLangByID / deleteLangByISO
         return request(server)
             .delete("/api/languages/" + identificator) // can be id / iso_code
+            .set("Authorization", "Bearer "+token);
+    };
+    const execDeleteRefs = () => {
+        return request(server)
+            .delete("/api/languages/refs/" + ref_id)
+            .set("Authorization", "Bearer "+token);
+    };
+    const execDeleteSourceComment = () => {
+        return request(server)
+            .delete("/api/languages/sourceComment/")
+            .set("Authorization", "Bearer "+token)
+            .send({
+                lang_id:lang_id,
+                comment:comment
+            });
+    };
+    const execDeleteAlternativeName= () => {
+        return request(server)
+            .delete("/api/languages/alternativeNames/")
+            .set("Authorization", "Bearer "+token)
+            .send({
+                lang_id:lang_id,
+                alternative_name:alternative_name,
+                source:source
+            });
+    };
+    const execDeleteLink = () => {
+        return request(server)
+            .delete("/api/languages/links/" + link_id)
             .set("Authorization", "Bearer "+token);
     };
 
@@ -230,6 +337,60 @@ describe('Language API', () => {
             .send({
                 country_iso_code:country_iso_code,
                 lang_id:identificator
+            });
+    };
+
+    /// Country Links
+
+    const execAddHDXLinks = () => {
+        return request(server)
+            .post("/api/languages/hdx/"+country_iso_code)
+            .set("Authorization", "Bearer "+token)
+            .send({
+                link:link,
+                description:description
+            });
+    };
+    const execAddPublicTableauLinks = () => {
+        return request(server)
+            .post("/api/languages/pt/"+country_iso_code)
+            .set("Authorization", "Bearer "+token)
+            .send({
+                link:link,
+                description:description
+            });
+    };
+    const execAddClearGlobalLinks = () => {
+        return request(server)
+            .post("/api/languages/clearglobal/"+country_iso_code)
+            .set("Authorization", "Bearer "+token)
+            .send({
+                link:link,
+                description:description
+            });
+    };
+    const execDeleteHDXLink = () => {
+        return request(server)
+            .delete("/api/languages/hdx/" + country_iso_code)
+            .set("Authorization", "Bearer "+token)
+            .send({
+                link:link
+            });
+    };
+    const execDeletePublicTableauLink = () => {
+        return request(server)
+            .delete("/api/languages/pt/" + country_iso_code)
+            .set("Authorization", "Bearer "+token)
+            .send({
+                link:link
+            });
+    };
+    const execDeleteClearGlobalLink = () => {
+        return request(server)
+            .delete("/api/languages/clearglobal/" + country_iso_code)
+            .set("Authorization", "Bearer "+token)
+            .send({
+                link:link
             });
     };
 
