@@ -3,10 +3,14 @@ const {
     showCountriesByLang,
     showCountryInfo,
     showAllLang,
+    showAllLangNames,
+    showAllLangDetails,
     showLangDetails,
     showRequestsByLang,
     showRequestsBetweenDates,
     showMostRecentRequest,
+    forgotPassword,
+    extractToken
 } = require('./II.app.controller');
 
 const router = require('express').Router();
@@ -20,9 +24,19 @@ router.get("/countries/info/:country_name", showCountryInfo);
 router.get("/lang/", showAllLang);
 router.get("/lang/:lang", showLangDetails);
 
+/// Language names
+router.get("/langNames/", showAllLangNames);
+
+/// Language details
+router.get("/langDetails/", showAllLangDetails);
+
 /// Requests output
 router.get("/requests/:lang", showRequestsByLang);
 router.get("/requests/period/:lang", showRequestsBetweenDates);
 router.get("/recent/", showMostRecentRequest);
+
+/// Forgot password
+router.post("/password/", forgotPassword);
+router.get("/password/", extractToken);
 
 module.exports = router;

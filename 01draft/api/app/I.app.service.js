@@ -2,7 +2,7 @@
 /// IMPORTANT TIP FOR VSCODE: CTRL + K + CTRL + 2 closes all 2nd level blocks allowing for immidiately easier navigation
 
 const winston = require('winston');
-
+const generateWebToken = require('../../auth/generateToken');
 const pool = require('../../config/database');
 
 module.exports = {
@@ -81,12 +81,49 @@ module.exports = {
             }
         );
     },
+    showAllLangNames: callBack => {
+        pool.query(
+            `SELECT
+                lang_name 
+            FROM languages`,
+            [],
+            (error, results, fields) => {
+                if (error) {
+                    return callBack(error);
+                }
+                return callBack(null, results);
+            }
+        );
+    },
+    showAllLangDetails: callBack => {
+        pool.query(
+            `SELECT 
+                languages.lang_name, 
+                languages.iso_code, 
+                languages.glottocode, 
+                languages.lang_status,
+                links.link, 
+                links.description, 
+                alternative_names.alternative_name
+            FROM languages 
+            LEFT JOIN links ON languages.lang_id = links.lang_id 
+            LEFT JOIN alternative_names ON languages.lang_id = alternative_names.lang_id`,
+            [],
+            (error, results, fields) => {
+                if (error) {
+                    return callBack(error);
+                }
+                return callBack(null, results);
+            }
+        );
+    },
     showLangDetails: (lang, callBack) => {
         pool.query(
             `SELECT 
                 languages.lang_name, 
                 languages.iso_code, 
                 languages.glottocode, 
+                languages.lang_status,
                 links.link, 
                 links.description, 
                 alternative_names.alternative_name
@@ -151,4 +188,44 @@ module.exports = {
             }
         );
     },
+    forgotPassword: (data, callBack) => {
+        const jsontoken = generateWebToken({ result: data });
+        const currentDate = new Date();
+        const timestamp = Math.floor(currentDate.getTime() / 1000);
+        pool.query(
+            `
+            INSERT INTO password_reset (user_id, reset_token, timestamp)
+            VALUES ((SELECT user_id FROM users WHERE email=?), ?, ?)
+            ON DUPLICATE KEY UPDATE reset_token = VALUES(reset_token), timestamp = VALUES(timestamp);
+            `,
+            [   
+                data.email,
+                jsontoken,
+                timestamp + 60*60 // this is set to 60 minutes after creation because generateWebToken function create a token expiring in an hour
+            ],
+            (error, results, fields) => {
+                if (error) {
+                    return callBack(error);
+                }
+                return callBack(null, results);
+            }
+        );
+    },
+    extractToken: (data, callBack) => {
+        pool.query(
+            `SELECT 
+                reset_token
+            FROM password_reset
+            WHERE user_id = (SELECT user_id FROM users WHERE email=?)`,
+            [
+                data.email
+            ],
+            (error, results, fields) => {
+                if (error) {
+                    return callBack(error);
+                }
+                return callBack(null, results);
+            }
+        );
+    }
 }

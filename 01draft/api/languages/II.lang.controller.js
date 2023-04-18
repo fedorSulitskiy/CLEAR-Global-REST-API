@@ -87,7 +87,7 @@ const refactorMultipleLanguages = function(results) {
         }
         // alternative names
         if (!result[item.lang_name].alternative_names.includes(item.alternative_name)) {
-            if (item.alternative_names) {
+            if (item.alternative_names !== null) {
                 result[item.lang_name].alternative_names.push(item.alternative_name);
             }
         }
