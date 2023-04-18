@@ -1,3 +1,5 @@
+/// IMPORTANT TIP FOR VSCODE: CTRL + K + CTRL + 2 closes all 2nd level blocks allowing for immidiately easier navigation
+
 const request = require('supertest');
 const generateWebToken = require('../../auth/generateToken');
 const tud = require('./_testUserDetails');

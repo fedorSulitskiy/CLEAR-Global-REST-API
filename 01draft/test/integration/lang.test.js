@@ -2,7 +2,9 @@
    we aren't testing it for every function because it is middleware and so it works the same every time, regardless
    of the function-specific error handling so it is redundant to test it for every function.
    It is tested on one, which means it should theoretically be enough to prove that it works for all.
-*/       
+*/
+
+/// IMPORTANT TIP FOR VSCODE: CTRL + K + CTRL + 2 closes all 2nd level blocks allowing for immidiately easier navigation
 
 const request = require('supertest');
 const generateWebToken = require('../../auth/generateToken');

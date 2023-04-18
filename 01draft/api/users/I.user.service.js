@@ -1,4 +1,5 @@
 /// Functions that send queries to SQL database
+/// IMPORTANT TIP FOR VSCODE: CTRL + K + CTRL + 2 closes all 2nd level blocks allowing for immidiately easier navigation
 
 const pool = require('../../config/database');
 

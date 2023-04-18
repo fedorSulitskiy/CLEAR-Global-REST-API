@@ -1,3 +1,6 @@
+/// Executes the SQL queries and catches any immediate connection errors
+/// IMPORTANT TIP FOR VSCODE: CTRL + K + CTRL + 2 closes all 2nd level blocks allowing for immidiately easier navigation
+
 const winston = require('winston');
 
 const { 
