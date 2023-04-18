@@ -53,23 +53,23 @@ const { checkToken } = require('../../auth/auth');
 
 /// General Languages Related Operations
 router.post("/", checkToken, createLang);
-router.post("/refs/:id", addRefs);
-router.post("/sourceComment/:id", addSourceComment);
-router.post("/alternativeNames/:id", addAlternativeName);
-router.post("/links/:id", addLinks);
+router.post("/refs/:id", checkToken, addRefs);
+router.post("/sourceComment/:id", checkToken, addSourceComment);
+router.post("/alternativeNames/:id", checkToken, addAlternativeName);
+router.post("/links/:id", checkToken, addLinks);
 router.patch("/:id(\\d+)", checkToken, updateLangByID);
 router.patch("/:isoCode(\[a-zA-Z]{2,4})", checkToken, updateLangByISO);
-router.patch("/refs/:id", updateRefs);
-router.patch("/links/:id", updateLinks);
+router.patch("/refs/:id", checkToken, updateRefs);
+router.patch("/links/:id", checkToken, updateLinks);
 router.get("/", showAll);
 router.get("/:id(\\d+)", showLangByID);
 router.get("/:isoCode(\[a-zA-Z]{2,4})", showLangByISO); // ISO codes can't go above 3 but I made it 4 to allow to create an impossible test ISO code, verification on it being 3 should be done at front-end
 router.delete("/:id(\\d+)", checkToken, deleteLangByID);
 router.delete("/:isoCode(\[a-zA-Z]{2,4})", checkToken, deleteLangByISO);
-router.delete("/refs/:id", deleteRefs);
-router.delete("/sourceComment/", deleteSourceComment);
-router.delete("/alternativeNames/", deleteAlternativeName);
-router.delete("/links/:id", deleteLink);
+router.delete("/refs/:id", checkToken, deleteRefs);
+router.delete("/sourceComment/", checkToken, deleteSourceComment);
+router.delete("/alternativeNames/", checkToken, deleteAlternativeName);
+router.delete("/links/:id", checkToken, deleteLink);
 
 /// Adding Countries
 router.post("/newCountry/:id(\\d+)", checkToken, addCountryToLanguageByID);
@@ -77,12 +77,12 @@ router.post("/newCountry/:isoCode(\[a-zA-Z]{2,4})", checkToken, addCountryToLang
 router.delete("/newCountry", checkToken, deleteLangsCountry);
 
 /// Country links
-router.post("/hdx/:isoCode", addHDXLinks);
-router.post("/pt/:isoCode", addPublicTableauLinks);
-router.post("/clearglobal/:isoCode", addClearGlobalLinks);
-router.delete("/hdx/:isoCode", deleteHDXLink);
-router.delete("/pt/:isoCode", deletePublicTableauLink);
-router.delete("/clearglobal/:isoCode", deleteClearGlobalLink);
+router.post("/hdx/:isoCode", checkToken, addHDXLinks);
+router.post("/pt/:isoCode", checkToken, addPublicTableauLinks);
+router.post("/clearglobal/:isoCode", checkToken, addClearGlobalLinks);
+router.delete("/hdx/:isoCode", checkToken, deleteHDXLink);
+router.delete("/pt/:isoCode", checkToken, deletePublicTableauLink);
+router.delete("/clearglobal/:isoCode", checkToken, deleteClearGlobalLink);
 
 /// Searching by Alternative Name
 router.get("/alt_name/:alt_name", showLangByAltName);
