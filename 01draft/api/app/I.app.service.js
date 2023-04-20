@@ -8,7 +8,24 @@ const pool = require('../../config/database');
 module.exports = {
     showAllCountries: callBack => {
         pool.query(
-            `SELECT english_name FROM countries`,
+            `SELECT 
+                c.country_iso_code, 
+                c.english_name, 
+                cri.regions, 
+                cri.intermediate_regions, 
+                rc.continents,
+                hdx.link hdx_link,
+                hdx.description hdx_description,
+                pt.link pt_link,
+                pt.description pt_description,
+                cg.link cg_link,
+                cg.description cg_description
+            FROM countries c
+            INNER JOIN countries_regions_int cri ON c.country_iso_code = cri.country_iso_code
+            INNER JOIN regions_continents rc ON cri.regions = rc.regions
+            LEFT JOIN hdx_links hdx ON hdx.country_iso_code = c.country_iso_code
+            LEFT JOIN pt_links pt ON pt.country_iso_code = c.country_iso_code
+            LEFT JOIN clearglobal_links cg ON cg.country_iso_code = c.country_iso_code`,
             [],
             (error, results, fields) => {
                 if (error) {
