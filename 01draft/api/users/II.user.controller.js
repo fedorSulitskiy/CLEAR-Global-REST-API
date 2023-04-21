@@ -48,10 +48,11 @@ module.exports = {
         // problem here is because I'm hashing the password the password string will always change so even if no actual changes are introduced the 
         // the password string will change due to new salts being generated meaning it's not possible to directly detect NO changes and this hashing
         // must be factored in.
-        const body = req.body;
+        const body = {...req.body};
         const initial = await pool.promise().query('SELECT first_name, last_name, email, password, hash, mobile, user_type_id, position, company, user_image, status FROM users WHERE user_id = ?', [req.params.id]);
-        
-        update(req.params.id, body, async (err, results) => {
+        const salt = genSaltSync(10);
+        req.body.password = hashPassword(res, req.body.password, salt); 
+        update(req.params.id, req.body, async (err, results) => {
             if (err) {
                 return status500(res, err);
             }
