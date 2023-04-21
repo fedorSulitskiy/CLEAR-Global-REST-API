@@ -6,7 +6,7 @@ const { checkToken } = require('../../auth/auth');
 // unregistered users can only see informationbut not change or add it
 
 /// General user operations
-router.post("/", checkToken, createUser);
+router.post("/", createUser);
 router.patch("/:id", checkToken, updateUser);
 router.delete("/:id(\\d+)", checkToken, deleteUser);
 
