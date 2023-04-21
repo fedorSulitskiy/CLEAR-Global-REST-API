@@ -148,14 +148,14 @@ module.exports = {
             if (result) {
                 results.password = undefined;
                 const jsontoken = generateWebToken({ result: results });
-                userID = results.user_id;
+                const result = results;
                 logHistory(results.user_id, 'logged in', (err, results) => {
                     if (err) {
                         return status500(res, err);
                     }
-                    winston.info('Login successful: user ' + userID);
-                    results['token'] = jsontoken;
-                    return res.status(200).send(results);
+                    winston.info('Login successful: user ' + result.userID);
+                    result['token'] = jsontoken;
+                    return res.status(200).send(result);
                 });
             }
             else {
