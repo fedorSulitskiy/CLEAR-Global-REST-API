@@ -231,7 +231,8 @@ module.exports = {
     extractToken: (data, callBack) => {
         pool.query(
             `SELECT 
-                reset_token
+                reset_token,
+                timestamp
             FROM password_reset
             WHERE user_id = (SELECT user_id FROM users WHERE email=?)`,
             [
