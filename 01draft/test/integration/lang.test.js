@@ -29,12 +29,6 @@ let glottocode;
 let total_speakers_nr;
 let first_lang_speakers_nr;
 let second_lang_speakers_nr;
-let TWB_machine_translation_development;
-let TWB_recommended_Pivot_langs;
-let community_feasibility;
-let recruitment_feasibility;
-let recruitment_category;
-let total_score_15;
 let level;
 let aes_status;
 let family_name;
@@ -108,12 +102,6 @@ describe('Language API', () => {
         total_speakers_nr = '0';
         first_lang_speakers_nr = '0';
         second_lang_speakers_nr = '0';
-        TWB_machine_translation_development = 0;
-        TWB_recommended_Pivot_langs = 0;
-        community_feasibility = 0;
-        recruitment_feasibility = 0;
-        recruitment_category = 'test';
-        total_score_15 = 0;
         level = 'language';
         aes_status = 'test';
         family_name = 'test';
@@ -128,12 +116,6 @@ describe('Language API', () => {
             total_speakers_nr,
             first_lang_speakers_nr,
             second_lang_speakers_nr,
-            TWB_machine_translation_development,
-            TWB_recommended_Pivot_langs,
-            community_feasibility,
-            recruitment_feasibility,
-            recruitment_category,
-            total_score_15,
             level,
             aes_status,
             family_name

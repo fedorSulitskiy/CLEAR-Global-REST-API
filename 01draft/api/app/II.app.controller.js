@@ -126,7 +126,7 @@ module.exports = {
                 return status500(res, err);
             }
             if (results.length === 0) {
-                winston.error('Could not find languges: '+req.params.lang);
+                winston.error('Could not find languages: '+req.params.lang);
                 return res.status(404).send("Could not find language");
             }
             winston.info('Language found: '+req.params.lang);

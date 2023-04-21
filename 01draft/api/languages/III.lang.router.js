@@ -21,7 +21,7 @@ const {
     showLangByISO,
     showLangRequestsByID,
     showAllRequests,
-    showLangByAltName,
+    showByAltName,
     showAllDialects,
     showLanguagesByContinent,
     showLanguagesByRegion,
@@ -85,7 +85,7 @@ router.delete("/pt/:isoCode", checkToken, deletePublicTableauLink);
 router.delete("/clearglobal/:isoCode", checkToken, deleteClearGlobalLink);
 
 /// Searching by Alternative Name
-router.get("/alt_name/:alt_name", showLangByAltName);
+router.get("/alt_name/:alt_name", showByAltName);
 
 /// See all dialects
 router.get("/dialects", showAllDialects);

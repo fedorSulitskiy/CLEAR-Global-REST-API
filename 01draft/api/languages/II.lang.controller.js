@@ -74,12 +74,6 @@ const refactorMultipleLanguages = function(results) {
                 total_speakers_nr: item.total_speakers_nr,
                 first_lang_speakers_nr: item.first_lang_speakers_nr,
                 second_lang_speakers_nr: item.second_lang_speakers_nr,
-                TWB_machine_translation_development: item.TWB_machine_translation_development,
-                TWB_recommended_Pivot_langs: item.TWB_recommended_Pivot_langs,
-                community_feasibility: item.community_feasibility,
-                recruitment_feasibility: item.recruitment_feasibility,
-                recruitment_category: item.recruitment_category,
-                total_score_15: item.total_score_15,
                 level: item.level,
                 aes_status: item.aes_status,
                 family_name: item.family_name
@@ -129,12 +123,6 @@ const refactorSingleLanguage = function(results) {
         total_speakers_nr: item.total_speakers_nr,
         first_lang_speakers_nr: item.first_lang_speakers_nr,
         second_lang_speakers_nr: item.second_lang_speakers_nr,
-        TWB_machine_translation_development: item.TWB_machine_translation_development,
-        TWB_recommended_Pivot_langs: item.TWB_recommended_Pivot_langs,
-        community_feasibility: item.community_feasibility,
-        recruitment_feasibility: item.recruitment_feasibility,
-        recruitment_category: item.recruitment_category,
-        total_score_15: item.total_score_15,
         level: item.level,
         aes_status: item.aes_status,
         family_name: item.family_name,
@@ -192,7 +180,7 @@ module.exports = {
             if (err) {
                 return status500(res, err);
             }
-            winston.info('New language request created')
+            winston.info(`New language request created. ID: ${results.insertId}. Language: ${req.body.lang_id}. Assigned user: ${req.body.assigned_user_id}`)
             return res.status(200).send(results);
         });
     },
@@ -300,6 +288,10 @@ module.exports = {
                     winston.error(err)
                     return res.status(400).send(`Links for country with iso_code: ${req.params.isoCode} already exist`);
                 }
+                if (err.code==='ER_NO_REFERENCED_ROW_2') {
+                    winston.error(err)
+                    return res.status(404).send(`Country with id ${req.params.isoCode} not found`);
+                }
                 return status500(res, err);
             }
             winston.info('New links added, for country with iso_code: '+req.params.isoCode)
@@ -314,6 +306,10 @@ module.exports = {
                     winston.error(err)
                     return res.status(400).send(`Links for country with iso_code: ${req.params.isoCode} already exist`);
                 }
+                if (err.code==='ER_NO_REFERENCED_ROW_2') {
+                    winston.error(err)
+                    return res.status(404).send(`Country with id ${req.params.isoCode} not found`);
+                }
                 return status500(res, err);
             }
             winston.info('New links added, for country with iso_code: '+req.params.isoCode)
@@ -327,6 +323,10 @@ module.exports = {
                 if (err.code==='ER_DUP_ENTRY') {
                     winston.error(err)
                     return res.status(400).send(`Links for country with iso_code: ${req.params.isoCode} already exist`);
+                }
+                if (err.code==='ER_NO_REFERENCED_ROW_2') {
+                    winston.error(err)
+                    return res.status(404).send(`Country with id ${req.params.isoCode} not found`);
                 }
                 return status500(res, err);
             }
@@ -344,7 +344,7 @@ module.exports = {
                 const noAffectedRows = results.affectedRows;
                 const noChangedRows = results.changedRows;
                 if (noAffectedRows === 0) {
-                    winston.error(err);
+                    winston.error("Could not find language. Language ID code: "+req.params.id);
                     return res.status(404).send("Could not find language");
                 }
                 if (noChangedRows === 0) {
@@ -366,7 +366,7 @@ module.exports = {
                 const noAffectedRows = results.affectedRows;
                 const noChangedRows = results.changedRows;
                 if (noAffectedRows === 0) {
-                    winston.error(err);
+                    winston.error("Could not find language. Language ISO code: "+req.params.isoCode);
                     return res.status(404).send("Could not find language");
                 }
                 if (noChangedRows === 0) {
@@ -388,7 +388,7 @@ module.exports = {
                 const noAffectedRows = results.affectedRows;
                 const noChangedRows = results.changedRows;
                 if (noAffectedRows === 0) {
-                    winston.error(err);
+                    winston.error("Could not find request. Request ID code: "+req.params.id);
                     return res.status(404).send("Could not find request");
                 }
                 if (noChangedRows === 0) {
@@ -396,7 +396,7 @@ module.exports = {
                     return res.status(200).send('No changes implemented');
                 }
             }
-            winston.info('Language updated. Language ID: '+req.params.id);
+            winston.info('Language request updated. Language ID: '+req.params.id);
             return res.status(200).send(results);
         });
     },
@@ -410,7 +410,7 @@ module.exports = {
                 const noAffectedRows = results.affectedRows;
                 const noChangedRows = results.changedRows;
                 if (noAffectedRows === 0) {
-                    winston.error(err);
+                    winston.error("Could not find reference. Reference ID code: "+req.params.id);
                     return res.status(404).send("Could not find reference");
                 }
                 if (noChangedRows === 0) {
@@ -432,7 +432,7 @@ module.exports = {
                 const noAffectedRows = results.affectedRows;
                 const noChangedRows = results.changedRows;
                 if (noAffectedRows === 0) {
-                    winston.error(err);
+                    winston.error('Could not find link. Link ID: '+req.params.id);
                     return res.status(404).send("Could not find link");
                 }
                 if (noChangedRows === 0) {
@@ -494,7 +494,7 @@ module.exports = {
                 return status500(res, err);
             }
             if (results.length === 0) {
-                winston.error('Could not find request. Language ID: '+req.params.isoCode);
+                winston.error('Could not find request. Language ID: '+req.params.id);
                 return res.status(404).send("Could not find request");
             }
             winston.info('Request found. Language ID: '+req.params.id);
@@ -510,7 +510,7 @@ module.exports = {
             return res.status(200).send(results);
         });
     },
-    showLangByAltName: (req, res) => {
+    showByAltName: (req, res) => {
         showByAltName(req.params.alt_name, (err, results) => { 
             if (err) {
                 return status500(res, err);
@@ -642,7 +642,7 @@ module.exports = {
             if (err) {
                 return status500(res, err);
             }
-            winston.info(results.length + ' open requests. ');
+            winston.info(results.length + ' open requests.');
             return res.status(200).send(results);
         });
     },
@@ -664,7 +664,7 @@ module.exports = {
             if (err) {
                 return status500(res, err);
             }
-            winston.info(results.length + ' pending requests. ');
+            winston.info(results.length + ' pending requests.');
             return res.status(200).send(results);
         });
     },
@@ -760,10 +760,10 @@ module.exports = {
                 return status500(res, err);
             }
             if (noAffectedRows === 0) {
-                winston.error('Could not find source comment. Details: '+body);
+                winston.error(`Could not find source comment. Language ID: ${body.lang_id}. Source Comment: ${body.comment}`);
                 return res.status(404).send("Could not find source comment");
             }
-            winston.info('Source comment deleted. Details: '+body);
+            winston.info(`Source comment deleted. Language ID: ${body.lang_id}. Source Comment: ${body.comment}`);
             return res.status(200).send(results);
         });
     },
@@ -775,10 +775,10 @@ module.exports = {
                 return status500(res, err);
             }
             if (noAffectedRows === 0) {
-                winston.error('Could not find alternative name. Details: '+body);
+                winston.error(`Could not find alternative name. Language name: ${body.lang_id}. Alternative name: ${body.alternative_name}. Source: ${body.source}`);
                 return res.status(404).send("Could not find alternative name");
             }
-            winston.info('Alternative name deleted. Details: '+body);
+            winston.info(`Alternative name deleted. Language name: ${body.lang_id}. Alternative name: ${body.alternative_name}. Source: ${body.source}`);
             return res.status(200).send(results);
         });
     },
@@ -804,10 +804,10 @@ module.exports = {
                 return status500(res, err);
             }
             if (noAffectedRows === 0) {
-                winston.error('Could not find link. Details: ' + body);
+                winston.error(`Could not find link. Link: ${body.link}. Country ISO Code: ${req.params.isoCode}`);
                 return res.status(404).send("Could not find link");
             }
-            winston.info('Link deleted. Details: ' + body);
+            winston.info(`Link deleted. Link: ${body.link}. Country ISO Code: ${req.params.isoCode}`);
             return res.status(200).send(results);
         });
     },
@@ -819,10 +819,10 @@ module.exports = {
                 return status500(res, err);
             }
             if (noAffectedRows === 0) {
-                winston.error('Could not find link. Details: ' + body);
+                winston.error(`Could not find link. Link: ${body.link}. Country ISO Code: ${req.params.isoCode}`);
                 return res.status(404).send("Could not find link");
             }
-            winston.info('Link deleted. Details: ' + body);
+            winston.info(`Link deleted. Link: ${body.link}. Country ISO Code: ${req.params.isoCode}`);
             return res.status(200).send(results);
         });
     },
@@ -834,10 +834,10 @@ module.exports = {
                 return status500(res, err);
             }
             if (noAffectedRows === 0) {
-                winston.error('Could not find link. Details: ' + body);
+                winston.error(`Could not find link. Link: ${body.link}. Country ISO Code: ${req.params.isoCode}`);
                 return res.status(404).send("Could not find link");
             }
-            winston.info('Link deleted. Details: ' + body);
+            winston.info(`Link deleted. Link: ${body.link}. Country ISO Code: ${req.params.isoCode}`);
             return res.status(200).send(results);
         });
     },

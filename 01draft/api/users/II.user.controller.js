@@ -32,8 +32,7 @@ module.exports = {
         const count = result[0].length;
 
         if (count > 0) {
-            repeatingEmailError = new Error('Email already in database');
-            winston.error(repeatingEmailError);
+            winston.error('User with this email is already registered: '+ email);
             return res.status(400).send('User with this email is already registered: '+ email);
         }
 
@@ -59,7 +58,7 @@ module.exports = {
             if (results) {
                 const noAffectedRows = results.affectedRows;
                 if (noAffectedRows === 0) {
-                    winston.error(err);
+                    winston.error('Could not find user. User id: '+req.params.id);
                     return res.status(404).send("Could not find user");
                 }
                 
@@ -149,12 +148,12 @@ module.exports = {
             if (result) {
                 results.password = undefined;
                 const jsontoken = generateWebToken({ result: results });
-
+                userID = results.user_id;
                 logHistory(results.user_id, 'logged in', (err, results) => {
                     if (err) {
                         return status500(res, err);
                     }
-                    winston.info('Login successful: user ' + results.user_id);
+                    winston.info('Login successful: user ' + userID);
                     results['token'] = jsontoken;
                     return res.status(200).send(results);
                 });
