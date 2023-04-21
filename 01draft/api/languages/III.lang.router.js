@@ -52,7 +52,7 @@ const { checkToken } = require('../../auth/auth');
 // unregistered users can only see informationbut not change or add it
 
 /// General Languages Related Operations
-router.post("/", checkToken, createLang);
+router.post("/", createLang);
 router.post("/refs/:id", checkToken, addRefs);
 router.post("/sourceComment/:id", checkToken, addSourceComment);
 router.post("/alternativeNames/:id", checkToken, addAlternativeName);
