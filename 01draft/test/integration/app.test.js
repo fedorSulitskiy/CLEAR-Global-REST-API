@@ -42,6 +42,7 @@ let lr_iso_code;
 let lr_glottocode;
 let lr_added_countries;
 let lr_removed_countries;
+let lr_lang_status;
 let lr_status;
 
 // Data to delete request
@@ -119,6 +120,7 @@ describe('App API', () => {
         lr_glottocode = '',
         lr_added_countries = '',
         lr_removed_countries = '',
+        lr_lang_status = 'verified',
         lr_status = "complete";
 
         req_details = {
@@ -133,6 +135,7 @@ describe('App API', () => {
             lr_glottocode:lr_glottocode,
             lr_added_countries:lr_added_countries,
             lr_removed_countries:lr_removed_countries,
+            lr_lang_status:lr_lang_status,
             lr_status:lr_status
         }
 

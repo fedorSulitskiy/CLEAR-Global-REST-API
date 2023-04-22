@@ -75,8 +75,9 @@ module.exports = {
                 lr_glottocode,
                 lr_added_countries,
                 lr_removed_countries,
+                lr_lang_status,
                 lr_status) 
-            values(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)`,
+            values(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)`,
             [
                 decoded.user_id, 
                 data.assigned_user_id, 
@@ -92,6 +93,7 @@ module.exports = {
                 data.lr_glottocode,
                 data.lr_added_countries,
                 data.lr_removed_countries, 
+                data.lr_lang_status,
                 data.lr_status
             ],
             (error, results, fields) => {
@@ -375,6 +377,7 @@ module.exports = {
                 lr_glottocode = ?,
                 lr_added_countries = ?,
                 lr_removed_countries = ?, 
+                lr_lang_status = ?,
                 lr_status = ?
             where lang_request_id=?`,
             [
@@ -391,6 +394,7 @@ module.exports = {
                 data.lr_glottocode,
                 data.lr_added_countries,
                 data.lr_removed_countries,
+                data.lr_lang_status,
                 data.lr_status,
                 id
             ],
