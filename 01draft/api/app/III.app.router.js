@@ -37,6 +37,6 @@ router.get("/recent/", showMostRecentRequest);
 
 /// Forgot password
 router.post("/password/", forgotPassword);
-router.get("/password/", extractToken);
+router.get("/password/:email", extractToken);
 
 module.exports = router;

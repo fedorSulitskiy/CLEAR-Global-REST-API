@@ -195,16 +195,15 @@ module.exports = {
         });
     },
     extractToken: (req, res) => {
-        const body = req.body;
-        extractToken(body, (err, results) => {
+        extractToken(req.params.email, (err, results) => {
             if (err) {
                 return status500(res, err);
             }
             if (results.length === 0) {
-                winston.error('Could not find token for user with email: ' + body.email);
+                winston.error('Could not find token for user with email: ' + req.params.email);
                 return res.status(404).send("Could not find token");
             }
-            winston.info('Token found. User id: '+body.email)
+            winston.info('Token found. User id: '+req.params.email)
             return res.status(200).send(results);
         });
     }
